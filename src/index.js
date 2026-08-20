@@ -5,11 +5,11 @@ const enc=new TextEncoder();
 function json(data,init={}){return new Response(JSON.stringify(data),{...init,headers:{...JSON_HEADERS,...(init.headers||{})}})}
 function b64(bytes){let s="";for(const b of bytes)s+=String.fromCharCode(b);return btoa(s).replaceAll("+","-").replaceAll("/","_").replaceAll("=","")}
 async function digest(value){return new Uint8Array(await crypto.subtle.digest("SHA-256",enc.encode(value)))}
-async function sameSecret(a,b){const [x,y]=await Promise.all([digest(a),digest(b)]);let diff=0;for(let i=0;i<x.length;i++)diff|=x[i]^y[i];return diff===0}
-async function sign(value,secret){const key=await crypto.subtle.importKey("raw",enc.encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);return b64(new Uint8Array(await crypto.subtle.sign("HMAC",key,enc.encode(value))))}
-async function issueSession(secret){const value=`${Date.now()+28800000}.${crypto.randomUUID()}`;return `${value}.${await sign(value,secret)}`}
-async function validSession(request,secret){if(!secret)return false;const match=(request.headers.get("cookie")||"").match(/(?:^|;\s*)jigz_admin=([^;]+)/);if(!match)return false;const token=decodeURIComponent(match[1]),parts=token.split(".");if(parts.length!==3||Number(parts[0])<Date.now())return false;return sameSecret(parts[2],await sign(`${parts[0]}.${parts[1]}`,secret))}
 function sameOrigin(request){const origin=request.headers.get("origin");return !origin||origin===new URL(request.url).origin}
+function randomToken(){const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);return b64(bytes)}
+function sessionCookie(token){return `jigz_sid=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=31536000`}
+function readCookie(request){const m=(request.headers.get("cookie")||"").match(/(?:^|;\s*)jigz_sid=([^;]+)/);return m?decodeURIComponent(m[1]):""}
+async function tokenHash(token){return b64(await digest(token))}
 
 async function initializeDatabase(db){
  await db.exec(`
@@ -19,6 +19,10 @@ async function initializeDatabase(db){
  CREATE TABLE IF NOT EXISTS inventory_lots(id INTEGER PRIMARY KEY AUTOINCREMENT,product_id TEXT NOT NULL,received_qty REAL NOT NULL,remaining_qty REAL NOT NULL,unit_cost REAL NOT NULL,supplier TEXT,note TEXT,received_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(product_id) REFERENCES products(id));
  CREATE INDEX IF NOT EXISTS idx_lots_fifo ON inventory_lots(product_id,received_at,id);
  CREATE TABLE IF NOT EXISTS agents(id INTEGER PRIMARY KEY AUTOINCREMENT,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,agent_type TEXT NOT NULL CHECK(agent_type IN ('RESELLER','SALES')),commission_rate REAL NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'ACTIVE',created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+ CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,display_name TEXT NOT NULL,role TEXT NOT NULL CHECK(role IN ('CUSTOMER','ADMIN','OWNER')),status TEXT NOT NULL DEFAULT 'ACTIVE',created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,last_seen_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+ CREATE INDEX IF NOT EXISTS idx_users_role_seen ON users(role,last_seen_at);
+ CREATE TABLE IF NOT EXISTS user_sessions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,expires_at TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(user_id) REFERENCES users(id));
+ CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id,expires_at);
  CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,customer_name TEXT,agent_code TEXT,subtotal REAL NOT NULL DEFAULT 0,discount REAL NOT NULL DEFAULT 0,shipping_subsidy REAL NOT NULL DEFAULT 0,payment_fee REAL NOT NULL DEFAULT 0,refund_amount REAL NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'DRAFT',created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,paid_at TEXT,completed_at TEXT,FOREIGN KEY(agent_code) REFERENCES agents(code));
  CREATE TABLE IF NOT EXISTS order_items(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id TEXT NOT NULL,product_id TEXT NOT NULL,quantity REAL NOT NULL,unit_price REAL NOT NULL,actual_cost REAL NOT NULL DEFAULT 0,FOREIGN KEY(order_id) REFERENCES orders(id),FOREIGN KEY(product_id) REFERENCES products(id));
  CREATE TABLE IF NOT EXISTS commissions(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id TEXT NOT NULL UNIQUE,agent_id INTEGER NOT NULL,revenue_net REAL NOT NULL,actual_cost REAL NOT NULL,deductions REAL NOT NULL,profit_base REAL NOT NULL,commission_rate REAL NOT NULL,commission_amount REAL NOT NULL,status TEXT NOT NULL DEFAULT 'PENDING',approved_at TEXT,paid_at TEXT,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(order_id) REFERENCES orders(id),FOREIGN KEY(agent_id) REFERENCES agents(id));
@@ -28,23 +32,24 @@ async function initializeDatabase(db){
  const insert=db.prepare("INSERT OR IGNORE INTO products(id,name,brand,category,unit,price,prices_json,stock,images_json,status) VALUES(?,?,?,?,?,?,?,?,?,'ACTIVE')");
  const statements=seedCatalog.products.map(p=>insert.bind(p.id,p.name,p.brand||"JIGz",p.category,p.unit,p.price,JSON.stringify(p.prices||{}),p.stock,JSON.stringify(p.images||[])));if(statements.length)await db.batch(statements)
 }
+async function currentUser(request,db){const token=readCookie(request);if(!token)return null;const user=await db.prepare("SELECT u.id,u.display_name,u.role,u.status FROM user_sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>CURRENT_TIMESTAMP AND u.status='ACTIVE'").bind(await tokenHash(token)).first();return user||null}
+async function newUser(db,role){const id=crypto.randomUUID(),token=randomToken(),hash=await tokenHash(token),expires=new Date(Date.now()+31536000000).toISOString(),displayName=`JIGZ-${id.slice(0,8).toUpperCase()}`;await db.batch([db.prepare("INSERT INTO users(id,display_name,role) VALUES(?,?,?)").bind(id,displayName,role),db.prepare("INSERT INTO user_sessions(token_hash,user_id,expires_at) VALUES(?,?,?)").bind(hash,id,expires)]);return{user:{id,display_name:displayName,role,status:"ACTIVE"},cookie:sessionCookie(token)}}
+async function ensureUser(request,db,wantsAdmin=false){await initializeDatabase(db);let user=await currentUser(request,db),cookie="";if(!user){const count=await db.prepare("SELECT COUNT(*) total FROM users WHERE role IN ('OWNER','ADMIN') AND status='ACTIVE'").first(),role=wantsAdmin&&Number(count?.total||0)===0?"OWNER":"CUSTOMER",created=await newUser(db,role);user=created.user;cookie=created.cookie}if(wantsAdmin&&user.role==="CUSTOMER"){const count=await db.prepare("SELECT COUNT(*) total FROM users WHERE role IN ('OWNER','ADMIN') AND status='ACTIVE'").first();if(Number(count?.total||0)===0){await db.prepare("UPDATE users SET role='OWNER',last_seen_at=CURRENT_TIMESTAMP WHERE id=?").bind(user.id).run();user.role="OWNER"}else return{denied:true,user,cookie}}await db.prepare("UPDATE users SET last_seen_at=CURRENT_TIMESTAMP WHERE id=?").bind(user.id).run();return{user,cookie}}
 async function products(db){await initializeDatabase(db);const r=await db.prepare("SELECT id,name,brand,category,unit,price,prices_json,stock,images_json FROM products WHERE status='ACTIVE' ORDER BY category COLLATE NOCASE,name COLLATE NOCASE").all();return r.results.map(x=>({...x,prices:JSON.parse(x.prices_json||"{}"),images:JSON.parse(x.images_json||"[]"),prices_json:undefined,images_json:undefined}))}
-async function summary(db){await initializeDatabase(db);const [orders,pending,packing,shipping,low,agents,commission]=await db.batch([
- db.prepare("SELECT COUNT(*) total FROM orders"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='PENDING_PAYMENT'"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='PACKING'"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='READY_TO_SHIP'"),db.prepare("SELECT COUNT(*) total FROM products WHERE stock IS NOT NULL AND stock<=0"),db.prepare("SELECT COUNT(*) total FROM agents WHERE status='ACTIVE'"),db.prepare("SELECT COALESCE(SUM(commission_amount),0) total FROM commissions WHERE status='PENDING'")]);
- return{orders:orders.results[0]?.total||0,pending:pending.results[0]?.total||0,packing:packing.results[0]?.total||0,shipping:shipping.results[0]?.total||0,lowStock:low.results[0]?.total||0,activeAgents:agents.results[0]?.total||0,pendingCommission:commission.results[0]?.total||0}
+async function summary(db){await initializeDatabase(db);const [orders,pending,packing,shipping,low,agents,commission,online]=await db.batch([
+ db.prepare("SELECT COUNT(*) total FROM orders"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='PENDING_PAYMENT'"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='PACKING'"),db.prepare("SELECT COUNT(*) total FROM orders WHERE status='READY_TO_SHIP'"),db.prepare("SELECT COUNT(*) total FROM products WHERE stock IS NOT NULL AND stock<=0"),db.prepare("SELECT COUNT(*) total FROM agents WHERE status='ACTIVE'"),db.prepare("SELECT COALESCE(SUM(commission_amount),0) total FROM commissions WHERE status='PENDING'"),db.prepare("SELECT COUNT(*) total FROM users WHERE last_seen_at>=datetime('now','-5 minutes')")]);
+ return{orders:orders.results[0]?.total||0,pending:pending.results[0]?.total||0,packing:packing.results[0]?.total||0,shipping:shipping.results[0]?.total||0,lowStock:low.results[0]?.total||0,activeAgents:agents.results[0]?.total||0,pendingCommission:commission.results[0]?.total||0,onlineUsers:online.results[0]?.total||0}
 }
 async function parseBody(request){const type=request.headers.get("content-type")||"";if(!type.includes("application/json"))throw new Error("invalid_content_type");return request.json()}
 async function adminApi(request,env,path){
- if(path==="/api/admin/login"&&request.method==="POST"){
-  if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});if(!env.ADMIN_PIN||!env.SESSION_SECRET)return json({error:"admin_secrets_required"},{status:503});const body=await parseBody(request);if(!await sameSecret(String(body.pin||""),env.ADMIN_PIN))return json({error:"invalid_credentials"},{status:401});const token=await issueSession(env.SESSION_SECRET);return json({ok:true},{headers:{"set-cookie":`jigz_admin=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=28800`}})
+ await initializeDatabase(env.DB);
+ if(path==="/api/admin/session"&&request.method==="GET"){
+  const session=await ensureUser(request,env.DB,true);if(session.denied)return json({error:"device_not_authorized",user:session.user},{status:403,headers:session.cookie?{"set-cookie":session.cookie}:{}});return json({ok:true,user:session.user},{headers:session.cookie?{"set-cookie":session.cookie}:{}})
  }
- if(!await validSession(request,env.SESSION_SECRET))return json({error:"unauthorized"},{status:401});
- if(path==="/api/admin/logout"&&request.method==="POST"){
-  if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});
-  return json({ok:true},{headers:{"set-cookie":"jigz_admin=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0"}})
- }
+ const actor=await currentUser(request,env.DB);if(!actor||!["OWNER","ADMIN"].includes(actor.role))return json({error:"unauthorized"},{status:401});
  if(path==="/api/admin/summary"&&request.method==="GET")return json({summary:await summary(env.DB)});
  if(path==="/api/admin/agents"&&request.method==="GET"){await initializeDatabase(env.DB);const r=await env.DB.prepare("SELECT id,code,name,agent_type,commission_rate,status,created_at FROM agents ORDER BY name").all();return json({agents:r.results})}
+ if(path==="/api/admin/users"&&request.method==="GET"){const r=await env.DB.prepare("SELECT id,display_name,role,status,created_at,last_seen_at FROM users ORDER BY last_seen_at DESC LIMIT 200").all();return json({users:r.results})}
  if(path==="/api/admin/agents"&&request.method==="POST"){
   if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});const b=await parseBody(request),code=String(b.code||"").trim().toUpperCase(),name=String(b.name||"").trim(),type=String(b.agentType||"").toUpperCase(),rate=Number(b.commissionRate);if(!/^[A-Z0-9-]{3,24}$/.test(code)||!name||!["RESELLER","SALES"].includes(type)||!Number.isFinite(rate)||rate<0||rate>100)return json({error:"invalid_agent"},{status:400});await initializeDatabase(env.DB);await env.DB.prepare("INSERT INTO agents(code,name,agent_type,commission_rate,status) VALUES(?,?,?,?, 'ACTIVE') ON CONFLICT(code) DO UPDATE SET name=excluded.name,agent_type=excluded.agent_type,commission_rate=excluded.commission_rate,updated_at=CURRENT_TIMESTAMP").bind(code,name,type,rate).run();return json({ok:true})
  }
@@ -71,6 +76,7 @@ async function adminApi(request,env,path){
 }
 export default{async fetch(request,env){const url=new URL(request.url);try{
  if(request.method==="GET"&&url.pathname==="/api/health"){await env.DB.prepare("SELECT 1").first();return json({ok:true,database:"connected"})}
+ if(request.method==="GET"&&url.pathname==="/api/session"){const session=await ensureUser(request,env.DB,false);return json({user:session.user},{headers:session.cookie?{"set-cookie":session.cookie}:{}})}
  if(request.method==="GET"&&url.pathname==="/api/products")return json({products:await products(env.DB)},{headers:{"cache-control":"public, max-age=30, stale-while-revalidate=120"}});
  if(url.pathname.startsWith("/api/admin/"))return adminApi(request,env,url.pathname);
  if(url.pathname.startsWith("/api/"))return json({error:"not_found"},{status:404});
