@@ -1,0 +1,9 @@
+{
+  "name": "JIGz Store",
+  "short_name": "JIGz",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070310",
+  "theme_color": "#140624",
+  "icons": []
+}
