@@ -14,9 +14,9 @@
     .shell{width:min(1100px,calc(100% - 28px));margin:auto;position:relative;z-index:1}.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0}.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--pink),var(--orange));box-shadow:0 10px 32px #ff3e9d33}.brand b{font-size:22px;letter-spacing:.04em}.brand small{display:block;color:var(--muted);letter-spacing:.25em;font-size:10px;margin-top:3px}.status{display:flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 13px;color:#c8ffd8;font-size:13px}.dot{width:8px;height:8px;border-radius:50%;background:#48ef83;box-shadow:0 0 14px #48ef83}
     .hero{min-height:520px;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:30px;padding:54px 0}.eyebrow{color:#d6b7ff;text-transform:uppercase;letter-spacing:.22em;font-weight:700;font-size:12px}.hero h1{font-size:clamp(43px,8vw,82px);line-height:.96;margin:16px 0;background:linear-gradient(90deg,#fff,#cda9ff 45%,#ff8b52);-webkit-background-clip:text;color:transparent}.hero p{font-size:clamp(16px,2.4vw,20px);line-height:1.7;color:#b9aec5;max-width:620px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{border:1px solid var(--line);border-radius:14px;padding:13px 18px;color:#fff;text-decoration:none;font-weight:750;background:var(--panel);transition:.2s transform,.2s border}.btn:hover{transform:translateY(-2px);border-color:#b574ff}.btn.primary{border:0;background:linear-gradient(90deg,var(--purple),var(--pink),var(--orange));box-shadow:0 12px 34px #a43cff33}
     .orbit{height:330px;position:relative;display:grid;place-items:center}.planet{width:180px;aspect-ratio:1;border-radius:50%;position:relative;background:radial-gradient(circle at 35% 28%,#ffd6ff 0 3%,#9c55ff 11%,#5220a9 38%,#170528 72%);box-shadow:inset -35px -20px 55px #030006,0 0 70px #873cff77;animation:float 4s ease-in-out infinite}.planet:before,.planet:after{content:"";position:absolute;left:50%;top:50%;border:13px solid #ff7a5599;border-left-color:#b073ff;border-right-color:#2d7fff;border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg);width:260px;height:68px}.planet:after{filter:blur(13px);opacity:.45}.moon{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffe8ff;box-shadow:0 0 25px #fff;animation:moon 6s linear infinite}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 0 60px}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;backdrop-filter:blur(14px)}.card .icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#8b5cf622;font-size:20px}.card h2{font-size:17px;margin:17px 0 8px}.card p{color:var(--muted);font-size:14px;line-height:1.6;margin:0}.footer{border-top:1px solid var(--line);padding:22px 0 34px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 0 60px}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;backdrop-filter:blur(14px)}.card .icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#8b5cf622;font-size:20px}.card h2{font-size:17px;margin:17px 0 8px}.card p{color:var(--muted);font-size:14px;line-height:1.6;margin:0}.catalog{padding:4px 0 70px}.catalog-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px}.catalog h2{font-size:clamp(28px,4vw,42px);margin:0}.catalog-tools{display:flex;gap:10px;flex-wrap:wrap}.control{background:#10071d;border:1px solid var(--line);color:#fff;border-radius:14px;padding:12px 14px;min-width:180px}.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.product{overflow:hidden;padding:0}.product-image{aspect-ratio:1.25/1;background:linear-gradient(145deg,#24103b,#0d0716);display:grid;place-items:center;color:#725d85}.product-image img{width:100%;height:100%;object-fit:cover}.product-body{padding:15px}.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:#cdb9dc;font-size:10px}.product h3{font-size:15px;margin:11px 0 8px;min-height:38px}.product-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--muted);font-size:12px}.price{color:#fff;font-size:16px;font-weight:800}.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:45px}.footer{border-top:1px solid var(--line);padding:22px 0 34px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
     @keyframes float{50%{transform:translateY(-13px) rotate(4deg)}}@keyframes moon{from{transform:rotate(0deg) translateX(145px) rotate(0deg)}to{transform:rotate(360deg) translateX(145px) rotate(-360deg)}}
-    @media(max-width:760px){.hero{grid-template-columns:1fr;min-height:auto;padding:44px 0 24px}.orbit{height:270px;order:-1}.planet{width:138px}.planet:before,.planet:after{width:205px;height:52px;border-width:10px}.moon{animation-name:moonMobile}.cards{grid-template-columns:1fr}.status span:last-child{display:none}.top{padding:14px 0}@keyframes moonMobile{from{transform:rotate(0deg) translateX(112px) rotate(0)}to{transform:rotate(360deg) translateX(112px) rotate(-360deg)}}}
+    @media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.hero{grid-template-columns:1fr;min-height:auto;padding:44px 0 24px}.orbit{height:270px;order:-1}.planet{width:138px}.planet:before,.planet:after{width:205px;height:52px;border-width:10px}.moon{animation-name:moonMobile}.cards{grid-template-columns:1fr}.catalog-head{align-items:stretch;flex-direction:column}.catalog-tools{display:grid;grid-template-columns:1fr 1fr}.control{min-width:0;width:100%}.status span:last-child{display:none}.top{padding:14px 0}@keyframes moonMobile{from{transform:rotate(0deg) translateX(112px) rotate(0)}to{transform:rotate(360deg) translateX(112px) rotate(-360deg)}}}@media(max-width:480px){.products{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -41,8 +41,45 @@
         <article class="card"><div class="icon">⌁</div><h2>ตรวจสอบออเดอร์</h2><p>เตรียมระบบคำสั่งซื้อ สถานะการชำระเงิน และการจัดส่ง</p></article>
         <article class="card"><div class="icon">◉</div><h2>บริการสมาชิก</h2><p>รองรับการใช้งานบนโทรศัพท์ ติดตั้งเป็นเว็บแอป และเปิดตลอด 24 ชั่วโมง</p></article>
       </section>
+      <section class="catalog" id="catalog">
+        <div class="catalog-head">
+          <div><div class="eyebrow">Current catalog</div><h2>รายการสินค้า</h2></div>
+          <div class="catalog-tools">
+            <input class="control" id="search" type="search" placeholder="ค้นหาสินค้า" autocomplete="off">
+            <select class="control" id="category" aria-label="เลือกหมวดหมู่"><option value="">ทุกหมวดหมู่</option></select>
+          </div>
+        </div>
+        <div class="products" id="products"><div class="empty">กำลังโหลดข้อมูล...</div></div>
+      </section>
     </main>
     <footer class="footer"><span>© 2026 JIGz Store</span><span>LINE OA: @jigz • IG: jigz.agent</span></footer>
   </div>
+  <script>
+    const state={products:[],query:"",category:""};
+    const baht=new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB",maximumFractionDigits:0});
+    const safe=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    function render(){
+      const items=state.products.filter(item=>(!state.category||item.category===state.category)&&(!state.query||item.name.toLocaleLowerCase("th").includes(state.query)));
+      document.querySelector("#products").innerHTML=items.length?items.map(item=>{
+        const image=item.images?.[0]?`<img src="${safe(item.images[0])}" alt="${safe(item.name)}" loading="lazy" referrerpolicy="no-referrer">`:`<span>JIGz</span>`;
+        const stock=item.stock==null?"รอรีสต็อก":`คงเหลือ ${safe(item.stock)} ${safe(item.unit)}`;
+        const price=item.price==null?"สอบถามข้อมูล":`${baht.format(item.price)} / ${safe(item.unit)}`;
+        return `<article class="card product"><div class="product-image">${image}</div><div class="product-body"><span class="tag">${safe(item.category)}</span><h3>${safe(item.name)}</h3><div class="product-meta"><span class="price">${price}</span><span>${stock}</span></div></div></article>`;
+      }).join(""):`<div class="empty">ไม่พบรายการที่ค้นหา</div>`;
+    }
+    async function loadProducts(){
+      try{
+        const response=await fetch("/products.json",{headers:{accept:"application/json"}});
+        if(!response.ok)throw new Error("load failed");
+        const data=await response.json();state.products=Array.isArray(data.products)?data.products:[];
+        const categories=[...new Set(state.products.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,"th"));
+        document.querySelector("#category").insertAdjacentHTML("beforeend",categories.map(value=>`<option value="${safe(value)}">${safe(value)}</option>`).join(""));
+        render();
+      }catch(error){document.querySelector("#products").innerHTML=`<div class="empty">โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่</div>`}
+    }
+    document.querySelector("#search").addEventListener("input",event=>{state.query=event.target.value.trim().toLocaleLowerCase("th");render()});
+    document.querySelector("#category").addEventListener("change",event=>{state.category=event.target.value;render()});
+    loadProducts();
+  </script>
 </body>
 </html>
