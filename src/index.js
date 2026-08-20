@@ -4,6 +4,8 @@ const JSON_HEADERS={"content-type":"application/json; charset=utf-8","cache-cont
 const enc=new TextEncoder();
 function json(data,init={}){return new Response(JSON.stringify(data),{...init,headers:{...JSON_HEADERS,...(init.headers||{})}})}
 function b64(bytes){let s="";for(const b of bytes)s+=String.fromCharCode(b);return btoa(s).replaceAll("+","-").replaceAll("/","_").replaceAll("=","")}
+function fromB64(value){const normalized=value.replaceAll("-","+").replaceAll("_","/");const raw=atob(normalized+"=".repeat((4-normalized.length%4)%4));return Uint8Array.from(raw,c=>c.charCodeAt(0))}
+function b64json(value){return b64(enc.encode(JSON.stringify(value)))}
 async function digest(value){return new Uint8Array(await crypto.subtle.digest("SHA-256",enc.encode(value)))}
 function sameOrigin(request){const origin=request.headers.get("origin");return !origin||origin===new URL(request.url).origin}
 function randomToken(){const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);return b64(bytes)}
@@ -27,6 +29,9 @@ async function initializeDatabase(db){
  CREATE TABLE IF NOT EXISTS order_items(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id TEXT NOT NULL,product_id TEXT NOT NULL,quantity REAL NOT NULL,unit_price REAL NOT NULL,actual_cost REAL NOT NULL DEFAULT 0,FOREIGN KEY(order_id) REFERENCES orders(id),FOREIGN KEY(product_id) REFERENCES products(id));
  CREATE TABLE IF NOT EXISTS commissions(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id TEXT NOT NULL UNIQUE,agent_id INTEGER NOT NULL,revenue_net REAL NOT NULL,actual_cost REAL NOT NULL,deductions REAL NOT NULL,profit_base REAL NOT NULL,commission_rate REAL NOT NULL,commission_amount REAL NOT NULL,status TEXT NOT NULL DEFAULT 'PENDING',approved_at TEXT,paid_at TEXT,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(order_id) REFERENCES orders(id),FOREIGN KEY(agent_id) REFERENCES agents(id));
  CREATE INDEX IF NOT EXISTS idx_commission_agent_status ON commissions(agent_id,status,created_at);
+ CREATE TABLE IF NOT EXISTS system_settings(setting_key TEXT PRIMARY KEY,setting_value TEXT NOT NULL,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+ CREATE TABLE IF NOT EXISTS push_subscriptions(id INTEGER PRIMARY KEY AUTOINCREMENT,user_id TEXT NOT NULL,endpoint TEXT NOT NULL UNIQUE,subscription_json TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'ACTIVE',created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(user_id) REFERENCES users(id));
+ CREATE INDEX IF NOT EXISTS idx_push_user_status ON push_subscriptions(user_id,status,updated_at);
  `);
  const count=await db.prepare("SELECT COUNT(*) AS total FROM products").first();if(Number(count?.total||0)>0)return;
  const insert=db.prepare("INSERT OR IGNORE INTO products(id,name,brand,category,unit,price,prices_json,stock,images_json,status) VALUES(?,?,?,?,?,?,?,?,?,'ACTIVE')");
@@ -41,6 +46,18 @@ async function summary(db){await initializeDatabase(db);const [orders,pending,pa
  return{orders:orders.results[0]?.total||0,pending:pending.results[0]?.total||0,packing:packing.results[0]?.total||0,shipping:shipping.results[0]?.total||0,lowStock:low.results[0]?.total||0,activeAgents:agents.results[0]?.total||0,pendingCommission:commission.results[0]?.total||0,onlineUsers:online.results[0]?.total||0}
 }
 async function parseBody(request){const type=request.headers.get("content-type")||"";if(!type.includes("application/json"))throw new Error("invalid_content_type");return request.json()}
+async function ensureVapidKeys(db){
+ const existing=await db.prepare("SELECT setting_value FROM system_settings WHERE setting_key='vapid_keys'").first();if(existing?.setting_value)return JSON.parse(existing.setting_value);
+ const pair=await crypto.subtle.generateKey({name:"ECDSA",namedCurve:"P-256"},true,["sign","verify"]),privateJwk=await crypto.subtle.exportKey("jwk",pair.privateKey),publicJwk=await crypto.subtle.exportKey("jwk",pair.publicKey),x=fromB64(publicJwk.x),y=fromB64(publicJwk.y),point=new Uint8Array(65);point[0]=4;point.set(x,1);point.set(y,33);
+ const generated={privateJwk,publicKey:b64(point)};await db.prepare("INSERT OR IGNORE INTO system_settings(setting_key,setting_value) VALUES('vapid_keys',?)").bind(JSON.stringify(generated)).run();const saved=await db.prepare("SELECT setting_value FROM system_settings WHERE setting_key='vapid_keys'").first();return JSON.parse(saved.setting_value)
+}
+async function vapidAuthorization(endpoint,keys){
+ const audience=new URL(endpoint).origin,header=b64json({typ:"JWT",alg:"ES256"}),payload=b64json({aud:audience,exp:Math.floor(Date.now()/1000)+43200,sub:"https://jigz-store.namphujigz.workers.dev"}),unsigned=`${header}.${payload}`;
+ const privateKey=await crypto.subtle.importKey("jwk",keys.privateJwk,{name:"ECDSA",namedCurve:"P-256"},false,["sign"]),signature=new Uint8Array(await crypto.subtle.sign({name:"ECDSA",hash:"SHA-256"},privateKey,enc.encode(unsigned)));return`vapid t=${unsigned}.${b64(signature)}, k=${keys.publicKey}`
+}
+async function sendPush(endpoint,keys){
+ const response=await fetch(endpoint,{method:"POST",headers:{Authorization:await vapidAuthorization(endpoint,keys),TTL:"60","Content-Length":"0"}});return{ok:response.ok,status:response.status,expired:response.status===404||response.status===410}
+}
 async function adminApi(request,env,path){
  await initializeDatabase(env.DB);
  if(path==="/api/admin/session"&&request.method==="GET"){
@@ -50,6 +67,16 @@ async function adminApi(request,env,path){
  if(path==="/api/admin/summary"&&request.method==="GET")return json({summary:await summary(env.DB)});
  if(path==="/api/admin/agents"&&request.method==="GET"){await initializeDatabase(env.DB);const r=await env.DB.prepare("SELECT id,code,name,agent_type,commission_rate,status,created_at FROM agents ORDER BY name").all();return json({agents:r.results})}
  if(path==="/api/admin/users"&&request.method==="GET"){const r=await env.DB.prepare("SELECT id,display_name,role,status,created_at,last_seen_at FROM users ORDER BY last_seen_at DESC LIMIT 200").all();return json({users:r.results})}
+ if(path==="/api/admin/push/config"&&request.method==="GET"){const keys=await ensureVapidKeys(env.DB);const row=await env.DB.prepare("SELECT COUNT(*) total FROM push_subscriptions WHERE user_id=? AND status='ACTIVE'").bind(actor.id).first();return json({supported:true,publicKey:keys.publicKey,subscriptions:Number(row?.total||0)})}
+ if(path==="/api/admin/push/subscribe"&&request.method==="POST"){
+  if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});const b=await parseBody(request),subscription=b?.subscription,endpoint=String(subscription?.endpoint||"");if(!endpoint.startsWith("https://")||endpoint.length>2048||!subscription?.keys?.p256dh||!subscription?.keys?.auth)return json({error:"invalid_subscription"},{status:400});await env.DB.prepare("INSERT INTO push_subscriptions(user_id,endpoint,subscription_json,status) VALUES(?,?,?,'ACTIVE') ON CONFLICT(endpoint) DO UPDATE SET user_id=excluded.user_id,subscription_json=excluded.subscription_json,status='ACTIVE',updated_at=CURRENT_TIMESTAMP").bind(actor.id,endpoint,JSON.stringify(subscription)).run();return json({ok:true})
+ }
+ if(path==="/api/admin/push/unsubscribe"&&request.method==="POST"){
+  if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});const b=await parseBody(request),endpoint=String(b?.endpoint||"");if(!endpoint||endpoint.length>2048)return json({error:"invalid_endpoint"},{status:400});await env.DB.prepare("UPDATE push_subscriptions SET status='INACTIVE',updated_at=CURRENT_TIMESTAMP WHERE user_id=? AND endpoint=?").bind(actor.id,endpoint).run();return json({ok:true})
+ }
+ if(path==="/api/admin/push/test"&&request.method==="POST"){
+  if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});const rows=await env.DB.prepare("SELECT id,endpoint FROM push_subscriptions WHERE user_id=? AND status='ACTIVE' ORDER BY updated_at DESC LIMIT 10").bind(actor.id).all();if(!rows.results.length)return json({error:"no_subscription"},{status:404});const keys=await ensureVapidKeys(env.DB),results=await Promise.all(rows.results.map(async row=>({id:row.id,...await sendPush(row.endpoint,keys)})));const expired=results.filter(x=>x.expired);if(expired.length)await env.DB.batch(expired.map(x=>env.DB.prepare("UPDATE push_subscriptions SET status='EXPIRED',updated_at=CURRENT_TIMESTAMP WHERE id=?").bind(x.id)));return json({ok:results.some(x=>x.ok),sent:results.filter(x=>x.ok).length,failed:results.filter(x=>!x.ok).length},{status:results.some(x=>x.ok)?200:502})
+ }
  if(path==="/api/admin/agents"&&request.method==="POST"){
   if(!sameOrigin(request))return json({error:"invalid_origin"},{status:403});const b=await parseBody(request),code=String(b.code||"").trim().toUpperCase(),name=String(b.name||"").trim(),type=String(b.agentType||"").toUpperCase(),rate=Number(b.commissionRate);if(!/^[A-Z0-9-]{3,24}$/.test(code)||!name||!["RESELLER","SALES"].includes(type)||!Number.isFinite(rate)||rate<0||rate>100)return json({error:"invalid_agent"},{status:400});await initializeDatabase(env.DB);await env.DB.prepare("INSERT INTO agents(code,name,agent_type,commission_rate,status) VALUES(?,?,?,?, 'ACTIVE') ON CONFLICT(code) DO UPDATE SET name=excluded.name,agent_type=excluded.agent_type,commission_rate=excluded.commission_rate,updated_at=CURRENT_TIMESTAMP").bind(code,name,type,rate).run();return json({ok:true})
  }
