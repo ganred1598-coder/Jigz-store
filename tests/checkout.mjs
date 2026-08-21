@@ -43,7 +43,13 @@ const checks={
   commissionWalletRelease:/function releaseWeeklyCommissions/.test(worker)&&/\/api\/admin\/commissions\/release/.test(worker)&&/reference_type='COMMISSION'/.test(worker),
   weeklyCron:/"0 10 \* \* SUN"/.test(wrangler)&&/async scheduled\(/.test(worker),
   financeIdempotency:/idx_wallet_reference/.test(worker)&&/idx_slip_trans_ref/.test(worker),
-  walletVersion:/version:"5\.0\.0"/.test(worker)&&/v5\.0\.0/.test(html)
+  closingSchema:/CREATE TABLE IF NOT EXISTS financial_closings/.test(worker)&&/UNIQUE\(period_type,period_key\)/.test(worker),
+  closingApi:/\/api\/admin\/closings/.test(worker)&&/function calculateClosing/.test(worker)&&/function createClosing/.test(worker),
+  closingUi:/id="closings" class="page"/.test(html)&&/function loadClosings/.test(admin)&&/function createFinancialClosing/.test(admin)&&/function showClosingDetail/.test(admin),
+  thaiClosingBoundary:/7\*3600000/.test(worker)&&/period_type/.test(worker),
+  safeUserDelete:/userDeleteMatch/.test(worker)&&/ARCHIVE_USER/.test(worker)&&/user_balance_not_zero/.test(worker)&&/user_wallet_pending/.test(worker),
+  userDeleteUi:/data-user-delete/.test(admin)&&/function deleteUser/.test(admin),
+  systemVersion:/version:"5\.1\.0"/.test(worker)&&/v5\.1\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

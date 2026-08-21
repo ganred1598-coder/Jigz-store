@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=5.0.0">
-  <link rel="stylesheet" href="/themes.css?v=5.0.0">
-  <link rel="stylesheet" href="/enhancements.css?v=5.0.0">
+  <link rel="stylesheet" href="/admin.css?v=5.1.0">
+  <link rel="stylesheet" href="/themes.css?v=5.1.0">
+  <link rel="stylesheet" href="/enhancements.css?v=5.1.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -32,13 +32,14 @@
         <button data-view="agents">♙ <span>ตัวแทน &amp; ค่าคอม</span></button>
         <button data-view="promotions">✦ <span>โปรโมชั่น</span></button>
         <button data-view="wallet">◉ <span>เครดิต ฝาก / ถอน</span><i id="walletPill">0</i></button>
+        <button data-view="closings">✓ <span>ปิดยอด</span></button>
         <button data-view="finance">◎ <span>การเงิน</span></button>
         <button data-view="reports">▦ <span>รายงาน &amp; Audit</span></button>
         <button data-view="settings">⚙ <span>ตั้งค่าระบบเว็บ</span></button>
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v5.0.0 · WALLET SYSTEM</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v5.1.0 · FINANCE CLOSING</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -120,6 +121,14 @@
           <article class="panel top-gap"><div class="filters"><select id="walletStatusFilter" class="field"><option value="">ทุกสถานะ</option><option value="PENDING">รอตรวจ</option><option value="APPROVED">อนุมัติแล้ว</option><option value="REJECTED">ไม่อนุมัติ</option></select><select id="walletTypeFilter" class="field"><option value="">ฝากและถอน</option><option value="DEPOSIT">เติมเครดิต</option><option value="WITHDRAWAL">ถอนเครดิต</option></select></div><div id="walletRequestCards" class="wallet-admin-list"></div></article>
         </section>
 
+        <section id="closings" class="page">
+          <div class="page-head"><div><h1>ปิดยอดรายวัน / รายเดือน</h1><p>บันทึก Snapshot รายรับ ต้นทุน กำไร ค่าคอม เงินสด และยอดเครดิต ณ เวลาปิดยอด</p></div><button class="button ghost" data-action="load-closings">⟳ คำนวณใหม่</button></div>
+          <article class="panel closing-control"><form id="closingForm" class="closing-form"><label>รอบปิดยอด<select id="closingType" class="field"><option value="DAY">รายวัน</option><option value="MONTH">รายเดือน</option></select></label><label id="closingDayLabel">วันที่<input id="closingDay" class="field" type="date" required></label><label id="closingMonthLabel" class="hidden">เดือน<input id="closingMonth" class="field" type="month"></label><label>เงินสดนับจริง (ถ้ามี)<input id="closingActualCash" class="field" type="number" min="0" step="0.01" placeholder="ระบบจะคำนวณส่วนต่าง"></label><label class="closing-note">หมายเหตุ<input id="closingNote" class="field" maxlength="500" placeholder="เช่น ส่งมอบกะ / ตรวจโดย..."></label><button id="closingCreate" class="button" type="submit">ยืนยันปิดยอด</button></form><div id="closingExistingNotice" class="closing-status hidden"></div></article>
+          <div class="metrics four closing-metrics"><article><span>รายรับที่รับเงินจริง</span><b id="cRevenue">฿0</b><small id="closingPeriodLabel">—</small></article><article class="orange"><span>ต้นทุนจริง FIFO</span><b id="cCost">฿0</b><small>หักจากสินค้าที่ขาย</small></article><article class="blue"><span>กำไรขั้นต้น</span><b id="cProfit">฿0</b><small>ก่อนหักค่าคอม</small></article><article class="pink"><span>กำไรหลังค่าคอม</span><b id="cNet">฿0</b><small id="cCommission">ค่าคอม ฿0</small></article></div>
+          <article class="panel top-gap"><div class="closing-breakdown"><div><span>โอนเงิน</span><b id="cTransfer">฿0</b></div><div><span>เงินสดตามระบบ</span><b id="cCash">฿0</b></div><div><span>COD รับแล้ว</span><b id="cCod">฿0</b></div><div><span>เติมเครดิต</span><b id="cWalletDeposit">฿0</b></div><div><span>ถอนเครดิต</span><b id="cWalletWithdrawal">฿0</b></div><div><span>ออเดอร์ค้างในรอบ</span><b id="cPending">0</b></div></div></article>
+          <article class="panel top-gap"><div class="panel-head"><div><h2>ประวัติปิดยอด</h2><small class="muted">ยอดที่ปิดแล้วไม่ถูกเขียนทับ เพื่อคงหลักฐานทางบัญชี</small></div></div><div id="closingRows" class="closing-admin-list"></div></article>
+        </section>
+
         <section id="finance" class="page">
           <div class="page-head"><div><h1>การเงิน</h1><p>รายรับ ต้นทุน กำไร และค่าคอมจากข้อมูลจริง</p></div><button class="button" data-action="load-reports">⟳ รีเฟรช</button></div>
           <div class="metrics four"><article><span>รายรับ</span><b id="fRevenue">฿0</b></article><article class="orange"><span>ต้นทุนจริง</span><b id="fCost">฿0</b></article><article class="blue"><span>กำไรขั้นต้น</span><b id="fProfit">฿0</b></article><article class="pink"><span>จำนวนออเดอร์</span><b id="fOrders">0</b></article></div><article class="panel top-gap"><div class="panel-head"><h2>สรุปตามสถานะ</h2></div><div id="financeStatuses" class="summary-list"></div></article>
@@ -146,6 +155,6 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js?v=5.0.0" defer></script>
+  <script src="/admin.js?v=5.1.0" defer></script>
 </body>
 </html>
