@@ -212,6 +212,9 @@
 .stock-order-warning { margin: 12px 0; padding: 11px 13px; border: 1px solid; border-radius: 10px; font-size: 12px; font-weight: 800; }
 .cart-line.stock-short { margin-inline: -8px; padding-inline: 8px; border-radius: 10px; background: #4a102542; }
 .qty button:disabled { opacity: .32; cursor: not-allowed; }
+.order-delete-button { border-color: #8d3048!important; background: #35101e!important; color: #ff8da2!important; }
+.create-area-highlight { animation: create-area-pulse 1s ease-out; }
+@keyframes create-area-pulse { 0%,100% { box-shadow: var(--shadow); } 35% { border-color: #d746ff; box-shadow: 0 0 0 4px #b62cff38,0 0 35px #8b2cff55; } }
 
 /* Calm animated space atmosphere — decorative only */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }

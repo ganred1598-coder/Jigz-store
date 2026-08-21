@@ -61,7 +61,10 @@ const checks={
   stockAwareTierMenu:/function reservedQuantity/.test(app)&&/สต็อกไม่พอ/.test(app)&&/data-cart-qty/.test(app)&&/function stockProblem/.test(app),
   aggregateStockGuard:/requestedByProduct/.test(worker)&&/fifoReservations/.test(worker)&&/prevent_negative_product_stock/.test(worker),
   checkoutStockRefresh:/กำลังตรวจสอบสต็อก/.test(app)&&/await loadProducts\(\);const problem=stockProblem/.test(app),
-  systemVersion:/version:"5\.3\.1"/.test(worker)&&/v5\.3\.1/.test(html)
+  safeOrderDelete:/deleted_at/.test(worker)&&/order_delete_requires_closed/.test(worker)&&/DELETE_ORDER/.test(worker)&&/actor\.role!=="OWNER"/.test(worker),
+  orderDeleteUi:/function deleteOrder/.test(admin)&&/data-order-delete/.test(admin)&&/order-delete-button/.test(admin),
+  contextualCreateActions:/data-action="create-pos"/.test(html)&&/data-action="focus-staff"/.test(html)&&/data-action="focus-agent"/.test(html)&&/data-action="focus-promotion"/.test(html),
+  systemVersion:/version:"5\.4\.0"/.test(worker)&&/v5\.4\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
