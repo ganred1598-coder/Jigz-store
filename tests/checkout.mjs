@@ -56,7 +56,9 @@ const checks={
   calmMotion:/calm-star-drift/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8"))&&/prefers-reduced-motion/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8")),
   responsiveSafeArea:/safe-area-inset/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8"))&&/100dvh/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8")),
   labeledProductForm:/class="field-label"/.test(admin)&&/ราคาขายต่อ 1 หน่วย/.test(admin)&&/สต็อกเริ่มต้น/.test(admin),
-  systemVersion:/version:"5\.2\.1"/.test(worker)&&/v5\.2\.1/.test(html)
+  standardPriceTiers:/ใช้เรท 1G–1000G/.test(admin)&&/10,30,50,100,500,1000/.test(admin)&&/function readPriceTiers/.test(admin),
+  customerRateMenu:/function sizeLabel/.test(app)&&/product-rate-list/.test(app)&&/เลือกขนาด \/ เรทราคา/.test(app),
+  systemVersion:/version:"5\.3\.0"/.test(worker)&&/v5\.3\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
