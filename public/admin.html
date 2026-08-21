@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=5.4.0">
-  <link rel="stylesheet" href="/themes.css?v=5.4.0">
-  <link rel="stylesheet" href="/enhancements.css?v=5.4.0">
+  <link rel="stylesheet" href="/admin.css?v=5.5.0">
+  <link rel="stylesheet" href="/themes.css?v=5.5.0">
+  <link rel="stylesheet" href="/enhancements.css?v=5.5.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -31,6 +31,7 @@
         <button class="owner-only hidden" data-view="staff">♛ <span>ผู้ดูแลระบบ</span></button>
         <button data-view="agents">♙ <span>ตัวแทน &amp; ค่าคอม</span></button>
         <button data-view="promotions">✦ <span>โปรโมชั่น</span></button>
+        <button data-view="rewards">★ <span>ของรางวัลพอยส์</span></button>
         <button data-view="wallet">◉ <span>เครดิต ฝาก / ถอน</span><i id="walletPill">0</i></button>
         <button data-view="closings">✓ <span>ปิดยอด</span></button>
         <button data-view="finance">◎ <span>การเงิน</span></button>
@@ -39,7 +40,7 @@
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v5.4.0 · ORDER CONTROL</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v5.5.0 · FULL CONTROL</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -69,11 +70,11 @@
 
         <section id="pos" class="page">
           <div class="page-head"><div><h1>POS ขายหน้าร้าน</h1><p>สร้างออเดอร์และตัดสต็อกด้วยระบบเดียวกับหน้าร้าน</p></div><button class="button ghost" data-action="clear-pos">ล้างรายการ</button></div>
-          <div class="pos-grid"><article class="panel"><div class="panel-head"><h2>เลือกสินค้า</h2><input id="posSearch" class="field compact" type="search" placeholder="ค้นหาสินค้า"></div><div id="posProducts" class="product-pick"></div></article><article class="panel pos-cart"><div class="panel-head"><h2>รายการขาย</h2><b id="posTotal">฿0</b></div><div id="posCart" class="stack"></div><form id="posForm" class="form"><input id="posName" class="field" required placeholder="ชื่อลูกค้า"><input id="posPhone" class="field" required placeholder="เบอร์โทร"><textarea id="posAddress" class="field" required placeholder="ที่อยู่ / รับหน้าร้าน"></textarea><div class="two"><select id="posPayment" class="field"><option value="CASH">เงินสด</option><option value="TRANSFER">โอนเงิน</option><option value="COD">COD</option></select><input id="posDiscount" class="field" type="number" min="0" value="0" placeholder="ส่วนลด"></div><input id="posAgent" class="field" placeholder="รหัสตัวแทน (ถ้ามี)"><button class="button wide" type="submit">ยืนยันการขายและตัดสต็อก</button></form></article></div>
+          <div class="pos-grid"><article class="panel pos-catalog"><div class="panel-head pos-catalog-head"><div><h2>เลือกสินค้า</h2><small class="muted">รูปแบบเดียวกับหน้าร้านลูกค้า พร้อมเรทราคาและสต็อกจริง</small></div><div class="pos-catalog-tools"><input id="posSearch" class="field compact" type="search" placeholder="ค้นหาสินค้า"><select id="posCategory" class="field compact"><option value="">ทุกหมวดหมู่</option></select></div></div><div id="posProducts" class="product-pick pos-customer-grid"></div></article><article class="panel pos-cart"><div class="panel-head"><h2>รายการขาย</h2><b id="posTotal">฿0</b></div><div id="posCart" class="stack"></div><form id="posForm" class="form"><input id="posName" class="field" required placeholder="ชื่อลูกค้า"><input id="posPhone" class="field" required placeholder="เบอร์โทร"><textarea id="posAddress" class="field" required placeholder="ที่อยู่ / รับหน้าร้าน"></textarea><div class="two"><select id="posPayment" class="field"><option value="CASH">เงินสด</option><option value="TRANSFER">โอนเงิน</option><option value="COD">COD</option></select><input id="posDiscount" class="field" type="number" min="0" value="0" placeholder="ส่วนลด"></div><input id="posAgent" class="field" placeholder="รหัสตัวแทน (ถ้ามี)"><button class="button wide" type="submit">ยืนยันการขายและตัดสต็อก</button></form></article></div>
         </section>
 
         <section id="orders" class="page">
-          <div class="page-head"><div><h1>ออเดอร์</h1><p>รับงาน → ยืนยันเงิน → เริ่มแพ็ก → ตรวจแพ็ก → จัดส่ง → ปิดออเดอร์</p></div><div class="row-actions"><button class="button" data-action="create-pos">＋ สร้างออเดอร์</button><button class="button ghost" data-action="load-orders">⟳ รีเฟรช</button></div></div>
+          <div class="page-head"><div><h1>ออเดอร์</h1><p>รับงาน → ยืนยันเงิน → เริ่มแพ็ก → ตรวจแพ็ก → จัดส่ง → ปิดออเดอร์</p></div><div class="row-actions"><button class="button" data-action="create-pos">＋ สร้างออเดอร์</button><button class="button ghost" data-action="deleted-orders">ประวัติการลบ</button><button class="button ghost" data-action="load-orders">⟳ รีเฟรช</button></div></div>
           <article class="panel"><div class="filters"><input id="orderSearch" class="field" type="search" placeholder="เลขออเดอร์ ชื่อลูกค้า เบอร์โทร"><select id="orderStatus" class="field"><option value="">ทุกสถานะ</option><option value="NEW">ออเดอร์ใหม่</option><option value="PENDING_PAYMENT">รอชำระเงิน</option><option value="PAID">ชำระแล้ว</option><option value="PACKING">กำลังแพ็ก</option><option value="PACKED">แพ็กแล้ว</option><option value="SHIPPED">จัดส่งแล้ว</option><option value="COMPLETED">สำเร็จ</option><option value="CANCELLED">ยกเลิก</option></select></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ลูกค้า</th><th>ช่องทาง</th><th>ชำระเงิน</th><th>ยอดรวม</th><th>สถานะ</th><th>วันที่</th><th>ทำงาน</th></tr></thead><tbody id="orderRows"></tbody></table></div></article>
         </section>
 
@@ -88,7 +89,7 @@
         </section>
 
         <section id="products" class="page">
-          <div class="page-head"><div><h1>สินค้า &amp; สต็อกจริง</h1><p>เพิ่มและแก้ข้อมูลสินค้า รับล็อต และบันทึกต้นทุน FIFO</p></div><div class="row-actions"><button class="button" data-action="new-product">＋ เพิ่มสินค้า</button><button class="button ghost" data-action="load-products">⟳ รีเฟรช</button></div></div>
+          <div class="page-head"><div><h1>สินค้า &amp; สต็อกจริง</h1><p>เพิ่มและแก้ข้อมูลสินค้า รับล็อต และบันทึกต้นทุน FIFO</p></div><div class="row-actions"><button class="button" data-action="weekly-stock-count">✓ นับสต๊อกสัปดาห์นี้</button><button class="button" data-action="new-product">＋ เพิ่มสินค้า</button><button class="button ghost" data-action="load-products">⟳ รีเฟรช</button></div></div>
           <article id="receiveStockPanel" class="panel"><div class="panel-head"><div><h2>รับสต็อกและบันทึกต้นทุนจริง</h2><small class="muted">ต้นทุนต่อหน่วยตรงนี้จะใช้คำนวณกำไรและค่าคอมแบบ FIFO</small></div></div><form id="receiveForm" class="inline-form"><select id="receiveProduct" class="field" required></select><input id="receiveQty" class="field" type="number" min="0.001" step="0.001" required placeholder="จำนวนรับเข้า"><input id="receiveCost" class="field" type="number" min="0" step="0.01" required placeholder="ต้นทุน/หน่วย"><input id="receiveSupplier" class="field" placeholder="ผู้จำหน่าย"><input id="receiveNote" class="field" placeholder="หมายเหตุ"><button class="button" type="submit">รับสต็อก + บันทึกทุน</button></form></article>
           <article class="panel top-gap"><div class="filters"><input id="productSearch" class="field" type="search" placeholder="ค้นหาสินค้า"></div><div class="table-wrap"><table><thead><tr><th>สินค้า</th><th>หมวด</th><th>หน่วย</th><th>ราคาขาย</th><th>ต้นทุนล่าสุด</th><th>คงเหลือ</th><th>สถานะ</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div></article>
         </section>
@@ -115,6 +116,11 @@
         <section id="promotions" class="page">
           <div class="page-head"><div><h1>โปรโมชั่น</h1><p>สร้างประกาศหรือส่วนลดที่แสดงหน้าลูกค้า</p></div><div class="row-actions"><button class="button" data-action="focus-promotion">＋ สร้างโปรโมชั่น</button><button class="button ghost" data-action="load-promotions">⟳ รีเฟรช</button></div></div>
           <article id="promotionCreatePanel" class="panel"><form id="promotionForm" class="form"><input id="promoTitle" class="field" required placeholder="ชื่อโปรโมชั่น"><textarea id="promoDescription" class="field" placeholder="รายละเอียด"></textarea><div class="three"><select id="promoType" class="field"><option value="INFO">ประกาศ</option><option value="PERCENT">ลดเปอร์เซ็นต์</option><option value="AMOUNT">ลดเป็นบาท</option></select><input id="promoValue" class="field" type="number" min="0" value="0" placeholder="มูลค่า"><select id="promoStatus" class="field"><option value="ACTIVE">เปิดใช้งาน</option><option value="INACTIVE">ปิดไว้ก่อน</option></select></div><label class="upload-button" for="promoImage">＋ เลือกรูปโปรโมชั่น</label><input id="promoImage" type="file" accept="image/jpeg,image/png,image/webp" hidden><div id="promoImagePreview" class="image-preview"></div><button id="promoSubmit" class="button" type="submit">สร้างโปรโมชั่น</button></form></article><div id="promotionCards" class="cards top-gap"></div>
+        </section>
+
+        <section id="rewards" class="page">
+          <div class="page-head"><div><h1>ของรางวัลพอยส์</h1><p>กำหนดรูป จำนวนแต้ม สต๊อกรางวัล และสถานะที่ลูกค้าเห็น</p></div><button class="button ghost" data-action="load-rewards">⟳ รีเฟรช</button></div>
+          <div class="dashboard-grid"><article class="panel"><form id="rewardForm" class="form"><input id="rewardTitle" class="field" required placeholder="ชื่อของรางวัล"><textarea id="rewardDescription" class="field" placeholder="รายละเอียด"></textarea><div class="three"><input id="rewardPoints" class="field" type="number" min="1" required placeholder="แต้มที่ใช้"><input id="rewardStock" class="field" type="number" min="0" required placeholder="จำนวนรางวัล"><select id="rewardStatus" class="field"><option value="ACTIVE">เปิดให้แลก</option><option value="INACTIVE">ปิดไว้ก่อน</option></select></div><label class="upload-button" for="rewardImage">＋ เลือกรูปรางวัล</label><input id="rewardImage" type="file" accept="image/jpeg,image/png,image/webp" hidden><button class="button" type="submit">เพิ่มของรางวัล</button></form></article><article class="panel"><div id="rewardCards" class="stack"></div></article></div>
         </section>
 
         <section id="wallet" class="page">
@@ -144,7 +150,13 @@
 
         <section id="settings" class="page">
           <div class="page-head"><div><h1>ตั้งค่าระบบเว็บ</h1><p>ควบคุมข้อมูลร้าน ธีม การชำระเงิน ค่าส่ง และแต้ม</p></div></div>
-          <article class="panel"><form id="settingsForm" class="settings-form"><label>ชื่อร้าน<input id="setShopName" class="field"></label><label>ประกาศหน้าเว็บ<input id="setAnnouncement" class="field"></label><label>สถานะร้าน<select id="setShopOpen" class="field"><option value="true">เปิดรับออเดอร์</option><option value="false">ปิดรับออเดอร์</option></select></label><label>ค่าจัดส่ง<input id="setShipping" class="field" type="number" min="0"></label><label>แต้ม 1 คะแนนต่อยอดซื้อ<input id="setPointsRate" class="field" type="number" min="1"></label><label>ธีม<select id="setTheme" class="field"><option value="space">Space</option><option value="newyear">New Year</option><option value="songkran">Songkran</option><option value="halloween">Halloween</option><option value="christmas">Christmas</option></select></label><label>LINE OA<input id="setLine" class="field"></label><label>Instagram<input id="setInstagram" class="field"></label><label>ธนาคาร<input id="setBankName" class="field"></label><label>ชื่อบัญชี<input id="setBankAccount" class="field"></label><label>เลขบัญชี<input id="setBankNumber" class="field"></label><label class="full">รูป QR (URL หรือรูปที่เลือก)<input id="setQrUrl" class="field" placeholder="https://..."><input id="setQrFile" type="file" accept="image/*"></label><section class="sound-settings full"><div><b>🔊 เสียงแจ้งเตือนออเดอร์</b><small id="setSoundName">เสียงมาตรฐาน JIGᶻ</small></div><label>สถานะ<select id="setSoundEnabled" class="field"><option value="true">เปิดเสียง</option><option value="false">ปิดเสียง</option></select></label><label>ระดับเสียง <output id="setVolumeValue">100%</output><input id="setSoundVolume" type="range" min="0" max="1" step="0.05" value="1"></label><label class="upload-button" for="setSoundFile">＋ เลือกไฟล์เสียงเอง</label><input id="setSoundFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/x-m4a" hidden><div class="row-actions"><button id="soundTest" class="button ghost" type="button">▶ ทดลองเสียง</button><button id="soundReset" class="button ghost" type="button">ใช้เสียงมาตรฐาน</button></div><small>รองรับ MP3, WAV, OGG, M4A ขนาดไม่เกิน 900 KB</small></section><button class="button" type="submit">บันทึกการตั้งค่าทั้งระบบ</button></form></article>
+          <article class="panel"><form id="settingsForm" class="settings-form">
+            <h3 class="full">ข้อมูลร้านและข้อความหน้าบ้าน</h3><label>ชื่อร้าน<input id="setShopName" class="field"></label><label>ประกาศหน้าเว็บ<input id="setAnnouncement" class="field"></label><label>ข้อความเหนือหัวเรื่อง<input id="setHeroEyebrow" class="field"></label><label>หัวเรื่องหน้าแรก<input id="setHeroTitle" class="field"></label><label class="full">คำอธิบายหน้าแรก<textarea id="setHeroDescription" class="field"></textarea></label><label>ชื่อหัวข้อสินค้า<input id="setCatalogTitle" class="field"></label><label>ข้อความท้ายเว็บ<input id="setFooterText" class="field"></label>
+            <h3 class="full">การขายและสต๊อก</h3><label>สถานะร้าน<select id="setShopOpen" class="field"><option value="true">เปิดรับออเดอร์</option><option value="false">ปิดรับออเดอร์</option></select></label><label>ค่าจัดส่ง<input id="setShipping" class="field" type="number" min="0"></label><label>ยอดสั่งซื้อขั้นต่ำ<input id="setMinimumOrder" class="field" type="number" min="0"></label><label>แจ้งเตือนสต๊อกต่ำกว่า<input id="setLowStock" class="field" type="number" min="0"></label><label>แต้ม 1 คะแนนต่อยอดซื้อ<input id="setPointsRate" class="field" type="number" min="1"></label><label>รับโอนเงิน<select id="setTransfer" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับ COD<select id="setCod" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับเงินสดหน้าบ้าน<select id="setCash" class="field"><option value="false">ปิด</option><option value="true">เปิด</option></select></label>
+            <h3 class="full">ธีมและการแสดงผล</h3><label>ธีม<select id="setTheme" class="field"><option value="space">Space</option><option value="newyear">New Year</option><option value="songkran">Songkran</option><option value="halloween">Halloween</option><option value="christmas">Christmas</option></select></label><label>สีหลัก<input id="setAccent" class="field" type="color"></label><label>ภาพเคลื่อนไหว<select id="setMotion" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label>
+            <h3 class="full">ติดต่อและรับชำระ</h3><label>LINE OA<input id="setLine" class="field"></label><label>Instagram<input id="setInstagram" class="field"></label><label>เบอร์ติดต่อ<input id="setSupportPhone" class="field"></label><label>ธนาคาร<input id="setBankName" class="field"></label><label>ชื่อบัญชี<input id="setBankAccount" class="field"></label><label>เลขบัญชี<input id="setBankNumber" class="field"></label><label class="full">รูป QR (URL หรือรูปที่เลือก)<input id="setQrUrl" class="field" placeholder="https://..."><input id="setQrFile" type="file" accept="image/*"></label>
+            <section class="sound-settings full"><div><b>🔊 เสียงแจ้งเตือนออเดอร์</b><small id="setSoundName">เสียงมาตรฐาน JIGᶻ</small></div><label>สถานะ<select id="setSoundEnabled" class="field"><option value="true">เปิดเสียง</option><option value="false">ปิดเสียง</option></select></label><label>ระดับเสียง <output id="setVolumeValue">100%</output><input id="setSoundVolume" type="range" min="0" max="1" step="0.05" value="1"></label><label class="upload-button" for="setSoundFile">＋ เลือกไฟล์เสียงเอง</label><input id="setSoundFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/x-m4a" hidden><div class="row-actions"><button id="soundTest" class="button ghost" type="button">▶ ทดลองเสียง</button><button id="soundReset" class="button ghost" type="button">ใช้เสียงมาตรฐาน</button></div><small>รองรับ MP3, WAV, OGG, M4A ขนาดไม่เกิน 900 KB</small></section><button class="button full" type="submit">บันทึกและใช้งานทุกหน้า</button>
+          </form></article>
         </section>
 
         <section id="chat" class="page">
@@ -157,6 +169,6 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js?v=5.4.0" defer></script>
+  <script src="/admin.js?v=5.5.0" defer></script>
 </body>
 </html>

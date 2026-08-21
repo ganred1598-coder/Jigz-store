@@ -64,7 +64,13 @@ const checks={
   safeOrderDelete:/deleted_at/.test(worker)&&/order_delete_requires_closed/.test(worker)&&/DELETE_ORDER/.test(worker)&&/actor\.role!=="OWNER"/.test(worker),
   orderDeleteUi:/function deleteOrder/.test(admin)&&/data-order-delete/.test(admin)&&/order-delete-button/.test(admin),
   contextualCreateActions:/data-action="create-pos"/.test(html)&&/data-action="focus-staff"/.test(html)&&/data-action="focus-agent"/.test(html)&&/data-action="focus-promotion"/.test(html),
-  systemVersion:/version:"5\.4\.0"/.test(worker)&&/v5\.4\.0/.test(html)
+  deletedOrderRestoresStock:/DELETE_RETURN/.test(worker)&&/stock_returned_at/.test(worker)&&/deleted_by_name/.test(worker),
+  weeklyStockCount:/inventory_counts/.test(worker)&&/WEEKLY_STOCK_COUNT/.test(worker)&&/function weeklyStockCount/.test(admin),
+  customerStylePos:/pos-customer-grid/.test(html)&&/pos-product-card/.test(admin),
+  fullSystemSettings:/PUBLIC_SETTING_KEYS/.test(worker)&&/hero_title/.test(worker)&&/enable_transfer/.test(worker)&&/setMinimumOrder/.test(html),
+  profileAvatar:/avatar_image/.test(worker)&&/profileAvatarFile/.test(app)&&/applyProfileHeader/.test(app),
+  rewardSystem:/CREATE TABLE IF NOT EXISTS rewards/.test(worker)&&/REDEEM_REWARD/.test(worker)&&/id="rewards" class="page"/.test(html)&&/function showRewards/.test(app),
+  systemVersion:/version:"5\.5\.0"/.test(worker)&&/v5\.5\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
