@@ -237,7 +237,7 @@ async function adminApi(request,env,url){const path=url.pathname;
 }
 
 export default{async fetch(request,env,ctx){const url=new URL(request.url);try{
- if(request.method==="GET"&&url.pathname==="/api/health"){await initializeDatabase(env.DB);await env.DB.prepare("SELECT 1").first();return json({ok:true,database:"connected",version:"5.5.0"})}
+ if(request.method==="GET"&&url.pathname==="/api/health"){await initializeDatabase(env.DB);await env.DB.prepare("SELECT 1").first();return json({ok:true,database:"connected",version:"5.5.1"})}
  if(url.pathname==="/api/admin/session"||url.pathname.startsWith("/api/admin/")){await initializeDatabase(env.DB);return adminApi(request,env,url)}
  if(url.pathname.startsWith("/api/")){const session=await ensureUser(request,env.DB,false);if(url.pathname==="/api/session"&&request.method==="GET")return json({user:session.user,profile:await getProfile(env.DB,session.user.id)},{headers:session.cookie?{"set-cookie":session.cookie}:{}});const response=await publicApi(request,env,url,session.user,ctx);if(session.cookie){const headers=new Headers(response.headers);headers.append("set-cookie",session.cookie);return new Response(response.body,{status:response.status,statusText:response.statusText,headers})}return response}
  if(url.pathname==="/admin"||url.pathname.startsWith("/admin/")){const target=new URL("/admin.html",url);return env.ASSETS.fetch(new Request(target,request))}

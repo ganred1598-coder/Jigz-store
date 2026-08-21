@@ -4,6 +4,8 @@ const app=fs.readFileSync(new URL("../public/app.js",import.meta.url),"utf8");
 const admin=fs.readFileSync(new URL("../public/admin.js",import.meta.url),"utf8");
 const worker=fs.readFileSync(new URL("../src/index.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../public/admin.html",import.meta.url),"utf8");
+const storefront=fs.readFileSync(new URL("../public/index.html",import.meta.url),"utf8");
+const guide=fs.readFileSync(new URL("../public/guide.html",import.meta.url),"utf8");
 const wrangler=fs.readFileSync(new URL("../wrangler.jsonc",import.meta.url),"utf8");
 
 const checks={
@@ -25,7 +27,7 @@ const checks={
   editableCommissions:/function editCommission/.test(admin)&&/UPDATE_COMMISSION/.test(worker),
   promotionImage:/promoImage/.test(admin)&&/normalizedImages\(body\.image/.test(worker),
   selectProductWorks:/"scrollProducts" in target\.dataset/.test(app),
-  themedNavIcons:/<svg viewBox="0 0 24 24"/.test(fs.readFileSync(new URL("../public/index.html",import.meta.url),"utf8")),
+  themedNavIcons:/<svg viewBox="0 0 24 24"/.test(storefront),
   cartStarAnimation:/function flyStarToCart/.test(app)&&/Math\.random/.test(app)&&/cart-star/.test(app),
   customOrderSound:/function playAlertSound/.test(admin)&&/setSoundFile/.test(admin)&&/notification_sound/.test(worker),
   promotionManagement:/UPDATE_PROMOTION/.test(worker)&&/DELETE_PROMOTION/.test(worker)&&/function editPromotion/.test(admin),
@@ -70,7 +72,8 @@ const checks={
   fullSystemSettings:/PUBLIC_SETTING_KEYS/.test(worker)&&/hero_title/.test(worker)&&/enable_transfer/.test(worker)&&/setMinimumOrder/.test(html),
   profileAvatar:/avatar_image/.test(worker)&&/profileAvatarFile/.test(app)&&/applyProfileHeader/.test(app),
   rewardSystem:/CREATE TABLE IF NOT EXISTS rewards/.test(worker)&&/REDEEM_REWARD/.test(worker)&&/id="rewards" class="page"/.test(html)&&/function showRewards/.test(app),
-  systemVersion:/version:"5\.5\.0"/.test(worker)&&/v5\.5\.0/.test(html)
+  customerGuide:/href="\/guide\.html"/.test(storefront)&&/คู่มือการใช้งานเว็บไซต์/.test(guide)&&/id="tracking"/.test(guide),
+  systemVersion:/version:"5\.5\.1"/.test(worker)&&/v5\.5\.1/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
