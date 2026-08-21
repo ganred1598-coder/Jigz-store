@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=4.2.0">
-  <link rel="stylesheet" href="/themes.css?v=4.2.0">
-  <link rel="stylesheet" href="/enhancements.css?v=4.2.0">
+  <link rel="stylesheet" href="/admin.css?v=4.3.0">
+  <link rel="stylesheet" href="/themes.css?v=4.3.0">
+  <link rel="stylesheet" href="/enhancements.css?v=4.3.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -37,7 +37,7 @@
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v4.2.0 · FULL SYSTEM</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v4.3.0 · FULL SYSTEM</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -87,8 +87,8 @@
 
         <section id="products" class="page">
           <div class="page-head"><div><h1>สินค้า &amp; สต็อกจริง</h1><p>เพิ่มและแก้ข้อมูลสินค้า รับล็อต และบันทึกต้นทุน FIFO</p></div><div class="row-actions"><button class="button" data-action="new-product">＋ เพิ่มสินค้า</button><button class="button ghost" data-action="load-products">⟳ รีเฟรช</button></div></div>
-          <article class="panel"><form id="receiveForm" class="inline-form"><select id="receiveProduct" class="field" required></select><input id="receiveQty" class="field" type="number" min="0.001" step="0.001" required placeholder="จำนวนรับเข้า"><input id="receiveCost" class="field" type="number" min="0" step="0.01" required placeholder="ต้นทุน/หน่วย"><input id="receiveSupplier" class="field" placeholder="ผู้จำหน่าย"><input id="receiveNote" class="field" placeholder="หมายเหตุ"><button class="button" type="submit">รับสต็อก</button></form></article>
-          <article class="panel top-gap"><div class="filters"><input id="productSearch" class="field" type="search" placeholder="ค้นหาสินค้า"></div><div class="table-wrap"><table><thead><tr><th>สินค้า</th><th>หมวด</th><th>หน่วย</th><th>ราคาเริ่มต้น</th><th>คงเหลือ</th><th>สถานะ</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div></article>
+          <article id="receiveStockPanel" class="panel"><div class="panel-head"><div><h2>รับสต็อกและบันทึกต้นทุนจริง</h2><small class="muted">ต้นทุนต่อหน่วยตรงนี้จะใช้คำนวณกำไรและค่าคอมแบบ FIFO</small></div></div><form id="receiveForm" class="inline-form"><select id="receiveProduct" class="field" required></select><input id="receiveQty" class="field" type="number" min="0.001" step="0.001" required placeholder="จำนวนรับเข้า"><input id="receiveCost" class="field" type="number" min="0" step="0.01" required placeholder="ต้นทุน/หน่วย"><input id="receiveSupplier" class="field" placeholder="ผู้จำหน่าย"><input id="receiveNote" class="field" placeholder="หมายเหตุ"><button class="button" type="submit">รับสต็อก + บันทึกทุน</button></form></article>
+          <article class="panel top-gap"><div class="filters"><input id="productSearch" class="field" type="search" placeholder="ค้นหาสินค้า"></div><div class="table-wrap"><table><thead><tr><th>สินค้า</th><th>หมวด</th><th>หน่วย</th><th>ราคาขาย</th><th>ต้นทุนล่าสุด</th><th>คงเหลือ</th><th>สถานะ</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div></article>
         </section>
 
         <section id="customers" class="page">
@@ -104,13 +104,13 @@
 
         <section id="agents" class="page">
           <div class="page-head"><div><h1>ตัวแทน &amp; ค่าคอม</h1><p>คำนวณจากกำไรหลังหักต้นทุนจริงและค่าใช้จ่าย</p></div><button class="button" data-action="load-agents">⟳ รีเฟรช</button></div>
-          <article class="panel"><form id="agentForm" class="inline-form"><input id="agentCode" class="field" required placeholder="รหัส เช่น SALE001"><input id="agentNameInput" class="field" required placeholder="ชื่อ"><select id="agentType" class="field"><option value="RESELLER">ตัวแทนจำหน่าย</option><option value="SALES">เด็กส่งยอด</option></select><input id="agentRate" class="field" type="number" min="0" max="100" step="0.01" required placeholder="ค่าคอม %"><button class="button" type="submit">บันทึก</button></form><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อ</th><th>ประเภท</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="agentRows"></tbody></table></div></article>
-          <article class="panel top-gap"><div class="panel-head"><h2>รายการค่าคอม</h2><span class="badge">หักต้นทุนจริงแล้ว</span></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ตัวแทน</th><th>รายรับสุทธิ</th><th>ต้นทุนจริง</th><th>ฐานกำไร</th><th>อัตรา</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="commissionRows"></tbody></table></div></article>
+          <article class="panel"><form id="agentForm" class="inline-form"><input id="agentCode" class="field" required placeholder="รหัส เช่น SALE001"><input id="agentNameInput" class="field" required placeholder="ชื่อ"><select id="agentType" class="field"><option value="RESELLER">ตัวแทนจำหน่าย</option><option value="SALES">เด็กส่งยอด</option></select><input id="agentRate" class="field" type="number" min="0" max="100" step="0.01" required placeholder="ค่าคอม %"><button class="button" type="submit">เพิ่มตัวแทน</button></form><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อ</th><th>ประเภท</th><th>ค่าคอม</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody id="agentRows"></tbody></table></div></article>
+          <article class="panel top-gap"><div class="panel-head"><h2>รายการค่าคอม</h2><span class="badge">หักต้นทุนจริงแล้ว</span></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ตัวแทน</th><th>รายรับสุทธิ</th><th>ต้นทุนจริง</th><th>ฐานกำไร</th><th>อัตรา</th><th>ค่าคอม</th><th>สถานะ</th><th>จัดการ</th></tr></thead><tbody id="commissionRows"></tbody></table></div></article>
         </section>
 
         <section id="promotions" class="page">
           <div class="page-head"><div><h1>โปรโมชั่น</h1><p>สร้างประกาศหรือส่วนลดที่แสดงหน้าลูกค้า</p></div><button class="button" data-action="load-promotions">⟳ รีเฟรช</button></div>
-          <article class="panel"><form id="promotionForm" class="form"><input id="promoTitle" class="field" required placeholder="ชื่อโปรโมชั่น"><textarea id="promoDescription" class="field" placeholder="รายละเอียด"></textarea><div class="three"><select id="promoType" class="field"><option value="INFO">ประกาศ</option><option value="PERCENT">ลดเปอร์เซ็นต์</option><option value="AMOUNT">ลดเป็นบาท</option></select><input id="promoValue" class="field" type="number" min="0" value="0" placeholder="มูลค่า"><select id="promoStatus" class="field"><option value="ACTIVE">เปิดใช้งาน</option><option value="INACTIVE">ปิดไว้ก่อน</option></select></div><button class="button" type="submit">สร้างโปรโมชั่น</button></form></article><div id="promotionCards" class="cards top-gap"></div>
+          <article class="panel"><form id="promotionForm" class="form"><input id="promoTitle" class="field" required placeholder="ชื่อโปรโมชั่น"><textarea id="promoDescription" class="field" placeholder="รายละเอียด"></textarea><div class="three"><select id="promoType" class="field"><option value="INFO">ประกาศ</option><option value="PERCENT">ลดเปอร์เซ็นต์</option><option value="AMOUNT">ลดเป็นบาท</option></select><input id="promoValue" class="field" type="number" min="0" value="0" placeholder="มูลค่า"><select id="promoStatus" class="field"><option value="ACTIVE">เปิดใช้งาน</option><option value="INACTIVE">ปิดไว้ก่อน</option></select></div><label class="upload-button" for="promoImage">＋ เลือกรูปโปรโมชั่น</label><input id="promoImage" type="file" accept="image/jpeg,image/png,image/webp" hidden><div id="promoImagePreview" class="image-preview"></div><button id="promoSubmit" class="button" type="submit">สร้างโปรโมชั่น</button></form></article><div id="promotionCards" class="cards top-gap"></div>
         </section>
 
         <section id="finance" class="page">
@@ -138,6 +138,6 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js?v=4.2.0" defer></script>
+  <script src="/admin.js?v=4.3.0" defer></script>
 </body>
 </html>

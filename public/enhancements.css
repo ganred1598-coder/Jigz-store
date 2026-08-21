@@ -97,6 +97,16 @@
 .order-timeline.cancelled span.active i { background: #b91c3b; border-color: #ff6480; }
 .order-timeline.cancelled span.active { color: #ff9aaa; }
 
+.product-uploader { display: grid; gap: 10px; padding: 14px; border: 1px dashed #7136a8; border-radius: 14px; background: #12071f; }
+.upload-button { width: max-content; max-width: 100%; padding: 11px 16px; border: 1px solid #a84cf2; border-radius: 11px; background: linear-gradient(135deg, #7823d8, #c026d3); color: #fff; font-weight: 800; cursor: pointer; }
+.upload-button:hover { filter: brightness(1.15); }
+.image-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 10px; }
+.image-tile { display: grid; gap: 6px; align-content: start; padding: 7px; border: 1px solid var(--line); border-radius: 11px; background: #090311; color: var(--muted); font-size: 11px; }
+.image-tile img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
+.image-tile input { accent-color: #b32bff; }
+.promo-image, .promo-admin-card > img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 13px; margin-bottom: 10px; }
+.promo-admin-card { overflow: hidden; }
+
 @media print {
   @page { size: A4; margin: 12mm; }
   .sheet > #modalBody { display: block !important; }
