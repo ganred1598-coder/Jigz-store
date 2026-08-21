@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#070310">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/app.css">
-  <link rel="stylesheet" href="/themes.css">
+  <link rel="stylesheet" href="/app.css?v=4.2.0">
+  <link rel="stylesheet" href="/themes.css?v=4.2.0">
+  <link rel="stylesheet" href="/enhancements.css?v=4.2.0">
   <title>JIGᶻ AGENT Store</title>
 </head>
 <body>
@@ -20,13 +21,13 @@
   <main>
     <section class="hero"><div><span>JIGᶻ AGENT SHOPPING EXPERIENCE</span><h1>รายการสินค้า<br>สั่งง่าย ติดตามได้</h1><p>เลือกขนาดสินค้า กรอกที่อยู่ ชำระเงิน และติดตามสถานะจากหน้าเดียว</p><div class="hero-actions"><button class="primary" data-scroll-products>เลือกสินค้า</button><button class="secondary" data-open="orders">ติดตามออเดอร์</button></div></div><img src="/assets/jigz-planet.png" alt="JIGᶻ Planet"></section>
     <section id="promotionSection" class="hidden"><div class="section-head"><div><small>PROMOTION</small><h2>โปรโมชั่นปัจจุบัน</h2></div></div><div id="promotionList" class="promo-list"></div></section>
-    <section id="catalog"><div class="section-head"><div><small>CURRENT CATALOG</small><h2>รายการสินค้า</h2></div><span id="productCount"></span></div><div class="toolbar"><input id="search" type="search" placeholder="ค้นหาสินค้า..."><select id="category"><option value="">ทุกหมวดหมู่</option></select><select id="stockFilter"><option value="">ทุกสถานะ</option><option value="ready">มีสินค้า</option><option value="wait">รอรีสต็อก</option></select><select id="sort"><option value="name">เรียงตามชื่อ</option><option value="priceAsc">ราคาน้อย → มาก</option><option value="priceDesc">ราคามาก → น้อย</option></select></div><div id="systemStatus" class="system-status"><i></i> กำลังโหลดระบบสินค้า...</div><div id="productGrid" class="product-grid"></div></section>
+    <section id="catalog"><div class="section-head"><div><small>CURRENT CATALOG</small><h2>รายการสินค้า</h2></div><span id="productCount"></span></div><div class="toolbar"><input id="search" type="search" placeholder="ค้นหาสินค้า..."><select id="category"><option value="">ทุกหมวดหมู่</option></select><select id="stockFilter"><option value="">ทุกสถานะ</option><option value="ready">มีสินค้า</option><option value="wait">รอรีสต็อก</option></select><select id="sort"><option value="name">เรียงตามชื่อ</option><option value="priceAsc">ราคาน้อย → มาก</option><option value="priceDesc">ราคามาก → น้อย</option></select><div class="view-toggle" role="group" aria-label="เลือกรูปแบบรายการสินค้า"><button type="button" data-catalog-view="grid" aria-label="มุมมองตาราง" title="ตาราง">▦</button><button type="button" data-catalog-view="list" aria-label="มุมมองรายการ" title="รายการ">☷</button><button type="button" data-catalog-view="compact" aria-label="มุมมองกะทัดรัด" title="กะทัดรัด">▤</button></div></div><div id="systemStatus" class="system-status"><i></i> กำลังโหลดระบบสินค้า...</div><div id="productGrid" class="product-grid" data-view="grid"></div></section>
   </main>
 
   <nav class="bottom-nav"><button class="active" data-home>⌂<small>สินค้า</small></button><button data-open="cart">🛒<small>ตะกร้า</small></button><button data-open="orders">▤<small>ออเดอร์</small></button><button data-open="account">♙<small>บัญชี</small></button><a id="lineContact" href="https://line.me/R/ti/p/@jigz">☵<small>ติดต่อ</small></a></nav>
   <div id="modal" class="modal hidden"><div class="sheet"><div class="sheet-head"><h2 id="modalTitle"></h2><button id="modalClose" type="button">✕</button></div><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
   <div id="warp" class="warp hidden"><img src="/assets/jigz-planet.png" alt=""><b>JIGᶻ KINGDOM</b><small>กำลังเปิดประตูวาร์ป · 3 วินาที</small></div>
-  <script src="/app.js" defer></script>
+  <script src="/app.js?v=4.2.0" defer></script>
 </body>
 </html>

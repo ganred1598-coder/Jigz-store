@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css">
-  <link rel="stylesheet" href="/themes.css">
+  <link rel="stylesheet" href="/admin.css?v=4.2.0">
+  <link rel="stylesheet" href="/themes.css?v=4.2.0">
+  <link rel="stylesheet" href="/enhancements.css?v=4.2.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -27,6 +28,7 @@
         <button data-view="shipping">🚚 <span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
         <button data-view="products">◈ <span>สินค้า &amp; สต็อก</span></button>
         <button data-view="customers">♧ <span>ลูกค้า / CRM</span></button>
+        <button class="owner-only hidden" data-view="staff">♛ <span>ผู้ดูแลระบบ</span></button>
         <button data-view="agents">♙ <span>ตัวแทน &amp; ค่าคอม</span></button>
         <button data-view="promotions">✦ <span>โปรโมชั่น</span></button>
         <button data-view="finance">◎ <span>การเงิน</span></button>
@@ -35,7 +37,7 @@
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v4.0.0 · FULL SYSTEM</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v4.2.0 · FULL SYSTEM</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -94,6 +96,12 @@
           <article class="panel"><div class="table-wrap"><table><thead><tr><th>ลูกค้า</th><th>เบอร์</th><th>ที่อยู่</th><th>แต้ม</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th></th></tr></thead><tbody id="userRows"></tbody></table></div></article>
         </section>
 
+        <section id="staff" class="page">
+          <div class="page-head"><div><h1>ผู้ดูแลระบบ</h1><p>แต่งตั้งหรือถอดสิทธิ์แอดมินจากผู้ใช้ที่ระบบแยกให้อัตโนมัติ</p></div><button class="button" data-action="load-staff">⟳ รีเฟรช</button></div>
+          <article class="panel staff-guide"><b>วิธีแต่งตั้ง</b><p>ให้ผู้ที่จะเป็นแอดมินเปิดหน้าร้านบนอุปกรณ์ของตนหนึ่งครั้ง จากนั้นค้นหาชื่อ เบอร์ หรือรหัสอุปกรณ์ด้านล่าง แล้วกด “แต่งตั้งแอดมิน”</p><span class="badge">OWNER เท่านั้น</span></article>
+          <article class="panel top-gap"><div class="filters"><input id="staffSearch" class="field" type="search" placeholder="ค้นหาชื่อ เบอร์ หรือรหัสอุปกรณ์"><select id="staffRoleFilter" class="field"><option value="">ทุกบทบาท</option><option value="ADMIN">แอดมิน</option><option value="CUSTOMER">ผู้ใช้ทั่วไป</option></select></div><div class="table-wrap"><table><thead><tr><th>ผู้ใช้</th><th>เบอร์</th><th>บทบาท</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th>จัดการ</th></tr></thead><tbody id="staffRows"></tbody></table></div></article>
+        </section>
+
         <section id="agents" class="page">
           <div class="page-head"><div><h1>ตัวแทน &amp; ค่าคอม</h1><p>คำนวณจากกำไรหลังหักต้นทุนจริงและค่าใช้จ่าย</p></div><button class="button" data-action="load-agents">⟳ รีเฟรช</button></div>
           <article class="panel"><form id="agentForm" class="inline-form"><input id="agentCode" class="field" required placeholder="รหัส เช่น SALE001"><input id="agentNameInput" class="field" required placeholder="ชื่อ"><select id="agentType" class="field"><option value="RESELLER">ตัวแทนจำหน่าย</option><option value="SALES">เด็กส่งยอด</option></select><input id="agentRate" class="field" type="number" min="0" max="100" step="0.01" required placeholder="ค่าคอม %"><button class="button" type="submit">บันทึก</button></form><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อ</th><th>ประเภท</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="agentRows"></tbody></table></div></article>
@@ -130,6 +138,6 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js" defer></script>
+  <script src="/admin.js?v=4.2.0" defer></script>
 </body>
 </html>
