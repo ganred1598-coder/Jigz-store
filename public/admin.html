@@ -4,126 +4,132 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#030612">
-  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
+  <link rel="stylesheet" href="/admin.css">
+  <link rel="stylesheet" href="/themes.css">
   <title>JIGᶻ AGENT — Command Center</title>
-  <style>
-    :root{--bg:#030612;--panel:#07101f;--panel2:#09152a;--line:#172747;--text:#f6f7ff;--muted:#8591aa;--purple:#a020f0;--pink:#f000b8;--blue:#0869ff;--cyan:#00c8ff;--orange:#ff5b00;--green:#24e584;--red:#ff315f;--shadow:0 18px 50px #0008}*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:radial-gradient(circle at 88% 0,#081c45 0,transparent 26%),radial-gradient(circle at 0 80%,#17062e 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,"Noto Sans Thai",Arial,sans-serif;min-height:100vh}button,input,select{font:inherit}.hidden{display:none!important}.muted{color:var(--muted)}.app{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:14px 12px;border-right:1px solid var(--line);background:#030815ed;backdrop-filter:blur(18px);overflow:auto}.logo{height:118px;display:grid;place-items:center;margin-bottom:9px;border:1px solid var(--line);border-radius:18px;background:radial-gradient(circle,#811bb047,transparent 60%)}.logo strong{display:block;font-size:32px;letter-spacing:.08em;text-shadow:0 0 16px #c026d3}.logo small{display:block;text-align:center;letter-spacing:.45em;color:#d78cff}.nav{display:grid;gap:5px}.nav button{width:100%;display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid transparent;border-radius:11px;background:transparent;color:#d8deeb;text-align:left;cursor:pointer}.nav button:hover{background:#0b1427}.nav button.active{border-color:#8b19c8;background:linear-gradient(90deg,#8d0fd4,#530c89);box-shadow:0 0 23px #a020f04a}.nav .icon{width:25px;text-align:center;font-size:18px}.pill{margin-left:auto;min-width:28px;padding:2px 7px;border-radius:999px;background:var(--orange);font-size:11px;text-align:center}.side-status{margin-top:18px;padding:18px;border:1px solid #532783;border-radius:15px;background:radial-gradient(circle at 85% 100%,#54158b,transparent 55%),#07101f}.side-status b{font-size:28px}.online{margin-top:20px;color:var(--green);font-weight:800}.main{min-width:0}.topbar{position:sticky;top:0;z-index:20;height:68px;display:flex;align-items:center;gap:14px;padding:10px 20px;background:#030612e8;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.menu-toggle{display:none}.search{flex:1;max-width:600px}.search input,.field{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#07101f;color:#fff;outline:none}.search input:focus,.field:focus{border-color:#6f35ff;box-shadow:0 0 0 3px #6f35ff24}.admin-badge{display:flex;align-items:center;gap:10px;margin-left:auto}.avatar{width:42px;height:42px;border:2px solid #8829ff;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ff4b65,#33138b);font-weight:900}.content{padding:18px;max-width:1500px;margin:auto}.page{display:none}.page.active{display:block}.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.head h1{font-size:20px;margin:0}.head p{margin:4px 0 0}.button{border:0;border-radius:10px;padding:11px 15px;color:#fff;background:linear-gradient(135deg,#7c17dc,#005cf8);font-weight:800;cursor:pointer}.button.orange{background:linear-gradient(135deg,#ff7a00,#ef2a00)}.button.ghost{border:1px solid var(--line);background:#07101f}.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.metric{position:relative;min-height:157px;padding:18px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(150deg,#11183a,#070b19)}.metric:nth-child(2){border-color:#8e3510;background:linear-gradient(145deg,#431b0b,#130a0a)}.metric:nth-child(3){border-color:#7b1a9b;background:linear-gradient(145deg,#39063e,#110819)}.metric:nth-child(4){border-color:#0a67a8;background:linear-gradient(145deg,#062c5c,#06111c)}.metric:nth-child(5){border-color:#3d2a92;background:linear-gradient(145deg,#20155a,#0b0a1d)}.metric .value{display:block;margin-top:14px;font-size:30px}.metric .symbol{position:absolute;right:16px;top:46px;font-size:36px;filter:drop-shadow(0 0 12px currentColor)}.metric footer{position:absolute;left:0;right:0;bottom:0;padding:11px 18px;background:#03061273;border-top:1px solid #ffffff12}.columns{display:grid;grid-template-columns:minmax(320px,.85fr) minmax(500px,1.35fr);gap:14px;margin-top:14px}.panel{border:1px solid var(--line);border-radius:14px;background:#060d1c;box-shadow:var(--shadow);overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:16px;margin:0}.tasks{padding:4px 16px}.task{display:grid;grid-template-columns:1fr auto auto;gap:13px;align-items:center;padding:13px 0;border-bottom:1px solid #142139}.task:last-child{border:0}.state{font-size:12px;color:#ff9d00}.state.purple{color:#f000d8}.state.blue{color:#1b9cff}.chart{padding:18px}.chart-svg{width:100%;height:220px}.chart-grid{stroke:#19304a;stroke-width:1}.chart-line{fill:none;stroke:url(#lineGradient);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.chart-area{fill:url(#areaGradient)}.chart-kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}.chart-kpis div{padding:13px 16px;border-right:1px solid var(--line)}.chart-kpis div:last-child{border:0}.chart-kpis b{font-size:21px}.lower{display:grid;grid-template-columns:1fr 1.6fr;gap:14px;margin-top:14px}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:16px}.action{padding:12px 8px;border:0;border-radius:12px;background:linear-gradient(145deg,#5f0fc1,#881be5);color:#fff;cursor:pointer}.action:nth-child(2){background:linear-gradient(145deg,#ed4800,#ff7b00)}.action:nth-child(3),.action:nth-child(4){background:linear-gradient(145deg,#113ac7,#075cf0)}.action i{display:grid;place-items:center;width:46px;height:46px;margin:auto auto 8px;border-radius:12px;background:#ffffff14;font-style:normal;font-size:22px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:12px;color:#aeb9d0;background:#081225}.table td{font-size:13px}.badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#7c3aed2b;color:#d9b8ff;border:1px solid #7c3aed66;font-size:11px}.badge.green{background:#22c55e20;color:#76eea4;border-color:#22c55e55}.badge.orange{background:#ff7a0020;color:#ffae5c;border-color:#ff7a0055}.form-grid{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:10px;padding:16px}.empty{padding:34px;text-align:center;color:var(--muted)}.notice{padding:13px 15px;border:1px solid #265087;border-radius:11px;background:#081a35;color:#bbd6ff}.formula{margin:14px 16px;padding:16px;border:1px solid #7035a2;border-radius:12px;background:#170b29;font-family:ui-monospace,monospace;color:#e9d5ff}.placeholder{min-height:380px;display:grid;place-items:center;text-align:center}.placeholder .big{font-size:60px}.login{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 35%,#32106b,transparent 35%),#02040e}.login-box{width:min(430px,100%);padding:30px;border:1px solid #6a2899;border-radius:24px;background:#060c19e8;box-shadow:0 0 80px #7c3aed4d}.login-logo{text-align:center;font-size:34px;font-weight:900;text-shadow:0 0 20px #d946ef}.login-box h1{text-align:center;font-size:21px;margin:8px 0 24px}.login-box label{display:block;margin:14px 0 7px;color:#b9c2d4}.error{min-height:24px;margin:9px 0;color:#ff718f}.mobile-mask{display:none}@media(max-width:1120px){.metrics{grid-template-columns:repeat(3,1fr)}.columns,.lower{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr 1fr}.form-grid .button{grid-column:span 2}}@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:50;left:0;transform:translateX(-105%);width:270px;transition:.25s}.app.menu-open .sidebar{transform:none}.mobile-mask{position:fixed;inset:0;z-index:40;background:#0009}.app.menu-open .mobile-mask{display:block}.menu-toggle{display:block}.topbar{padding:10px 12px}.search{display:none}.admin-badge small{display:none}.content{padding:12px}.metrics{grid-template-columns:1fr 1fr}.metric{min-height:140px}.actions{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .button{grid-column:auto}.chart-kpis{grid-template-columns:1fr 1fr}.head{align-items:flex-start}.head .button{white-space:nowrap}}@media(max-width:430px){.metrics{grid-template-columns:1fr}.admin-badge .who{display:none}}
-    .logo img{width:190px;height:104px;object-fit:contain;filter:drop-shadow(0 0 13px #a020f0)}.login-logo img{display:block;width:280px;max-width:100%;height:170px;object-fit:contain;margin:auto;filter:drop-shadow(0 0 22px #a020f0)}.device-ring{width:52px;height:52px;margin:20px auto;border:4px solid #20375d;border-top-color:#e829f2;border-right-color:#087aff;border-radius:50%;animation:scan 1s linear infinite}@keyframes scan{to{transform:rotate(360deg)}}
-  </style>
-  <style>
-    .push-tools{display:flex;align-items:center;gap:8px}.push-button{padding:9px 12px;font-size:12px}.push-button.ready{border-color:#24e584;color:#8fffc0;background:#073321}.push-button:disabled{opacity:.55;cursor:not-allowed}
-    @media(max-width:760px){.push-tools{margin-left:auto}.push-button{width:42px;overflow:hidden;white-space:nowrap;padding:9px}.push-button .push-label{display:none}.admin-badge{margin-left:0}}
-  </style>
 </head>
 <body>
-  <div id="login" class="login">
-    <div class="login-box">
-      <div class="login-logo"><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"></div>
-      <h1>COMMAND CENTER</h1>
-      <div class="device-ring"></div>
-      <div id="accessMessage" class="notice" style="text-align:center">กำลังตรวจสอบรหัสอุปกรณ์อัตโนมัติ...</div>
-      <button id="backStore" class="button ghost hidden" type="button" style="width:100%;margin-top:16px" onclick="location.href='/'">กลับหน้าร้าน</button>
-    </div>
-  </div>
+  <section id="gate" class="gate">
+    <div class="gate-card"><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"><div class="loader"></div><h1>COMMAND CENTER</h1><p id="gateText">กำลังตรวจสอบอุปกรณ์อัตโนมัติ...</p><a id="gateBack" class="button ghost hidden" href="/">กลับหน้าร้าน</a></div>
+  </section>
 
   <div id="app" class="app hidden">
-    <div class="mobile-mask" onclick="toggleMenu(false)"></div>
+    <button class="mask" type="button" aria-label="ปิดเมนู"></button>
     <aside class="sidebar">
       <div class="logo"><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"></div>
-      <nav class="nav">
-        <button class="active" data-view="dashboard"><span class="icon">〽</span>COMMAND CENTER</button>
-        <button data-view="pos"><span class="icon">▣</span>POS ขายหน้าร้าน</button>
-        <button data-view="orders"><span class="icon">▤</span>ออเดอร์ <span class="pill" id="orderPill">0</span></button>
-        <button data-view="shipping"><span class="icon">▱</span>จัดส่ง / COD</button>
-        <button data-view="payments"><span class="icon">◉</span>รอชำระเงิน</button>
-        <button data-view="products"><span class="icon">◈</span>สินค้า &amp; สต็อก</button>
-        <button data-view="agents"><span class="icon">♙</span>ตัวแทน &amp; ค่าคอม</button>
-        <button data-view="customers"><span class="icon">♧</span>ลูกค้า / CRM</button>
-        <button data-view="promotions"><span class="icon">✦</span>โปรโมชั่น</button>
-        <button data-view="finance"><span class="icon">฿</span>การเงิน</button>
-        <button data-view="reports"><span class="icon">▦</span>รายงาน</button>
-        <button data-view="settings"><span class="icon">⚙</span>ตั้งค่าระบบเว็บ</button>
-        <button data-view="chat"><span class="icon">☵</span>แชททีมแอดมิน</button>
-        <button id="logout"><span class="icon">↪</span>กลับหน้าร้าน</button>
+      <nav id="nav">
+        <button class="active" data-view="dashboard">〽 <span>COMMAND CENTER</span></button>
+        <button data-view="pos">🛒 <span>POS ขายหน้าร้าน</span></button>
+        <button data-view="orders">▤ <span>ออเดอร์</span><i id="orderPill">0</i></button>
+        <button data-view="payments">฿ <span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
+        <button data-view="shipping">🚚 <span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
+        <button data-view="products">◈ <span>สินค้า &amp; สต็อก</span></button>
+        <button data-view="customers">♧ <span>ลูกค้า / CRM</span></button>
+        <button data-view="agents">♙ <span>ตัวแทน &amp; ค่าคอม</span></button>
+        <button data-view="promotions">✦ <span>โปรโมชั่น</span></button>
+        <button data-view="finance">◎ <span>การเงิน</span></button>
+        <button data-view="reports">▦ <span>รายงาน &amp; Audit</span></button>
+        <button data-view="settings">⚙ <span>ตั้งค่าระบบเว็บ</span></button>
+        <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
+        <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><div>v3.1.0 · PUSH READY</div><div class="online">● ONLINE</div></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v4.0.0 · FULL SYSTEM</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
       <header class="topbar">
-        <button class="button ghost menu-toggle" onclick="toggleMenu(true)">☰</button>
-        <div class="search"><input type="search" placeholder="ค้นหาเมนู สินค้า ลูกค้า ออเดอร์..."></div>
-        <div class="push-tools"><button id="pushEnable" class="button ghost push-button" type="button" onclick="enablePush()">🔔 <span class="push-label">เปิดแจ้งเตือน</span></button><button id="pushTest" class="button ghost push-button hidden" type="button" onclick="testPush()">⚡ <span class="push-label">ทดสอบ</span></button></div>
-        <div class="admin-badge"><div class="avatar">JA</div><div class="who"><b id="adminName">JIGᶻ Admin</b><small id="adminRole" class="muted" style="display:block">กำลังระบุอุปกรณ์</small></div></div>
+        <button id="menuButton" class="icon-button" type="button">☰</button>
+        <input id="globalSearch" type="search" placeholder="ค้นหาออเดอร์ ลูกค้า หรือสินค้า...">
+        <button id="pushEnable" class="button ghost small" type="button">🔔 เปิดแจ้งเตือน</button>
+        <button id="pushTest" class="button ghost small hidden" type="button">⚡ ทดสอบ</button>
+        <div class="admin"><span class="avatar">JA</span><div><b id="adminName">JIGᶻ Admin</b><small id="adminRole">กำลังตรวจสอบ</small></div></div>
       </header>
 
       <main class="content">
         <section id="dashboard" class="page active">
-          <div class="head"><div><h1>〽 COMMAND CENTER</h1><p class="muted">ภาพรวมการทำงานของระบบ</p></div><button class="button" onclick="loadDashboard()">⟳ รีเฟรชข้อมูล</button></div>
+          <div class="page-head"><div><h1>〽 COMMAND CENTER</h1><p>ภาพรวมระบบแบบเรียลไทม์</p></div><button class="button" data-action="refresh-dashboard">⟳ รีเฟรช</button></div>
           <div class="metrics">
-            <article class="metric"><span>ออเดอร์ทั้งหมด</span><b id="mOrders" class="value">—</b><span class="symbol" style="color:#a855f7">▰</span><footer><span style="color:var(--green)">ระบบออนไลน์</span></footer></article>
-            <article class="metric"><span>รอชำระเงิน</span><b id="mPending" class="value">—</b><span class="symbol" style="color:#ff6900">฿</span><footer>ตรวจสอบยอดชำระ</footer></article>
-            <article class="metric"><span>รอแพ็ก</span><b id="mPacking" class="value">—</b><span class="symbol" style="color:#d500e9">⬡</span><footer>คิวคลังสินค้า</footer></article>
-            <article class="metric"><span>พร้อมจัดส่ง</span><b id="mShipping" class="value">—</b><span class="symbol" style="color:#087aff">▰</span><footer>เตรียมส่งพัสดุ</footer></article>
-            <article class="metric"><span>สินค้าต่ำกว่า Minimum</span><b id="mLow" class="value">—</b><span class="symbol" style="color:#735cff">⚠</span><footer>ต้องเติมสต็อก</footer></article>
+            <article><span>ออเดอร์ทั้งหมด</span><b id="mOrders">—</b><small id="mTodayOrders">วันนี้ —</small></article>
+            <article class="orange"><span>รอชำระเงิน</span><b id="mPending">—</b><small>ตรวจสลิปและยืนยันยอด</small></article>
+            <article class="pink"><span>กำลังแพ็ก</span><b id="mPacking">—</b><small>คิวงานคลัง</small></article>
+            <article class="blue"><span>พร้อมจัดส่ง</span><b id="mShipping">—</b><small>ใส่เลขพัสดุ</small></article>
+            <article class="red"><span>สต็อกหมด</span><b id="mLow">—</b><small>ต้องเติมสินค้า</small></article>
           </div>
-          <div class="columns">
-            <article class="panel"><div class="panel-head"><h2>🛍 งานที่ต้องดำเนินการ</h2><span class="muted">ล่าสุด</span></div><div class="tasks"><div class="task"><div><b>ตรวจยอดชำระเงิน</b><div class="state">รอชำระเงิน</div></div><b id="taskPending">0</b><button class="button orange" onclick="showView('payments')">ตรวจสอบ</button></div><div class="task"><div><b>เตรียมแพ็กสินค้า</b><div class="state purple">รอแพ็กสินค้า</div></div><b id="taskPacking">0</b><button class="button" onclick="showView('orders')">เริ่มแพ็ก</button></div><div class="task"><div><b>เตรียมจัดส่ง</b><div class="state blue">พร้อมจัดส่ง</div></div><b id="taskShipping">0</b><button class="button" onclick="showView('shipping')">จัดส่ง</button></div></div></article>
-            <article class="panel"><div class="panel-head"><h2>ยอดขายวันนี้</h2><b>24 ชั่วโมง</b></div><div class="chart"><svg class="chart-svg" viewBox="0 0 700 240" preserveAspectRatio="none" aria-label="กราฟตัวอย่าง"><defs><linearGradient id="lineGradient"><stop stop-color="#d400ff"/><stop offset="1" stop-color="#008cff"/></linearGradient><linearGradient id="areaGradient" x2="0" y2="1"><stop stop-color="#7338ff" stop-opacity=".55"/><stop offset="1" stop-color="#06111f" stop-opacity="0"/></linearGradient></defs><path class="chart-grid" d="M0 40H700M0 90H700M0 140H700M0 190H700"/><path class="chart-area" d="M0 210L55 198L100 170L150 177L205 145L260 131L310 125L360 104L420 65L470 50L520 75L565 58L610 63L660 40L700 24V240H0Z"/><path class="chart-line" d="M0 210L55 198L100 170L150 177L205 145L260 131L310 125L360 104L420 65L470 50L520 75L565 58L610 63L660 40L700 24"/></svg></div><div class="chart-kpis"><div><small class="muted">ตัวแทนใช้งาน</small><br><b id="mAgents">0</b></div><div><small class="muted">ค่าคอมรอจ่าย</small><br><b id="mCommission">฿0</b></div><div><small class="muted">ผู้ใช้ออนไลน์</small><br><b id="mOnline">0</b></div><div><small class="muted">สถานะ</small><br><b style="color:var(--green)">ONLINE</b></div></div></article>
+          <div class="dashboard-grid">
+            <article class="panel"><div class="panel-head"><h2>งานล่าสุด</h2><button class="link" data-view-jump="orders">ดูทั้งหมด</button></div><div id="latestOrders" class="stack"></div></article>
+            <article class="panel"><div class="panel-head"><h2>ยอดขายวันนี้</h2><b id="mSales">฿0</b></div><div class="summary-grid"><div><small>ผู้ใช้ออนไลน์</small><b id="mOnline">0</b></div><div><small>ตัวแทนใช้งาน</small><b id="mAgents">0</b></div><div><small>ค่าคอมรอจ่าย</small><b id="mCommission">฿0</b></div><div><small>ระบบ</small><b class="green">ONLINE</b></div></div><div class="quick-actions"><button data-view-jump="pos">🛒 เปิด POS</button><button data-view-jump="products">📦 รับสต็อก</button><button data-view-jump="payments">฿ ตรวจยอด</button><button data-view-jump="shipping">🚚 จัดส่ง</button></div></article>
           </div>
-          <div class="lower"><article class="panel"><div class="panel-head"><h2>เมนูลัด</h2></div><div class="actions"><button class="action" onclick="showView('pos')"><i>🛒</i>POS</button><button class="action" onclick="showView('orders')"><i>▦</i>สร้างออเดอร์</button><button class="action" onclick="showView('products')"><i>⌕</i>ตรวจสต็อก</button><button class="action" onclick="showView('agents')"><i>฿</i>ค่าคอม</button></div></article><article class="panel"><div class="panel-head"><h2>หลักการคิดค่าคอม</h2></div><div class="formula">(ยอดขาย − ส่วนลด − คืนเงิน − ต้นทุนสินค้าจริง − ค่าธรรมเนียม − เงินช่วยค่าส่ง) × อัตราคอมมิชชัน</div></article></div>
+        </section>
+
+        <section id="pos" class="page">
+          <div class="page-head"><div><h1>POS ขายหน้าร้าน</h1><p>สร้างออเดอร์และตัดสต็อกด้วยระบบเดียวกับหน้าร้าน</p></div><button class="button ghost" data-action="clear-pos">ล้างรายการ</button></div>
+          <div class="pos-grid"><article class="panel"><div class="panel-head"><h2>เลือกสินค้า</h2><input id="posSearch" class="field compact" type="search" placeholder="ค้นหาสินค้า"></div><div id="posProducts" class="product-pick"></div></article><article class="panel pos-cart"><div class="panel-head"><h2>รายการขาย</h2><b id="posTotal">฿0</b></div><div id="posCart" class="stack"></div><form id="posForm" class="form"><input id="posName" class="field" required placeholder="ชื่อลูกค้า"><input id="posPhone" class="field" required placeholder="เบอร์โทร"><textarea id="posAddress" class="field" required placeholder="ที่อยู่ / รับหน้าร้าน"></textarea><div class="two"><select id="posPayment" class="field"><option value="CASH">เงินสด</option><option value="TRANSFER">โอนเงิน</option><option value="COD">COD</option></select><input id="posDiscount" class="field" type="number" min="0" value="0" placeholder="ส่วนลด"></div><input id="posAgent" class="field" placeholder="รหัสตัวแทน (ถ้ามี)"><button class="button wide" type="submit">ยืนยันการขายและตัดสต็อก</button></form></article></div>
+        </section>
+
+        <section id="orders" class="page">
+          <div class="page-head"><div><h1>ออเดอร์</h1><p>รับงาน → ยืนยันเงิน → เริ่มแพ็ก → ตรวจแพ็ก → จัดส่ง → ปิดออเดอร์</p></div><button class="button" data-action="load-orders">⟳ รีเฟรช</button></div>
+          <article class="panel"><div class="filters"><input id="orderSearch" class="field" type="search" placeholder="เลขออเดอร์ ชื่อลูกค้า เบอร์โทร"><select id="orderStatus" class="field"><option value="">ทุกสถานะ</option><option value="NEW">ออเดอร์ใหม่</option><option value="PENDING_PAYMENT">รอชำระเงิน</option><option value="PAID">ชำระแล้ว</option><option value="PACKING">กำลังแพ็ก</option><option value="PACKED">แพ็กแล้ว</option><option value="SHIPPED">จัดส่งแล้ว</option><option value="COMPLETED">สำเร็จ</option><option value="CANCELLED">ยกเลิก</option></select></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ลูกค้า</th><th>ช่องทาง</th><th>ชำระเงิน</th><th>ยอดรวม</th><th>สถานะ</th><th>วันที่</th><th>ทำงาน</th></tr></thead><tbody id="orderRows"></tbody></table></div></article>
+        </section>
+
+        <section id="payments" class="page">
+          <div class="page-head"><div><h1>ตรวจสอบการชำระเงิน</h1><p>ดูหลักฐานและยืนยันยอดก่อนส่งเข้าแพ็ก</p></div><button class="button" data-action="load-payments">⟳ รีเฟรช</button></div>
+          <div id="paymentCards" class="cards"></div>
+        </section>
+
+        <section id="shipping" class="page">
+          <div class="page-head"><div><h1>จัดส่ง / COD</h1><p>บันทึกบริษัทขนส่งและเลขติดตามให้ลูกค้าดูได้ทันที</p></div><button class="button" data-action="load-shipping">⟳ รีเฟรช</button></div>
+          <div id="shippingCards" class="cards"></div>
+        </section>
+
+        <section id="products" class="page">
+          <div class="page-head"><div><h1>สินค้า &amp; สต็อกจริง</h1><p>เพิ่มและแก้ข้อมูลสินค้า รับล็อต และบันทึกต้นทุน FIFO</p></div><div class="row-actions"><button class="button" data-action="new-product">＋ เพิ่มสินค้า</button><button class="button ghost" data-action="load-products">⟳ รีเฟรช</button></div></div>
+          <article class="panel"><form id="receiveForm" class="inline-form"><select id="receiveProduct" class="field" required></select><input id="receiveQty" class="field" type="number" min="0.001" step="0.001" required placeholder="จำนวนรับเข้า"><input id="receiveCost" class="field" type="number" min="0" step="0.01" required placeholder="ต้นทุน/หน่วย"><input id="receiveSupplier" class="field" placeholder="ผู้จำหน่าย"><input id="receiveNote" class="field" placeholder="หมายเหตุ"><button class="button" type="submit">รับสต็อก</button></form></article>
+          <article class="panel top-gap"><div class="filters"><input id="productSearch" class="field" type="search" placeholder="ค้นหาสินค้า"></div><div class="table-wrap"><table><thead><tr><th>สินค้า</th><th>หมวด</th><th>หน่วย</th><th>ราคาเริ่มต้น</th><th>คงเหลือ</th><th>สถานะ</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div></article>
+        </section>
+
+        <section id="customers" class="page">
+          <div class="page-head"><div><h1>ลูกค้า / CRM / แต้ม</h1><p>User ID ไม่ซ้ำ บันทึกที่อยู่ ยอดแต้ม และสถานะออนไลน์</p></div><button class="button" data-action="load-users">⟳ รีเฟรช</button></div>
+          <article class="panel"><div class="table-wrap"><table><thead><tr><th>ลูกค้า</th><th>เบอร์</th><th>ที่อยู่</th><th>แต้ม</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th></th></tr></thead><tbody id="userRows"></tbody></table></div></article>
         </section>
 
         <section id="agents" class="page">
-          <div class="head"><div><h1>ตัวแทนจำหน่าย &amp; เด็กส่งยอด</h1><p class="muted">กำหนดรหัสและอัตราคอมรายคน</p></div><button class="button" onclick="loadAgents()">⟳ รีเฟรช</button></div>
-          <article class="panel"><div class="panel-head"><h2>เพิ่มหรือแก้ไขรหัสตัวแทน</h2><span class="badge">หักต้นทุนจริงก่อน</span></div><form id="agentForm" class="form-grid"><input id="agentCode" class="field" maxlength="24" required placeholder="รหัส เช่น SALE001"><input id="agentName" class="field" maxlength="100" required placeholder="ชื่อผู้ใช้งาน"><select id="agentType" class="field"><option value="RESELLER">ตัวแทนจำหน่าย</option><option value="SALES">เด็กส่งยอด</option></select><input id="agentRate" class="field" type="number" min="0" max="100" step="0.01" required placeholder="ค่าคอม %"><button class="button" type="submit">บันทึกรหัส</button></form><div id="agentMessage" style="padding:0 16px"></div><div class="table-wrap"><table class="table"><thead><tr><th>รหัส</th><th>ชื่อ</th><th>ประเภท</th><th>อัตราคอม</th><th>สถานะ</th><th>สร้างเมื่อ</th></tr></thead><tbody id="agentRows"></tbody></table></div></article>
-          <article class="panel" style="margin-top:14px"><div class="panel-head"><h2>รายการค่าคอม</h2><span class="badge orange">คำนวณจากกำไรจริง</span></div><form id="recalcForm" class="form-grid" style="grid-template-columns:1fr auto"><input id="recalcOrder" class="field" required maxlength="80" placeholder="เลขออเดอร์ที่ต้องการคำนวณใหม่"><button class="button orange" type="submit">คำนวณค่าคอม</button></form><div id="commissionMessage" style="padding:0 16px"></div><div class="table-wrap"><table class="table"><thead><tr><th>ออเดอร์</th><th>ตัวแทน</th><th>ยอดสุทธิ</th><th>ต้นทุนจริง</th><th>ค่าใช้จ่ายอื่น</th><th>ฐานกำไร</th><th>อัตรา</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="commissionRows"></tbody></table></div></article>
+          <div class="page-head"><div><h1>ตัวแทน &amp; ค่าคอม</h1><p>คำนวณจากกำไรหลังหักต้นทุนจริงและค่าใช้จ่าย</p></div><button class="button" data-action="load-agents">⟳ รีเฟรช</button></div>
+          <article class="panel"><form id="agentForm" class="inline-form"><input id="agentCode" class="field" required placeholder="รหัส เช่น SALE001"><input id="agentNameInput" class="field" required placeholder="ชื่อ"><select id="agentType" class="field"><option value="RESELLER">ตัวแทนจำหน่าย</option><option value="SALES">เด็กส่งยอด</option></select><input id="agentRate" class="field" type="number" min="0" max="100" step="0.01" required placeholder="ค่าคอม %"><button class="button" type="submit">บันทึก</button></form><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อ</th><th>ประเภท</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="agentRows"></tbody></table></div></article>
+          <article class="panel top-gap"><div class="panel-head"><h2>รายการค่าคอม</h2><span class="badge">หักต้นทุนจริงแล้ว</span></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ตัวแทน</th><th>รายรับสุทธิ</th><th>ต้นทุนจริง</th><th>ฐานกำไร</th><th>อัตรา</th><th>ค่าคอม</th><th>สถานะ</th></tr></thead><tbody id="commissionRows"></tbody></table></div></article>
         </section>
 
-        <section id="pos" class="page placeholder"><div><div class="big">🛒</div><h1>POS ขายหน้าร้าน</h1><p class="muted">โครงหน้าแยกพร้อมเชื่อมการสร้างออเดอร์และตัดสต็อก FIFO</p></div></section>
-        <section id="orders" class="page placeholder"><div><div class="big">▤</div><h1>หน้าออเดอร์สำหรับทำงาน</h1><p class="muted">แยกจากแดชบอร์ด พร้อมต่อสถานะ ชำระเงิน แพ็ก และจัดส่ง</p></div></section>
-        <section id="shipping" class="page placeholder"><div><div class="big">🚚</div><h1>จัดส่ง / COD</h1><p class="muted">พื้นที่จัดการขนส่ง เลขติดตาม และเก็บเงินปลายทาง</p></div></section>
-        <section id="payments" class="page placeholder"><div><div class="big">฿</div><h1>ตรวจสอบการชำระเงิน</h1><p class="muted">พื้นที่ตรวจสลิป อนุมัติ และบันทึกหลักฐาน</p></div></section>
-        <section id="products" class="page placeholder"><div><div class="big">◈</div><h1>สินค้า &amp; สต็อกจริง</h1><p class="muted">ฐานข้อมูลรองรับล็อตรับเข้า ต้นทุนต่อหน่วย และการตัดแบบ FIFO แล้ว</p></div></section>
-        <section id="customers" class="page"><div class="head"><div><h1>ผู้ใช้งาน / CRM</h1><p class="muted">แต่ละอุปกรณ์มี User ID ไม่ซ้ำและไม่ต้องเข้าสู่ระบบ</p></div><button class="button" onclick="loadUsers()">⟳ รีเฟรช</button></div><article class="panel"><div class="panel-head"><h2>รายการผู้ใช้งาน</h2><span class="badge green">แยกอุปกรณ์อัตโนมัติ</span></div><div class="table-wrap"><table class="table"><thead><tr><th>User ID</th><th>ชื่อระบบ</th><th>สิทธิ์</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th>สร้างเมื่อ</th></tr></thead><tbody id="userRows"></tbody></table></div></article></section>
-        <section id="promotions" class="page placeholder"><div><div class="big">✦</div><h1>โปรโมชั่น</h1><p class="muted">พื้นที่คูปอง ส่วนลด และสิทธิ์รายกลุ่ม</p></div></section>
-        <section id="finance" class="page placeholder"><div><div class="big">◎</div><h1>การเงิน</h1><p class="muted">พื้นที่รายรับ ต้นทุน กำไร และการจ่ายค่าคอม</p></div></section>
-        <section id="reports" class="page placeholder"><div><div class="big">▦</div><h1>รายงาน</h1><p class="muted">พื้นที่รายงานยอดขาย สต็อก กำไร และประสิทธิภาพตัวแทน</p></div></section>
-        <section id="settings" class="page placeholder"><div><div class="big">⚙</div><h1>ตั้งค่าระบบเว็บ</h1><p class="muted">พื้นที่ธีมเทศกาล แบนเนอร์ ข้อมูลร้าน สิทธิ์ และการแจ้งเตือน</p></div></section>
-        <section id="chat" class="page placeholder"><div><div class="big">☵</div><h1>แชททีมแอดมิน</h1><p class="muted">โครงหน้าพร้อมเชื่อมระบบเรียลไทม์ในขั้นถัดไป</p></div></section>
+        <section id="promotions" class="page">
+          <div class="page-head"><div><h1>โปรโมชั่น</h1><p>สร้างประกาศหรือส่วนลดที่แสดงหน้าลูกค้า</p></div><button class="button" data-action="load-promotions">⟳ รีเฟรช</button></div>
+          <article class="panel"><form id="promotionForm" class="form"><input id="promoTitle" class="field" required placeholder="ชื่อโปรโมชั่น"><textarea id="promoDescription" class="field" placeholder="รายละเอียด"></textarea><div class="three"><select id="promoType" class="field"><option value="INFO">ประกาศ</option><option value="PERCENT">ลดเปอร์เซ็นต์</option><option value="AMOUNT">ลดเป็นบาท</option></select><input id="promoValue" class="field" type="number" min="0" value="0" placeholder="มูลค่า"><select id="promoStatus" class="field"><option value="ACTIVE">เปิดใช้งาน</option><option value="INACTIVE">ปิดไว้ก่อน</option></select></div><button class="button" type="submit">สร้างโปรโมชั่น</button></form></article><div id="promotionCards" class="cards top-gap"></div>
+        </section>
+
+        <section id="finance" class="page">
+          <div class="page-head"><div><h1>การเงิน</h1><p>รายรับ ต้นทุน กำไร และค่าคอมจากข้อมูลจริง</p></div><button class="button" data-action="load-reports">⟳ รีเฟรช</button></div>
+          <div class="metrics four"><article><span>รายรับ</span><b id="fRevenue">฿0</b></article><article class="orange"><span>ต้นทุนจริง</span><b id="fCost">฿0</b></article><article class="blue"><span>กำไรขั้นต้น</span><b id="fProfit">฿0</b></article><article class="pink"><span>จำนวนออเดอร์</span><b id="fOrders">0</b></article></div><article class="panel top-gap"><div class="panel-head"><h2>สรุปตามสถานะ</h2></div><div id="financeStatuses" class="summary-list"></div></article>
+        </section>
+
+        <section id="reports" class="page">
+          <div class="page-head"><div><h1>รายงาน &amp; Audit</h1><p>ยอดขาย 30 วัน สินค้าขายดี สต็อก และประวัติการทำรายการ</p></div><button class="button" data-action="load-reports">⟳ รีเฟรช</button></div>
+          <div class="report-grid"><article class="panel"><div class="panel-head"><h2>ยอดขาย 30 วัน</h2></div><div id="salesBars" class="bars"></div></article><article class="panel"><div class="panel-head"><h2>สินค้าขายดี</h2></div><div id="topProducts" class="summary-list"></div></article></div><article class="panel top-gap"><div class="panel-head"><h2>Audit Log</h2></div><div class="table-wrap"><table><thead><tr><th>เวลา</th><th>Action</th><th>ประเภท</th><th>รายการ</th><th>ผู้ทำ</th></tr></thead><tbody id="auditRows"></tbody></table></div></article>
+        </section>
+
+        <section id="settings" class="page">
+          <div class="page-head"><div><h1>ตั้งค่าระบบเว็บ</h1><p>ควบคุมข้อมูลร้าน ธีม การชำระเงิน ค่าส่ง และแต้ม</p></div></div>
+          <article class="panel"><form id="settingsForm" class="settings-form"><label>ชื่อร้าน<input id="setShopName" class="field"></label><label>ประกาศหน้าเว็บ<input id="setAnnouncement" class="field"></label><label>สถานะร้าน<select id="setShopOpen" class="field"><option value="true">เปิดรับออเดอร์</option><option value="false">ปิดรับออเดอร์</option></select></label><label>ค่าจัดส่ง<input id="setShipping" class="field" type="number" min="0"></label><label>แต้ม 1 คะแนนต่อยอดซื้อ<input id="setPointsRate" class="field" type="number" min="1"></label><label>ธีม<select id="setTheme" class="field"><option value="space">Space</option><option value="newyear">New Year</option><option value="songkran">Songkran</option><option value="halloween">Halloween</option><option value="christmas">Christmas</option></select></label><label>LINE OA<input id="setLine" class="field"></label><label>Instagram<input id="setInstagram" class="field"></label><label>ธนาคาร<input id="setBankName" class="field"></label><label>ชื่อบัญชี<input id="setBankAccount" class="field"></label><label>เลขบัญชี<input id="setBankNumber" class="field"></label><label class="full">รูป QR (URL หรือรูปที่เลือก)<input id="setQrUrl" class="field" placeholder="https://..."><input id="setQrFile" type="file" accept="image/*"></label><button class="button" type="submit">บันทึกการตั้งค่าทั้งระบบ</button></form></article>
+        </section>
+
+        <section id="chat" class="page">
+          <div class="page-head"><div><h1>แชททีมแอดมิน</h1><p>อัปเดตข้อความใหม่อัตโนมัติทุก 4 วินาที</p></div></div>
+          <article class="panel chat-panel"><div id="chatMessages" class="chat-messages"></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" maxlength="1000" required placeholder="พิมพ์ข้อความถึงทีมแอดมิน..."><button class="button" type="submit">ส่ง</button></form></article>
+        </section>
       </main>
     </section>
   </div>
 
-  <script>
-    const q=s=>document.querySelector(s),money=new Intl.NumberFormat('th-TH',{style:'currency',currency:'THB',maximumFractionDigits:2});
-    function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-    async function api(path,options={}){const r=await fetch(path,{...options,headers:{'content-type':'application/json',...(options.headers||{})}});let data={};try{data=await r.json()}catch{}if(!r.ok){if(r.status===401)showGate('อุปกรณ์นี้ไม่มีสิทธิ์ใช้งานหลังบ้าน');throw new Error(data.error||'request_failed')}return data}
-    function showGate(message){q('#app').classList.add('hidden');q('#login').classList.remove('hidden');q('#accessMessage').textContent=message||'กำลังตรวจสอบรหัสอุปกรณ์อัตโนมัติ...';q('.device-ring').classList.toggle('hidden',Boolean(message));q('#backStore').classList.toggle('hidden',!message)}
-    function showApp(){q('#login').classList.add('hidden');q('#app').classList.remove('hidden');loadDashboard()}
-    function urlB64(value){const padding='='.repeat((4-value.length%4)%4),raw=atob((value+padding).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(raw,c=>c.charCodeAt(0))}
-    function pushState(message,ready=false){const button=q('#pushEnable');button.classList.toggle('ready',ready);button.innerHTML=`🔔 <span class="push-label">${esc(message)}</span>`;q('#pushTest').classList.toggle('hidden',!ready)}
-    async function checkPush(){
-      if(!('serviceWorker'in navigator)||!('PushManager'in window)||!('Notification'in window)){pushState('เครื่องนี้ไม่รองรับ');q('#pushEnable').disabled=true;return}
-      try{const registration=await navigator.serviceWorker.register('/sw.js',{scope:'/'}),subscription=await registration.pushManager.getSubscription();pushState(subscription&&Notification.permission==='granted'?'แจ้งเตือนเปิดอยู่':'เปิดแจ้งเตือน',Boolean(subscription&&Notification.permission==='granted'))}catch{pushState('เปิดแจ้งเตือน')}
-    }
-    async function enablePush(){
-      const button=q('#pushEnable');button.disabled=true;pushState('กำลังเปิด...');
-      try{if(!('serviceWorker'in navigator)||!('PushManager'in window)||!('Notification'in window))throw new Error('unsupported');const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('permission_denied');const registration=await navigator.serviceWorker.register('/sw.js',{scope:'/'}),config=await api('/api/admin/push/config'),existing=await registration.pushManager.getSubscription(),subscription=existing||await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlB64(config.publicKey)});await api('/api/admin/push/subscribe',{method:'POST',body:JSON.stringify({subscription:subscription.toJSON()})});pushState('แจ้งเตือนเปิดอยู่',true)}catch(error){pushState(error.message==='permission_denied'?'ถูกปิดโดยเครื่อง':'เปิดไม่สำเร็จ');alert(error.message==='permission_denied'?'กรุณาอนุญาตการแจ้งเตือนในการตั้งค่าเบราว์เซอร์':'อุปกรณ์หรือเบราว์เซอร์นี้ยังเปิด Web Push ไม่สำเร็จ')}finally{button.disabled=false}
-    }
-    async function testPush(){const button=q('#pushTest');button.disabled=true;button.textContent='กำลังส่ง...';try{const result=await api('/api/admin/push/test',{method:'POST',body:'{}'});button.textContent=result.sent?'✓ ส่งแล้ว':'ส่งไม่สำเร็จ';setTimeout(()=>{button.innerHTML='⚡ <span class="push-label">ทดสอบ</span>';button.disabled=false},1800)}catch{button.textContent='ลองใหม่';button.disabled=false}}
-    function toggleMenu(open){q('#app').classList.toggle('menu-open',open)}
-    function showView(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('.nav button[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));toggleMenu(false);if(id==='agents'){loadAgents();loadCommissions()}if(id==='customers')loadUsers();scrollTo(0,0)}
-    q('#logout').addEventListener('click',()=>location.href='/');
-    document.querySelectorAll('.nav button[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-    async function loadDashboard(){try{const s=(await api('/api/admin/summary')).summary;q('#mOrders').textContent=s.orders;q('#mPending').textContent=s.pending;q('#mPacking').textContent=s.packing;q('#mShipping').textContent=s.shipping;q('#mLow').textContent=s.lowStock;q('#mAgents').textContent=s.activeAgents;q('#mCommission').textContent=money.format(s.pendingCommission);q('#mOnline').textContent=s.onlineUsers;q('#taskPending').textContent=s.pending;q('#taskPacking').textContent=s.packing;q('#taskShipping').textContent=s.shipping;q('#orderPill').textContent=s.orders}catch{}}
-    async function loadAgents(){try{const a=(await api('/api/admin/agents')).agents;q('#agentRows').innerHTML=a.length?a.map(x=>`<tr><td><b>${esc(x.code)}</b></td><td>${esc(x.name)}</td><td><span class="badge">${x.agent_type==='RESELLER'?'ตัวแทนจำหน่าย':'เด็กส่งยอด'}</span></td><td>${Number(x.commission_rate).toFixed(2)}%</td><td><span class="badge green">${esc(x.status)}</span></td><td>${esc(x.created_at)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">ยังไม่มีรหัสตัวแทน</td></tr>'}catch{}}
-    async function loadUsers(){try{const a=(await api('/api/admin/users')).users,now=Date.now();q('#userRows').innerHTML=a.length?a.map(x=>{const seen=new Date(String(x.last_seen_at).replace(' ','T')+'Z').getTime(),online=Number.isFinite(seen)&&now-seen<300000;return`<tr><td><code>${esc(x.id)}</code></td><td><b>${esc(x.display_name)}</b></td><td><span class="badge">${esc(x.role)}</span></td><td><span class="badge ${online?'green':''}">${online?'ONLINE':'OFFLINE'}</span></td><td>${esc(x.last_seen_at)}</td><td>${esc(x.created_at)}</td></tr>`}).join(''):'<tr><td colspan="6" class="empty">ยังไม่มีผู้ใช้งาน</td></tr>'}catch{}}
-    q('#agentForm').addEventListener('submit',async e=>{e.preventDefault();const out=q('#agentMessage');out.innerHTML='<p class="muted">กำลังบันทึก...</p>';try{await api('/api/admin/agents',{method:'POST',body:JSON.stringify({code:q('#agentCode').value,name:q('#agentName').value,agentType:q('#agentType').value,commissionRate:q('#agentRate').value})});out.innerHTML='<p style="color:var(--green)">บันทึกรหัสเรียบร้อย</p>';e.target.reset();await loadAgents();await loadDashboard()}catch{out.innerHTML='<p style="color:var(--red)">ตรวจรูปแบบรหัส ชื่อ และอัตรา 0–100%</p>'}});
-    async function loadCommissions(){try{const a=(await api('/api/admin/commissions')).commissions;q('#commissionRows').innerHTML=a.length?a.map(x=>`<tr><td><b>${esc(x.order_id)}</b></td><td>${esc(x.agent_code)} · ${esc(x.agent_name)}</td><td>${money.format(x.revenue_net)}</td><td>${money.format(x.actual_cost)}</td><td>${money.format(x.deductions)}</td><td>${money.format(x.profit_base)}</td><td>${Number(x.commission_rate).toFixed(2)}%</td><td><b>${money.format(x.commission_amount)}</b></td><td><span class="badge ${x.status==='PENDING'?'orange':'green'}">${esc(x.status)}</span></td></tr>`).join(''):'<tr><td colspan="9" class="empty">ยังไม่มีรายการค่าคอม</td></tr>'}catch{}}
-    q('#recalcForm').addEventListener('submit',async e=>{e.preventDefault();const out=q('#commissionMessage');out.innerHTML='<p class="muted">กำลังคำนวณ...</p>';try{const x=(await api('/api/admin/commissions/recalculate',{method:'POST',body:JSON.stringify({orderId:q('#recalcOrder').value})})).commission;out.innerHTML=`<p style="color:var(--green)">ฐานกำไร ${money.format(x.profitBase)} · ค่าคอม ${money.format(x.amount)}</p>`;await loadCommissions();await loadDashboard()}catch(err){out.innerHTML=`<p style="color:var(--red)">${err.message==='order_or_agent_not_found'?'ไม่พบออเดอร์หรือรหัสตัวแทน':'คำนวณไม่สำเร็จ'}</p>`}});
-    showGate();api('/api/admin/session').then(data=>{q('#adminName').textContent=data.user.display_name;q('#adminRole').textContent=data.user.role==='OWNER'?'Owner · อุปกรณ์หลัก':'Administrator';showApp();checkPush()}).catch(err=>showGate(err.message==='device_not_authorized'?'อุปกรณ์นี้เป็นผู้ใช้ทั่วไป จึงไม่สามารถเข้าหลังบ้านได้':'ไม่สามารถตรวจสอบอุปกรณ์ได้'));
-  </script>
+  <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
+  <div id="toast" class="toast"></div>
+  <script src="/admin.js" defer></script>
 </body>
 </html>

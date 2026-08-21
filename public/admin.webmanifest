@@ -1,0 +1,13 @@
+{
+  "name": "JIGᶻ AGENT Admin",
+  "short_name": "JIGᶻ Admin",
+  "id": "/admin",
+  "start_url": "/admin",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#030711",
+  "theme_color": "#09031a",
+  "icons": [
+    {"src":"/assets/jigz-planet.png","sizes":"any","type":"image/png","purpose":"any maskable"}
+  ]
+}

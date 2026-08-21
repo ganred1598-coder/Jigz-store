@@ -2,7 +2,7 @@
   "name": "JIGᶻ AGENT Store",
   "short_name": "JIGᶻ",
   "id": "/",
-  "start_url": "/admin",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#070310",

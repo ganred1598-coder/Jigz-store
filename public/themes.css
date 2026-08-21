@@ -1,0 +1,6 @@
+body[data-theme="newyear"]{--pink:#ffcc33;--purple:#d51f32;--blue:#ff8a00;background-image:radial-gradient(circle at 90% 0,#ffbf0055,transparent 30%),radial-gradient(circle at 10% 25%,#d51f3233,transparent 25%)}
+body[data-theme="songkran"]{--pink:#00d8ff;--purple:#0077ff;--blue:#00e5b0;background-image:radial-gradient(circle at 85% 0,#00ddff55,transparent 30%),radial-gradient(circle at 5% 30%,#0077ff35,transparent 24%)}
+body[data-theme="halloween"]{--pink:#ff7a00;--purple:#7d21c6;--blue:#ff3d00;background-image:radial-gradient(circle at 85% 0,#ff7a0055,transparent 30%),radial-gradient(circle at 5% 25%,#7d21c640,transparent 25%)}
+body[data-theme="christmas"]{--pink:#e92545;--purple:#0d8c55;--blue:#2ecb78;background-image:radial-gradient(circle at 88% 0,#e9254544,transparent 30%),radial-gradient(circle at 5% 25%,#0d8c5540,transparent 25%)}
+body[data-theme]:not([data-theme="space"]) .announcement{background:linear-gradient(90deg,var(--purple),var(--pink),var(--blue))}
+body[data-theme]:not([data-theme="space"]) .primary,body[data-theme]:not([data-theme="space"]) .button:not(.ghost){background:linear-gradient(100deg,var(--purple),var(--pink))}
