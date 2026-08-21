@@ -5,6 +5,7 @@ self.addEventListener("push",event=>{
     badge:"/assets/jigz-planet.png",
     tag:"jigz-admin-update",
     renotify:true,
+    silent:false,
     requireInteraction:true,
     vibrate:[180,80,180],
     data:{url:"/admin"}

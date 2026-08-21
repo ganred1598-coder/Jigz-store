@@ -18,6 +18,9 @@
       "database_id": "36c7eb19-331e-40cf-8358-7c1a5d51be9d"
     }
   ],
+  "triggers": {
+    "crons": ["0 10 * * SUN"]
+  },
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
