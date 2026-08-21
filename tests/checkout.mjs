@@ -49,7 +49,14 @@ const checks={
   thaiClosingBoundary:/7\*3600000/.test(worker)&&/period_type/.test(worker),
   safeUserDelete:/userDeleteMatch/.test(worker)&&/ARCHIVE_USER/.test(worker)&&/user_balance_not_zero/.test(worker)&&/user_wallet_pending/.test(worker),
   userDeleteUi:/data-user-delete/.test(admin)&&/function deleteUser/.test(admin),
-  systemVersion:/version:"5\.1\.0"/.test(worker)&&/v5\.1\.0/.test(html)
+  primaryOwnerSchema:/is_primary_owner/.test(worker)&&/idx_single_primary_owner/.test(worker),
+  secondaryOwnerLimit:/secondary_owner_limit/.test(worker)&&/limit_secondary_owners_update/.test(worker)&&/secondaryOwnerLimit:4/.test(worker),
+  ownerApprovalFlow:/owner_deletion_requests/.test(worker)&&/REQUEST_OWNER_DELETION/.test(worker)&&/APPROVE_OWNER_DELETION/.test(worker)&&/primary_owner_required/.test(worker),
+  ownerUi:/secondaryOwnerCount/.test(html)&&/function renderOwnerRequests/.test(admin)&&/function reviewOwnerDeletion/.test(admin),
+  calmMotion:/calm-star-drift/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8"))&&/prefers-reduced-motion/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8")),
+  responsiveSafeArea:/safe-area-inset/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8"))&&/100dvh/.test(fs.readFileSync(new URL("../public/enhancements.css",import.meta.url),"utf8")),
+  labeledProductForm:/class="field-label"/.test(admin)&&/ราคาขายต่อ 1 หน่วย/.test(admin)&&/สต็อกเริ่มต้น/.test(admin),
+  systemVersion:/version:"5\.2\.1"/.test(worker)&&/v5\.2\.1/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

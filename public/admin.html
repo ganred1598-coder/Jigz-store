@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=5.1.0">
-  <link rel="stylesheet" href="/themes.css?v=5.1.0">
-  <link rel="stylesheet" href="/enhancements.css?v=5.1.0">
+  <link rel="stylesheet" href="/admin.css?v=5.2.1">
+  <link rel="stylesheet" href="/themes.css?v=5.2.1">
+  <link rel="stylesheet" href="/enhancements.css?v=5.2.1">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -39,7 +39,7 @@
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v5.1.0 · FINANCE CLOSING</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v5.2.1 · CLEAR PRODUCT FORM</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -99,9 +99,11 @@
         </section>
 
         <section id="staff" class="page">
-          <div class="page-head"><div><h1>ผู้ดูแลระบบ</h1><p>แต่งตั้งหรือถอดสิทธิ์แอดมินจากผู้ใช้ที่ระบบแยกให้อัตโนมัติ</p></div><button class="button" data-action="load-staff">⟳ รีเฟรช</button></div>
-          <article class="panel staff-guide"><b>วิธีแต่งตั้ง</b><p>ให้ผู้ที่จะเป็นแอดมินเปิดหน้าร้านบนอุปกรณ์ของตนหนึ่งครั้ง จากนั้นค้นหาชื่อ เบอร์ หรือรหัสอุปกรณ์ด้านล่าง แล้วกด “แต่งตั้งแอดมิน”</p><span class="badge">OWNER เท่านั้น</span></article>
-          <article class="panel top-gap"><div class="filters"><input id="staffSearch" class="field" type="search" placeholder="ค้นหาชื่อ เบอร์ หรือรหัสอุปกรณ์"><select id="staffRoleFilter" class="field"><option value="">ทุกบทบาท</option><option value="ADMIN">แอดมิน</option><option value="CUSTOMER">ผู้ใช้ทั่วไป</option></select></div><div class="table-wrap"><table><thead><tr><th>ผู้ใช้</th><th>เบอร์</th><th>บทบาท</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th>จัดการ</th></tr></thead><tbody id="staffRows"></tbody></table></div></article>
+          <div class="page-head"><div><h1>ผู้ดูแลระบบ</h1><p>OWNER หลัก 1 คน · OWNER รองสูงสุด 4 คน · ทุกการลบ OWNER ต้องยืนยันโดย OWNER หลัก</p></div><button class="button" data-action="load-staff">⟳ รีเฟรช</button></div>
+          <div class="metrics four owner-metrics"><article><span>OWNER หลัก</span><b>1</b><small>สิทธิ์ยืนยันสูงสุด</small></article><article class="blue"><span>OWNER รอง</span><b id="secondaryOwnerCount">0 / 4</b><small>แต่งตั้งโดย OWNER หลัก</small></article><article class="orange"><span>คำขอลบ OWNER</span><b id="ownerDeletePending">0</b><small>รอ OWNER หลักตรวจ</small></article><article class="pink"><span>สถานะของฉัน</span><b id="myOwnerType">—</b><small>สิทธิ์บนอุปกรณ์นี้</small></article></div>
+          <article class="panel staff-guide top-gap"><b>ระบบยืนยันสองขั้นสำหรับ OWNER</b><p>OWNER ทุกคนส่งคำขอลบ OWNER รองได้ แต่ระบบจะยังไม่ลบทันที จนกว่า OWNER หลักจะกดอนุมัติ ส่วน OWNER หลักไม่สามารถถูกลบเพื่อป้องกันระบบขาดผู้ควบคุม</p><span class="badge">สูงสุด 4 OWNER รอง</span></article>
+          <article id="ownerRequestPanel" class="panel top-gap hidden"><div class="panel-head"><h2>คำขอลบ OWNER</h2><span class="badge">OWNER หลักตรวจสอบ</span></div><div id="ownerRequestCards" class="owner-request-list"></div></article>
+          <article class="panel top-gap"><div class="filters"><input id="staffSearch" class="field" type="search" placeholder="ค้นหาชื่อ เบอร์ หรือรหัสอุปกรณ์"><select id="staffRoleFilter" class="field"><option value="">ทุกบทบาท</option><option value="OWNER">OWNER</option><option value="ADMIN">แอดมิน</option><option value="CUSTOMER">ผู้ใช้ทั่วไป</option></select></div><div class="table-wrap"><table><thead><tr><th>ผู้ใช้</th><th>เบอร์</th><th>บทบาท</th><th>สถานะ</th><th>ใช้งานล่าสุด</th><th>จัดการ</th></tr></thead><tbody id="staffRows"></tbody></table></div></article>
         </section>
 
         <section id="agents" class="page">
@@ -155,6 +157,6 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js?v=5.1.0" defer></script>
+  <script src="/admin.js?v=5.2.1" defer></script>
 </body>
 </html>
