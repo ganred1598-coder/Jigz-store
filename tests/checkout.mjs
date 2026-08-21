@@ -58,7 +58,10 @@ const checks={
   labeledProductForm:/class="field-label"/.test(admin)&&/ราคาขายต่อ 1 หน่วย/.test(admin)&&/สต็อกเริ่มต้น/.test(admin),
   standardPriceTiers:/ใช้เรท 1G–1000G/.test(admin)&&/10,30,50,100,500,1000/.test(admin)&&/function readPriceTiers/.test(admin),
   customerRateMenu:/function sizeLabel/.test(app)&&/product-rate-list/.test(app)&&/เลือกขนาด \/ เรทราคา/.test(app),
-  systemVersion:/version:"5\.3\.0"/.test(worker)&&/v5\.3\.0/.test(html)
+  stockAwareTierMenu:/function reservedQuantity/.test(app)&&/สต็อกไม่พอ/.test(app)&&/data-cart-qty/.test(app)&&/function stockProblem/.test(app),
+  aggregateStockGuard:/requestedByProduct/.test(worker)&&/fifoReservations/.test(worker)&&/prevent_negative_product_stock/.test(worker),
+  checkoutStockRefresh:/กำลังตรวจสอบสต็อก/.test(app)&&/await loadProducts\(\);const problem=stockProblem/.test(app),
+  systemVersion:/version:"5\.3\.1"/.test(worker)&&/v5\.3\.1/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
