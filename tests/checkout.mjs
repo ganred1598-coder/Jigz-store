@@ -44,7 +44,7 @@ const checks={
   slipSafety:/matchAccount:true/.test(worker)&&/matchAmount:expectedAmount/.test(worker)&&/checkDuplicate:true/.test(worker),
   walletAdmin:/id="wallet" class="page"/.test(html)&&/function loadWalletRequests/.test(admin)&&/function reviewWallet/.test(admin),
   agentWalletLink:/id="agentUserId"/.test(html)&&/userId:\$\("#agentUserId"\)\.value/.test(admin)&&/idx_agents_user/.test(worker),
-  commissionWalletRelease:/function releaseWeeklyCommissions/.test(worker)&&/\/api\/admin\/commissions\/release/.test(worker)&&/reference_type='COMMISSION'/.test(worker),
+  commissionWalletRelease:/function releaseWeeklyCommissions/.test(worker)&&/\/api\/admin\/commissions\/release/.test(worker)&&/'COMMISSION','CREDIT'/.test(worker),
   weeklyCron:/"0 10 \* \* SUN"/.test(wrangler)&&/async scheduled\(/.test(worker),
   financeIdempotency:/idx_wallet_reference/.test(worker)&&/idx_slip_trans_ref/.test(worker),
   closingSchema:/CREATE TABLE IF NOT EXISTS financial_closings/.test(worker)&&/UNIQUE\(period_type,period_key\)/.test(worker),
@@ -75,6 +75,10 @@ const checks={
   posPerBillPrice:/data-pos-price-input/.test(admin)&&/function setPosPrice/.test(admin)&&/salePrice/.test(admin)&&/hasPosOverride=source==="POS"/.test(worker)&&/posPriceOverrides/.test(worker),
   linkedSalesAutoCommission:/function applyPosSalesAgent/.test(admin)&&/salesAgent/.test(admin)&&/agent_type='SALES'/.test(worker)&&/autoSalesAgent/.test(worker)&&/commissionCreated/.test(worker),
   salesSelfWorkspace:/id="my-sales" class="page"/.test(html)&&/function loadMySales/.test(admin)&&/\/api\/admin\/sales\/me/.test(worker)&&/function salesWorkspace/.test(worker)&&/WHERE user_id=\? AND agent_type='SALES'/.test(worker),
+  salesPermissionBoundary:/effectiveRole/.test(worker)&&/sales_permission_denied/.test(worker)&&/classList\.add\("sales-mode"\)/.test(admin),
+  posPriceApproval:/function posPriceApprovalQuote/.test(worker)&&/APPROVE_POS_PRICE/.test(worker)&&/sales_max_discount_percent/.test(worker)&&/setSalesMinMargin/.test(html),
+  commissionStatement:/function printMySalesStatement/.test(admin)&&/COMMISSION STATEMENT/.test(admin)&&/print-my-sales/.test(html),
+  paidCommissionReversal:/COMMISSION_REVERSAL/.test(worker)&&/COMMISSION_OFFSET/.test(worker)&&/offsetTotal/.test(worker),
   fullSystemSettings:/PUBLIC_SETTING_KEYS/.test(worker)&&/hero_title/.test(worker)&&/enable_transfer/.test(worker)&&/setMinimumOrder/.test(html),
   profileAvatar:/avatar_image/.test(worker)&&/profileAvatarFile/.test(app)&&/applyProfileHeader/.test(app),
   rewardSystem:/CREATE TABLE IF NOT EXISTS rewards/.test(worker)&&/REDEEM_REWARD/.test(worker)&&/id="rewards" class="page"/.test(html)&&/function showRewards/.test(app),
@@ -93,7 +97,7 @@ const checks={
   healthCenter:/id="health" class="page"/.test(html)&&/function loadSystemHealth/.test(admin)&&/\/api\/admin\/system-health/.test(worker),
   complianceGate:/compliance_required/.test(worker)&&/checkoutCompliance/.test(app)&&/compliance_text/.test(worker),
   reservationProofHold:/reservation_expires_at=CASE WHEN \?='VERIFIED'/.test(worker),
-  systemVersion:/version:"5\.8\.0"/.test(worker)&&/v5\.8\.0/.test(html)
+  systemVersion:/version:"5\.9\.0"/.test(worker)&&/v5\.9\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
