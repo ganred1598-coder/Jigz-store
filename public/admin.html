@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=5.5.1">
-  <link rel="stylesheet" href="/themes.css?v=5.5.1">
-  <link rel="stylesheet" href="/enhancements.css?v=5.5.1">
+  <link rel="stylesheet" href="/admin.css?v=5.7.0">
+  <link rel="stylesheet" href="/themes.css?v=5.7.0">
+  <link rel="stylesheet" href="/enhancements.css?v=5.7.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
   <section id="gate" class="gate">
-    <div class="gate-card"><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"><div class="loader"></div><h1>COMMAND CENTER</h1><p id="gateText">กำลังตรวจสอบอุปกรณ์อัตโนมัติ...</p><a id="gateBack" class="button ghost hidden" href="/">กลับหน้าร้าน</a></div>
+    <div class="gate-card"><label class="language-picker gate-language" aria-label="เปลี่ยนภาษา"><span>🌐</span><select data-language-select><option value="th">ไทย</option><option value="en">English</option><option value="zh">中文</option></select></label><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"><div class="loader"></div><h1>COMMAND CENTER</h1><p id="gateText">กำลังตรวจสอบอุปกรณ์อัตโนมัติ...</p><a id="gateBack" class="button ghost hidden" href="/">กลับหน้าร้าน</a></div>
   </section>
 
   <div id="app" class="app hidden">
@@ -36,17 +36,19 @@
         <button data-view="closings">✓ <span>ปิดยอด</span></button>
         <button data-view="finance">◎ <span>การเงิน</span></button>
         <button data-view="reports">▦ <span>รายงาน &amp; Audit</span></button>
+        <button data-view="health">◌ <span>ศูนย์สุขภาพระบบ</span><i id="healthPill">0</i></button>
         <button data-view="settings">⚙ <span>ตั้งค่าระบบเว็บ</span></button>
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v5.5.1 · FULL CONTROL</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v5.7.0 · PRODUCTION SHIELD</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
       <header class="topbar">
         <button id="menuButton" class="icon-button" type="button">☰</button>
         <input id="globalSearch" type="search" placeholder="ค้นหาออเดอร์ ลูกค้า หรือสินค้า...">
+        <label class="language-picker admin-language" aria-label="เปลี่ยนภาษา"><span>🌐</span><select data-language-select><option value="th">ไทย</option><option value="en">English</option><option value="zh">中文</option></select></label>
         <button id="pushEnable" class="button ghost small" type="button">🔔 เปิดแจ้งเตือน</button>
         <button id="pushTest" class="button ghost small hidden" type="button">⚡ ทดสอบ</button>
         <div class="admin"><span class="avatar">JA</span><div><b id="adminName">JIGᶻ Admin</b><small id="adminRole">กำลังตรวจสอบ</small></div></div>
@@ -148,11 +150,19 @@
           <div class="report-grid"><article class="panel"><div class="panel-head"><h2>ยอดขายตามช่วงที่เลือก</h2></div><div id="salesBars" class="bars"></div></article><article class="panel"><div class="panel-head"><h2>สินค้าขายดี</h2></div><div id="topProducts" class="summary-list"></div></article></div><article class="panel top-gap"><div class="panel-head"><h2>Audit Log</h2></div><div class="table-wrap"><table><thead><tr><th>เวลา</th><th>Action</th><th>ประเภท</th><th>รายการ</th><th>ผู้ทำ</th></tr></thead><tbody id="auditRows"></tbody></table></div></article>
         </section>
 
+        <section id="health" class="page">
+          <div class="page-head"><div><h1>ศูนย์สุขภาพระบบ</h1><p>ตรวจความปลอดภัย ฐานข้อมูล การจองสินค้า สลิป Push และรายการเสี่ยง</p></div><div class="row-actions"><a class="button ghost owner-only hidden" href="/api/admin/backup" download>⬇ สำรองข้อมูล</a><button class="button" data-action="load-health">⟳ ตรวจตอนนี้</button></div></div>
+          <div id="healthChecks" class="metrics four"></div>
+          <div class="report-grid top-gap"><article class="panel"><div class="panel-head"><h2>การแจ้งเตือนที่ต้องตรวจ</h2></div><div id="healthAlerts" class="summary-list"></div></article><article class="panel"><div class="panel-head"><h2>รอ OWNER หลักยืนยัน</h2></div><div id="healthApprovals" class="summary-list"></div></article></div>
+          <article class="panel top-gap"><div class="panel-head"><h2>แผนกู้คืนข้อมูล</h2></div><div class="system-guide"><p><b>D1 Time Travel</b> ใช้ย้อนฐานข้อมูลเมื่อเกิดการลบหรือแก้ผิดพลาด ส่วนปุ่มสำรองข้อมูลจะดาวน์โหลดสินค้า ออเดอร์ ผู้ใช้ การเงิน และ Audit เป็นไฟล์ JSON</p><p>ควรดาวน์โหลดไฟล์สำรองทุกสัปดาห์และก่อนแก้โครงสร้างระบบครั้งใหญ่</p></div></article>
+        </section>
+
         <section id="settings" class="page">
           <div class="page-head"><div><h1>ตั้งค่าระบบเว็บ</h1><p>ควบคุมข้อมูลร้าน ธีม การชำระเงิน ค่าส่ง และแต้ม</p></div></div>
           <article class="panel"><form id="settingsForm" class="settings-form">
             <h3 class="full">ข้อมูลร้านและข้อความหน้าบ้าน</h3><label>ชื่อร้าน<input id="setShopName" class="field"></label><label>ประกาศหน้าเว็บ<input id="setAnnouncement" class="field"></label><label>ข้อความเหนือหัวเรื่อง<input id="setHeroEyebrow" class="field"></label><label>หัวเรื่องหน้าแรก<input id="setHeroTitle" class="field"></label><label class="full">คำอธิบายหน้าแรก<textarea id="setHeroDescription" class="field"></textarea></label><label>ชื่อหัวข้อสินค้า<input id="setCatalogTitle" class="field"></label><label>ข้อความท้ายเว็บ<input id="setFooterText" class="field"></label>
-            <h3 class="full">การขายและสต๊อก</h3><label>สถานะร้าน<select id="setShopOpen" class="field"><option value="true">เปิดรับออเดอร์</option><option value="false">ปิดรับออเดอร์</option></select></label><label>ค่าจัดส่ง<input id="setShipping" class="field" type="number" min="0"></label><label>ยอดสั่งซื้อขั้นต่ำ<input id="setMinimumOrder" class="field" type="number" min="0"></label><label>แจ้งเตือนสต๊อกต่ำกว่า<input id="setLowStock" class="field" type="number" min="0"></label><label>แต้ม 1 คะแนนต่อยอดซื้อ<input id="setPointsRate" class="field" type="number" min="1"></label><label>รับโอนเงิน<select id="setTransfer" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับ COD<select id="setCod" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับเงินสดหน้าบ้าน<select id="setCash" class="field"><option value="false">ปิด</option><option value="true">เปิด</option></select></label>
+            <h3 class="full">การขายและสต๊อก</h3><label>สถานะร้าน<select id="setShopOpen" class="field"><option value="true">เปิดรับออเดอร์</option><option value="false">ปิดรับออเดอร์</option></select></label><label>ค่าจัดส่ง<input id="setShipping" class="field" type="number" min="0"></label><label>ยอดสั่งซื้อขั้นต่ำ<input id="setMinimumOrder" class="field" type="number" min="0"></label><label>แจ้งเตือนสต๊อกต่ำกว่า<input id="setLowStock" class="field" type="number" min="0"></label><label>เวลาจองสินค้า (นาที)<input id="setReservationMinutes" class="field" type="number" min="5" max="60"></label><label>แต้ม 1 คะแนนต่อยอดซื้อ<input id="setPointsRate" class="field" type="number" min="1"></label><label>รับโอนเงิน<select id="setTransfer" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับ COD<select id="setCod" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>รับเงินสดหน้าบ้าน<select id="setCash" class="field"><option value="false">ปิด</option><option value="true">เปิด</option></select></label>
+            <h3 class="full">ความปลอดภัยและข้อกำหนด</h3><label>ให้ยืนยันเงื่อนไขก่อนซื้อ<select id="setComplianceEnabled" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label><label>ยอดถอนที่ต้องยืนยันสองชั้น<input id="setApprovalThreshold" class="field" type="number" min="0"></label><label class="full">หัวข้อยืนยัน<input id="setComplianceTitle" class="field"></label><label class="full">ข้อความเงื่อนไข<textarea id="setComplianceText" class="field"></textarea></label>
             <h3 class="full">ธีมและการแสดงผล</h3><label>ธีม<select id="setTheme" class="field"><option value="space">Space</option><option value="newyear">New Year</option><option value="songkran">Songkran</option><option value="halloween">Halloween</option><option value="christmas">Christmas</option></select></label><label>สีหลัก<input id="setAccent" class="field" type="color"></label><label>ภาพเคลื่อนไหว<select id="setMotion" class="field"><option value="true">เปิด</option><option value="false">ปิด</option></select></label>
             <h3 class="full">ติดต่อและรับชำระ</h3><label>LINE OA<input id="setLine" class="field"></label><label>Instagram<input id="setInstagram" class="field"></label><label>เบอร์ติดต่อ<input id="setSupportPhone" class="field"></label><label>ธนาคาร<input id="setBankName" class="field"></label><label>ชื่อบัญชี<input id="setBankAccount" class="field"></label><label>เลขบัญชี<input id="setBankNumber" class="field"></label><label class="full">รูป QR (URL หรือรูปที่เลือก)<input id="setQrUrl" class="field" placeholder="https://..."><input id="setQrFile" type="file" accept="image/*"></label>
             <section class="sound-settings full"><div><b>🔊 เสียงแจ้งเตือนออเดอร์</b><small id="setSoundName">เสียงมาตรฐาน JIGᶻ</small></div><label>สถานะ<select id="setSoundEnabled" class="field"><option value="true">เปิดเสียง</option><option value="false">ปิดเสียง</option></select></label><label>ระดับเสียง <output id="setVolumeValue">100%</output><input id="setSoundVolume" type="range" min="0" max="1" step="0.05" value="1"></label><label class="upload-button" for="setSoundFile">＋ เลือกไฟล์เสียงเอง</label><input id="setSoundFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/x-m4a" hidden><div class="row-actions"><button id="soundTest" class="button ghost" type="button">▶ ทดลองเสียง</button><button id="soundReset" class="button ghost" type="button">ใช้เสียงมาตรฐาน</button></div><small>รองรับ MP3, WAV, OGG, M4A ขนาดไม่เกิน 900 KB</small></section><button class="button full" type="submit">บันทึกและใช้งานทุกหน้า</button>
@@ -169,6 +179,7 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/admin.js?v=5.5.1" defer></script>
+  <script src="/i18n.js?v=5.7.0" defer></script>
+  <script src="/admin.js?v=5.7.0" defer></script>
 </body>
 </html>

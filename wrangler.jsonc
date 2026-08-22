@@ -19,7 +19,7 @@
     }
   ],
   "triggers": {
-    "crons": ["0 10 * * SUN"]
+    "crons": ["*/5 * * * *", "0 10 * * SUN"]
   },
   "observability": {
     "enabled": true,

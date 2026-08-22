@@ -1,11 +1,14 @@
 {
   "name": "jigz-store",
-  "version": "5.5.1",
+  "version": "5.7.0",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check": "wrangler deploy --dry-run"
+    "check": "wrangler deploy --dry-run",
+    "test:contracts": "node tests/checkout.mjs",
+    "test:runtime": "node tests/runtime.mjs",
+    "test": "npm run test:contracts && npm run test:runtime"
   },
   "devDependencies": {
     "wrangler": "^4.124.0"

@@ -6,13 +6,14 @@ const worker=fs.readFileSync(new URL("../src/index.js",import.meta.url),"utf8");
 const html=fs.readFileSync(new URL("../public/admin.html",import.meta.url),"utf8");
 const storefront=fs.readFileSync(new URL("../public/index.html",import.meta.url),"utf8");
 const guide=fs.readFileSync(new URL("../public/guide.html",import.meta.url),"utf8");
+const i18n=fs.readFileSync(new URL("../public/i18n.js",import.meta.url),"utf8");
 const wrangler=fs.readFileSync(new URL("../wrangler.jsonc",import.meta.url),"utf8");
 
 const checks={
   checkoutHandler:/async function checkout\(event\)/.test(app),
   checkoutEndpoint:/path==="\/api\/orders"&&request\.method==="POST"/.test(worker),
   stockValidation:/insufficient_stock/.test(worker),
-  safeSubmitButton:/event\.submitter\|\|event\.currentTarget/.test(app),
+  safeSubmitButton:/event\.submitter\|\|form\.querySelector/.test(app),
   clickableTracking:/function trackingLink\(order/.test(app)&&/target="_blank"/.test(app),
   printableReceipt:/data-print-receipt/.test(app)&&/window\.print\(\)/.test(app),
   orderTimeline:/function timelineHtml\(order\)/.test(app),
@@ -29,6 +30,7 @@ const checks={
   selectProductWorks:/"scrollProducts" in target\.dataset/.test(app),
   themedNavIcons:/<svg viewBox="0 0 24 24"/.test(storefront),
   cartStarAnimation:/function flyStarToCart/.test(app)&&/Math\.random/.test(app)&&/cart-star/.test(app),
+  jigzWarpCartEffect:/jigz-cart-flight/.test(app)&&/jigz-warp-burst/.test(app)&&/jigz-cart-impact/.test(app)&&/navigator\.vibrate/.test(app),
   customOrderSound:/function playAlertSound/.test(admin)&&/setSoundFile/.test(admin)&&/notification_sound/.test(worker),
   promotionManagement:/UPDATE_PROMOTION/.test(worker)&&/DELETE_PROMOTION/.test(worker)&&/function editPromotion/.test(admin),
   reportFilters:/reportFilterForm/.test(admin)&&/url\.searchParams\.get\("from"\)/.test(worker),
@@ -73,7 +75,21 @@ const checks={
   profileAvatar:/avatar_image/.test(worker)&&/profileAvatarFile/.test(app)&&/applyProfileHeader/.test(app),
   rewardSystem:/CREATE TABLE IF NOT EXISTS rewards/.test(worker)&&/REDEEM_REWARD/.test(worker)&&/id="rewards" class="page"/.test(html)&&/function showRewards/.test(app),
   customerGuide:/href="\/guide\.html"/.test(storefront)&&/คู่มือการใช้งานเว็บไซต์/.test(guide)&&/id="tracking"/.test(guide),
-  systemVersion:/version:"5\.5\.1"/.test(worker)&&/v5\.5\.1/.test(html)
+  languageSwitcher:/data-language-select/.test(storefront)&&/data-language-select/.test(html)&&/data-language-select/.test(guide),
+  threeLanguages:/SUPPORTED=\["th","en","zh"\]/.test(i18n)&&/JIGZI18N/.test(i18n),
+  preservesSpecificData:/data-i18n-skip/.test(storefront)&&/data-i18n-skip/.test(app),
+  localizedFormatting:/Intl\.NumberFormat\(locale/.test(app)&&/toLocaleString\(locale\)/.test(admin),
+  accessJwtValidation:/cf-access-jwt-assertion/.test(worker)&&/crypto\.subtle\.verify/.test(worker)&&/POLICY_AUD/.test(worker),
+  orderIdempotency:/CREATE TABLE IF NOT EXISTS order_idempotency/.test(worker)&&/idempotencyKey/.test(app)&&/invalid_idempotency_key/.test(worker),
+  timedReservation:/reservation_expires_at/.test(worker)&&/cleanupExpiredReservations/.test(worker)&&/"\*\/5 \* \* \* \*"/.test(wrangler),
+  immutableAudit:/audit_logs_no_update/.test(worker)&&/audit_log_immutable/.test(worker),
+  systemAlerts:/CREATE TABLE IF NOT EXISTS system_alerts/.test(worker)&&/SLIP_REVIEW/.test(worker)&&/LOW_STOCK/.test(worker),
+  dualApproval:/CREATE TABLE IF NOT EXISTS approval_requests/.test(worker)&&/APPROVE_WITHDRAWAL/.test(worker)&&/reviewHighRiskApproval/.test(admin),
+  backupExport:/path==="\/api\/admin\/backup"/.test(worker)&&/jigz-backup-/.test(worker),
+  healthCenter:/id="health" class="page"/.test(html)&&/function loadSystemHealth/.test(admin)&&/\/api\/admin\/system-health/.test(worker),
+  complianceGate:/compliance_required/.test(worker)&&/checkoutCompliance/.test(app)&&/compliance_text/.test(worker),
+  reservationProofHold:/reservation_expires_at=CASE WHEN \?='VERIFIED'/.test(worker),
+  systemVersion:/version:"5\.7\.0"/.test(worker)&&/v5\.7\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
