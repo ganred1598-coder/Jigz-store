@@ -71,6 +71,10 @@ const checks={
   deletedOrderRestoresStock:/DELETE_RETURN/.test(worker)&&/stock_returned_at/.test(worker)&&/deleted_by_name/.test(worker),
   weeklyStockCount:/inventory_counts/.test(worker)&&/WEEKLY_STOCK_COUNT/.test(worker)&&/function weeklyStockCount/.test(admin),
   customerStylePos:/pos-customer-grid/.test(html)&&/pos-product-card/.test(admin),
+  posDirectQuantity:/data-pos-product-qty/.test(admin)&&/data-pos-qty-input/.test(admin)&&/function setPosQuantity/.test(admin)&&/function posMaxQty/.test(admin),
+  posPerBillPrice:/data-pos-price-input/.test(admin)&&/function setPosPrice/.test(admin)&&/salePrice/.test(admin)&&/hasPosOverride=source==="POS"/.test(worker)&&/posPriceOverrides/.test(worker),
+  linkedSalesAutoCommission:/function applyPosSalesAgent/.test(admin)&&/salesAgent/.test(admin)&&/agent_type='SALES'/.test(worker)&&/autoSalesAgent/.test(worker)&&/commissionCreated/.test(worker),
+  salesSelfWorkspace:/id="my-sales" class="page"/.test(html)&&/function loadMySales/.test(admin)&&/\/api\/admin\/sales\/me/.test(worker)&&/function salesWorkspace/.test(worker)&&/WHERE user_id=\? AND agent_type='SALES'/.test(worker),
   fullSystemSettings:/PUBLIC_SETTING_KEYS/.test(worker)&&/hero_title/.test(worker)&&/enable_transfer/.test(worker)&&/setMinimumOrder/.test(html),
   profileAvatar:/avatar_image/.test(worker)&&/profileAvatarFile/.test(app)&&/applyProfileHeader/.test(app),
   rewardSystem:/CREATE TABLE IF NOT EXISTS rewards/.test(worker)&&/REDEEM_REWARD/.test(worker)&&/id="rewards" class="page"/.test(html)&&/function showRewards/.test(app),
@@ -89,7 +93,7 @@ const checks={
   healthCenter:/id="health" class="page"/.test(html)&&/function loadSystemHealth/.test(admin)&&/\/api\/admin\/system-health/.test(worker),
   complianceGate:/compliance_required/.test(worker)&&/checkoutCompliance/.test(app)&&/compliance_text/.test(worker),
   reservationProofHold:/reservation_expires_at=CASE WHEN \?='VERIFIED'/.test(worker),
-  systemVersion:/version:"5\.7\.0"/.test(worker)&&/v5\.7\.0/.test(html)
+  systemVersion:/version:"5\.8\.0"/.test(worker)&&/v5\.8\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

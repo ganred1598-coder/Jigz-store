@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#030612">
   <link rel="manifest" href="/admin.webmanifest">
   <link rel="icon" href="/assets/jigz-planet.png">
-  <link rel="stylesheet" href="/admin.css?v=5.7.0">
-  <link rel="stylesheet" href="/themes.css?v=5.7.0">
-  <link rel="stylesheet" href="/enhancements.css?v=5.7.0">
+  <link rel="stylesheet" href="/admin.css?v=5.8.0">
+  <link rel="stylesheet" href="/themes.css?v=5.8.0">
+  <link rel="stylesheet" href="/enhancements.css?v=5.8.0">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
 <body>
@@ -23,6 +23,7 @@
       <nav id="nav">
         <button class="active" data-view="dashboard">〽 <span>COMMAND CENTER</span></button>
         <button data-view="pos">🛒 <span>POS ขายหน้าร้าน</span></button>
+        <button id="mySalesNav" class="hidden" data-view="my-sales">✧ <span>ยอดขายของฉัน</span></button>
         <button data-view="orders">▤ <span>ออเดอร์</span><i id="orderPill">0</i></button>
         <button data-view="payments">฿ <span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
         <button data-view="shipping">🚚 <span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
@@ -41,7 +42,7 @@
         <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
         <a href="/">↪ <span>กลับหน้าร้าน</span></a>
       </nav>
-      <div class="side-status"><b>JIGᶻ OS</b><small>v5.7.0 · PRODUCTION SHIELD</small><strong>● ONLINE</strong></div>
+      <div class="side-status"><b>JIGᶻ OS</b><small>v5.8.0 · SALES WORKSPACE</small><strong>● ONLINE</strong></div>
     </aside>
 
     <section class="main">
@@ -71,8 +72,15 @@
         </section>
 
         <section id="pos" class="page">
-          <div class="page-head"><div><h1>POS ขายหน้าร้าน</h1><p>สร้างออเดอร์และตัดสต็อกด้วยระบบเดียวกับหน้าร้าน</p></div><button class="button ghost" data-action="clear-pos">ล้างรายการ</button></div>
-          <div class="pos-grid"><article class="panel pos-catalog"><div class="panel-head pos-catalog-head"><div><h2>เลือกสินค้า</h2><small class="muted">รูปแบบเดียวกับหน้าร้านลูกค้า พร้อมเรทราคาและสต็อกจริง</small></div><div class="pos-catalog-tools"><input id="posSearch" class="field compact" type="search" placeholder="ค้นหาสินค้า"><select id="posCategory" class="field compact"><option value="">ทุกหมวดหมู่</option></select></div></div><div id="posProducts" class="product-pick pos-customer-grid"></div></article><article class="panel pos-cart"><div class="panel-head"><h2>รายการขาย</h2><b id="posTotal">฿0</b></div><div id="posCart" class="stack"></div><form id="posForm" class="form"><input id="posName" class="field" required placeholder="ชื่อลูกค้า"><input id="posPhone" class="field" required placeholder="เบอร์โทร"><textarea id="posAddress" class="field" required placeholder="ที่อยู่ / รับหน้าร้าน"></textarea><div class="two"><select id="posPayment" class="field"><option value="CASH">เงินสด</option><option value="TRANSFER">โอนเงิน</option><option value="COD">COD</option></select><input id="posDiscount" class="field" type="number" min="0" value="0" placeholder="ส่วนลด"></div><input id="posAgent" class="field" placeholder="รหัสตัวแทน (ถ้ามี)"><button class="button wide" type="submit">ยืนยันการขายและตัดสต็อก</button></form></article></div>
+          <div class="page-head"><div><h1>POS ขายหน้าร้าน</h1><p>พิมพ์จำนวนได้โดยตรง หรือปรับด้วยปุ่ม − / + ระบบตรวจสต๊อกให้อัตโนมัติ</p></div><button class="button ghost" data-action="clear-pos">ล้างรายการ</button></div>
+          <div class="pos-grid"><article class="panel pos-catalog"><div class="panel-head pos-catalog-head"><div><h2>เลือกสินค้า</h2><small class="muted">เลือกเรทราคา กรอกจำนวนแพ็ก แล้วเพิ่มลงรายการขาย</small></div><div class="pos-catalog-tools"><input id="posSearch" class="field compact" type="search" placeholder="ค้นหาสินค้า"><select id="posCategory" class="field compact"><option value="">ทุกหมวดหมู่</option></select></div></div><div id="posProducts" class="product-pick pos-customer-grid"></div></article><article class="panel pos-cart"><div class="panel-head"><h2>รายการขาย</h2><b id="posTotal">฿0</b></div><div id="posCart" class="stack"></div><form id="posForm" class="form"><input id="posName" class="field" required placeholder="ชื่อลูกค้า"><input id="posPhone" class="field" required placeholder="เบอร์โทร"><textarea id="posAddress" class="field" required placeholder="ที่อยู่ / รับหน้าร้าน"></textarea><div class="two"><select id="posPayment" class="field"><option value="CASH">เงินสด</option><option value="TRANSFER">โอนเงิน</option><option value="COD">COD</option></select><input id="posDiscount" class="field" type="number" min="0" value="0" placeholder="ส่วนลด"></div><div id="posAgentStatus" class="pos-agent-status hidden"></div><input id="posAgent" class="field" placeholder="รหัสตัวแทน (ถ้ามี)"><button class="button wide" type="submit">ยืนยันการขายและตัดสต็อก</button></form></article></div>
+        </section>
+
+        <section id="my-sales" class="page">
+          <div class="page-head"><div><h1>✧ ยอดขายของฉัน</h1><p>บิลและค่าคอมของเซลล์ที่ผูกกับ User ID นี้ ระบบระบุตัวตนอัตโนมัติ</p></div><button class="button" data-action="load-my-sales">⟳ รีเฟรช</button></div>
+          <article id="mySalesIdentity" class="panel sales-identity"></article>
+          <div class="metrics five top-gap"><article><span>จำนวนบิล</span><b id="mySalesOrders">0</b><small>เฉพาะบิลของฉัน</small></article><article class="blue"><span>ยอดขายวันนี้</span><b id="mySalesToday">฿0</b><small>เวลาไทย</small></article><article class="pink"><span>ยอดขายเดือนนี้</span><b id="mySalesMonth">฿0</b><small>ไม่รวมบิลยกเลิก</small></article><article class="orange"><span>ค่าคอมรอจ่าย</span><b id="mySalesPending">฿0</b><small>จ่ายรอบวันอาทิตย์</small></article><article><span>ค่าคอมจ่ายแล้ว</span><b id="mySalesPaid">฿0</b><small>เข้ากระเป๋าเครดิตแล้ว</small></article></div>
+          <article class="panel top-gap"><div class="panel-head"><div><h2>ประวัติบิลของฉัน</h2><small class="muted">ค่าคอม = กำไรหลังหักทุน FIFO × อัตราค่าคอม</small></div><span class="badge">ดูได้เฉพาะของตัวเอง</span></div><div class="table-wrap"><table><thead><tr><th>ออเดอร์</th><th>ลูกค้า</th><th>ยอดขาย</th><th>ทุนจริง</th><th>ฐานกำไร</th><th>ค่าคอม</th><th>สถานะค่าคอม</th><th>วันที่</th></tr></thead><tbody id="mySalesRows"></tbody></table></div></article>
         </section>
 
         <section id="orders" class="page">
@@ -179,7 +187,7 @@
 
   <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">✕</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
   <div id="toast" class="toast"></div>
-  <script src="/i18n.js?v=5.7.0" defer></script>
-  <script src="/admin.js?v=5.7.0" defer></script>
+  <script src="/i18n.js?v=5.8.0" defer></script>
+  <script src="/admin.js?v=5.8.0" defer></script>
 </body>
 </html>

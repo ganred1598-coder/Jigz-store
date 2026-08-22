@@ -35,7 +35,7 @@ class D1Database {
     this.database.exec("BEGIN IMMEDIATE");
     try {
       const results = [];
-      for (const statement of statements) results.push(await statement.run());
+      for (const statement of statements) results.push(/^\s*(?:SELECT|WITH|PRAGMA)\b/i.test(statement.sql) ? await statement.all() : await statement.run());
       this.database.exec("COMMIT");
       return results;
     } catch (error) { this.database.exec("ROLLBACK"); throw error; }
@@ -65,7 +65,7 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.7.0");
+assert.equal(health.body.version, "5.8.0");
 
 const session = await json("/api/session");
 assert.equal(session.response.status, 200);
@@ -78,12 +78,13 @@ const product = catalog.body.products.find((item) => Number(item.stock) >= 2 && 
 assert.ok(product, `Seed catalog must contain an orderable product: ${JSON.stringify(catalog.body.products.slice(0, 3))}`);
 const packSize = Number(Object.keys(product.prices).sort((a, b) => Number(a) - Number(b))[0]);
 const stockBefore = Number(product.stock);
-const payload = { customerName: "Runtime Tester", phone: "0812345678", address: "Bangkok 10110", paymentMethod: "TRANSFER", complianceAccepted: true, idempotencyKey: `runtime:${crypto.randomUUID()}`, items: [{ productId: product.id, packSize, qty: 1 }] };
+const payload = { customerName: "Runtime Tester", phone: "0812345678", address: "Bangkok 10110", paymentMethod: "TRANSFER", complianceAccepted: true, idempotencyKey: `runtime:${crypto.randomUUID()}`, items: [{ productId: product.id, packSize, qty: 1, salePrice: 0.01 }] };
 const postOrder = () => json("/api/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
 const create = await postOrder();
 assert.equal(create.response.status, 201, JSON.stringify(create.body));
 assert.ok(create.body.order.id);
 assert.ok(create.body.order.reservation_expires_at);
+assert.equal(Number(create.body.order.items[0].line_total), Number(product.prices[String(packSize)]), "Customer checkout must ignore POS-only sale price");
 
 const duplicate = await postOrder();
 assert.equal(duplicate.response.status, 201, JSON.stringify(duplicate.body));
@@ -101,6 +102,55 @@ assert.equal(Number(afterExpiry.body.products.find((item) => item.id === product
 const adminSession = await json("/api/admin/session");
 assert.equal(adminSession.response.status, 200);
 assert.equal(adminSession.body.user.role, "OWNER");
+const salesCode = "AUTOSELL";
+const createSalesAgent = await json("/api/admin/agents", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ code: salesCode, name: "Runtime Sales", agentType: "SALES", commissionRate: 10, userId: adminSession.body.user.id })
+});
+assert.equal(createSalesAgent.response.status, 200, JSON.stringify(createSalesAgent.body));
+const linkedSession = await json("/api/admin/session");
+assert.equal(linkedSession.body.salesAgent.code, salesCode);
+await db.prepare("DELETE FROM inventory_lots WHERE product_id=?").bind(product.id).run();
+await db.prepare("INSERT INTO inventory_lots(product_id,received_qty,remaining_qty,unit_cost,note) VALUES(?,?,?,?,?)").bind(product.id,100,100,2.5,"runtime cost").run();
+const posSalePrice = 12.34;
+const posOrder = await json("/api/admin/orders", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    customerName: "POS Price Tester",
+    phone: "0811111111",
+    address: "รับหน้าร้าน",
+    paymentMethod: "CASH",
+    agentCode: "WRONG-CODE",
+    items: [{ productId: product.id, packSize, qty: 2, salePrice: posSalePrice }]
+  })
+});
+assert.equal(posOrder.response.status, 201, JSON.stringify(posOrder.body));
+assert.equal(posOrder.body.order.source, "POS");
+assert.equal(posOrder.body.order.agent_code, salesCode, "Worker must assign the signed-in sales code");
+assert.equal(Number(posOrder.body.order.items[0].line_total), posSalePrice * 2);
+assert.equal(Number(posOrder.body.order.items[0].unit_price) * packSize, posSalePrice);
+assert.equal(Number(posOrder.body.order.items[0].actual_cost), 2.5 * packSize * 2, JSON.stringify(posOrder.body.order.items[0]));
+const commission = await db.prepare("SELECT commission_rate,profit_base,commission_amount,status FROM sales_commissions WHERE order_id=?").bind(posOrder.body.order.id).first();
+const expectedProfit = Math.max(0,posSalePrice*2-2.5*packSize*2);
+assert.equal(Number(commission.commission_rate),10);
+assert.ok(Math.abs(Number(commission.profit_base)-expectedProfit)<0.0001);
+assert.ok(Math.abs(Number(commission.commission_amount)-expectedProfit*.1)<0.0001);
+assert.equal(commission.status,"PENDING");
+const mySales = await json("/api/admin/sales/me");
+assert.equal(mySales.response.status,200,JSON.stringify(mySales.body));
+assert.equal(mySales.body.agent.code,salesCode);
+assert.ok(mySales.body.summary.orders>=1,JSON.stringify(mySales.body));
+assert.ok(mySales.body.summary.pendingCommission>=Number(commission.commission_amount));
+const myPosBill=mySales.body.orders.find(item=>item.id===posOrder.body.order.id);
+assert.ok(myPosBill,"Sales workspace must include the signed-in sales bill");
+assert.equal(Number(myPosBill.commission_amount),Number(commission.commission_amount));
+const productsAfterPos = await json("/api/admin/products");
+const unchangedProduct = productsAfterPos.body.products.find((item) => item.id === product.id);
+assert.equal(Number(unchangedProduct.prices[String(packSize)]), Number(product.prices[String(packSize)]), "POS override must not change catalog price");
+const overrideAudit = await db.prepare("SELECT details_json FROM audit_logs WHERE action='CREATE_ORDER' AND entity_id=?").bind(posOrder.body.order.id).first();
+assert.equal(JSON.parse(overrideAudit.details_json).posPriceOverrides[0].salePrice, posSalePrice);
 const adminHealth = await json("/api/admin/system-health");
 assert.equal(adminHealth.response.status, 200);
 assert.equal(adminHealth.body.ok, true);
@@ -108,11 +158,11 @@ const backup = await request("/api/admin/backup");
 assert.equal(backup.status, 200);
 assert.match(backup.headers.get("content-disposition") || "", /jigz-backup-/);
 const backupBody = await backup.json();
-assert.equal(backupBody.schemaVersion, "5.7.0");
+assert.equal(backupBody.schemaVersion, "5.8.0");
 assert.ok(Array.isArray(backupBody.auditLogs));
 
 const protectedEnv = { DB: db, ASSETS: assets, ADMIN_ACCESS_REQUIRED: "true", TEAM_DOMAIN: "https://example.cloudflareaccess.com", POLICY_AUD: "runtime-audience" };
 assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401);
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
-console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));
+console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "linked sales session", "automatic sales attribution", "sales self workspace", "POS per-bill pricing", "FIFO commission calculation", "catalog price isolation", "price override audit", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));
