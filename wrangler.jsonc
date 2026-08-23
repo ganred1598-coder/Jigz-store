@@ -4,6 +4,9 @@
   "main": "./src/index.js",
   "compatibility_date": "2026-08-20",
   "compatibility_flags": ["nodejs_compat"],
+  "secrets": {
+    "required": ["EASYSLIP_API_KEY"]
+  },
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

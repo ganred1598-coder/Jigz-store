@@ -97,7 +97,9 @@ const checks={
   healthCenter:/id="health" class="page"/.test(html)&&/function loadSystemHealth/.test(admin)&&/\/api\/admin\/system-health/.test(worker),
   complianceGate:/compliance_required/.test(worker)&&/checkoutCompliance/.test(app)&&/compliance_text/.test(worker),
   reservationProofHold:/reservation_expires_at=CASE WHEN \?='VERIFIED'/.test(worker),
-  systemVersion:/version:"5\.9\.0"/.test(worker)&&/v5\.9\.0/.test(html)
+  internalAdminAccess:/CREATE TABLE IF NOT EXISTS admin_access_requests/.test(worker)&&/DEVICE_APPROVAL/.test(worker)&&/data-access-review/.test(admin)&&/gateRequest/.test(html),
+  noAccessHealthWarning:!/ACTION_REQUIRED/.test(worker)&&!/Cloudflare Access/.test(admin),
+  systemVersion:/version:"5\.10\.0"/.test(worker)&&/v5\.10\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

@@ -65,7 +65,7 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.9.0");
+assert.equal(health.body.version, "5.10.0");
 
 const session = await json("/api/session");
 assert.equal(session.response.status, 200);
@@ -102,6 +102,28 @@ assert.equal(Number(afterExpiry.body.products.find((item) => item.id === product
 const adminSession = await json("/api/admin/session");
 assert.equal(adminSession.response.status, 200);
 assert.equal(adminSession.body.user.role, "OWNER");
+const initialOwnerCookie=cookie;
+cookie="";
+const accessDevice=await json("/api/session");
+assert.equal(accessDevice.body.user.role,"CUSTOMER");
+const accessDeviceCookie=cookie;
+const accessRequest=await json("/api/admin/access-request",{method:"POST",headers:{"content-type":"application/json"},body:"{}"});
+assert.equal(accessRequest.response.status,202,JSON.stringify(accessRequest.body));
+assert.equal(accessRequest.body.request.status,"PENDING");
+const accessStatus=await json("/api/admin/access-request");
+assert.equal(accessStatus.body.authorized,false);
+assert.equal(accessStatus.body.request.status,"PENDING");
+cookie=initialOwnerCookie;
+const staffAccess=await json("/api/admin/staff");
+const pendingAccess=staffAccess.body.accessRequests.find(item=>item.user_id===accessDevice.body.user.id);
+assert.ok(pendingAccess,"OWNER must see pending device access request");
+const approvedAccess=await json(`/api/admin/access-requests/${encodeURIComponent(pendingAccess.id)}/review`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status:"APPROVED"})});
+assert.equal(approvedAccess.response.status,200,JSON.stringify(approvedAccess.body));
+cookie=accessDeviceCookie;
+const approvedDeviceSession=await json("/api/admin/session");
+assert.equal(approvedDeviceSession.response.status,200);
+assert.equal(approvedDeviceSession.body.user.role,"ADMIN");
+cookie=initialOwnerCookie;
 const salesCode = "AUTOSELL";
 const createSalesAgent = await json("/api/admin/agents", {
   method: "POST",
@@ -201,11 +223,11 @@ const backup = await request("/api/admin/backup");
 assert.equal(backup.status, 200);
 assert.match(backup.headers.get("content-disposition") || "", /jigz-backup-/);
 const backupBody = await backup.json();
-assert.equal(backupBody.schemaVersion, "5.9.0");
+assert.equal(backupBody.schemaVersion, "5.10.0");
 assert.ok(Array.isArray(backupBody.auditLogs));
 
 const protectedEnv = { DB: db, ASSETS: assets, ADMIN_ACCESS_REQUIRED: "true", TEAM_DOMAIN: "https://example.cloudflareaccess.com", POLICY_AUD: "runtime-audience" };
 assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401);
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
-console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "linked sales session", "automatic sales attribution", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));
+console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));

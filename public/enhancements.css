@@ -560,6 +560,9 @@ button,a,input,select,textarea { touch-action: manipulation; }
 .language-picker select { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: inherit; cursor: pointer; }
 .language-picker option { background: #100820; color: #fff; }
 .gate-card { position: relative; }
+.gate-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 14px; }
+.gate-actions .button { text-decoration: none; }
+#gateDevice { display: block; overflow-wrap: anywhere; margin-top: 10px; line-height: 1.55; }
 .gate-language { position: absolute; top: 14px; right: 14px; }
 .guide-header-actions { display: flex; align-items: center; gap: 8px; }
 
