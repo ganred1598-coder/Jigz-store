@@ -1,0 +1,61 @@
+/* Status colors shared by storefront and Command Center. */
+.status-PAID,
+.status.PAID {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid #159ddd;
+  border-radius: 999px;
+  background: #087cb32b;
+  color: #45ceff !important;
+  box-shadow: inset 0 0 12px #159ddd18;
+}
+
+.status-PAID::before,
+.status.PAID::before {
+  content: "฿";
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #159ddd;
+  color: #03101b;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.status-COMPLETED,
+.status.COMPLETED {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border: 1px solid #20c979;
+  border-radius: 999px;
+  background: #20c97926;
+  color: #48ef9c !important;
+  box-shadow: inset 0 0 12px #20c97918;
+}
+
+.status-COMPLETED::before,
+.status.COMPLETED::before {
+  content: "✓";
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #20c979;
+  color: #03140c;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+@media (prefers-contrast: more) {
+  .status-PAID,
+  .status.PAID,
+  .status-COMPLETED,
+  .status.COMPLETED { border-width: 2px; }
+}

@@ -114,7 +114,8 @@ const checks={
   mobilePosCart:/id="posCartToggle"/.test(html)&&/id="posCartPanel"/.test(html)&&/function togglePosCart/.test(admin)&&/pos-cart-open/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8")),
   searchMetadata:/rel="canonical"/.test(storefront)&&/og:title/.test(storefront)&&/twitter:card/.test(storefront)&&/application\/ld\+json/.test(storefront)&&/"@type":"OnlineStore"/.test(storefront),
   peopleFirstSeo:/ร้านค้าปลีกสมุนไพรและสินค้าออนไลน์/.test(storefront)&&/class="seo-content"/.test(storefront)&&/function shareStoreLink/.test(app),
-  systemVersion:/version:"5\.12\.1"/.test(worker)&&/v5\.12\.1/.test(html)
+  distinctPaidCompleted:/status-colors\.css/.test(html)&&/status-PAID/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8"))&&/status-COMPLETED/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8")),
+  systemVersion:/version:"5\.12\.2"/.test(worker)&&/v5\.12\.2/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
