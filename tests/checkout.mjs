@@ -106,7 +106,15 @@ const checks={
   googleVerification:/googlea735a29242109529\.html/.test(worker)&&/google-site-verification: googlea735a29242109529\.html/.test(worker)&&/"run_worker_first": true/.test(wrangler),
   searchDiscovery:/pathname==="\/sitemap\.xml"/.test(worker)&&/application\/xml/.test(worker)&&/pathname==="\/robots\.txt"/.test(worker)&&/Disallow: \/admin/.test(worker)&&/"run_worker_first": true/.test(wrangler),
   noAccessHealthWarning:!/ACTION_REQUIRED/.test(worker)&&!/Cloudflare Access/.test(admin),
-  systemVersion:/version:"5\.11\.1"/.test(worker)&&/v5\.11\.1/.test(html)
+  orderDateFilters:/id="orderFrom"/.test(html)&&/id="orderTo"/.test(html)&&/id="orderPayment"/.test(html)&&/id="orderSource"/.test(html)&&/date\(created_at,'\+7 hours'\)/.test(worker)&&/filters=\{q:/.test(admin),
+  largeDataFilters:/id="productCategoryFilter"/.test(html)&&/id="customerOnlineFilter"/.test(html)&&/id="agentSearchFilter"/.test(html)&&/id="commissionFrom"/.test(html)&&/id="promotionStatusFilter"/.test(html)&&/function renderUsers/.test(admin)&&/function renderAgentTables/.test(admin)&&/function renderPromotions/.test(admin),
+  walletDateSearch:/id="walletSearchFilter"/.test(html)&&/id="walletFrom"/.test(html)&&/id="walletTo"/.test(html)&&/date\(r\.created_at,'\+7 hours'\)/.test(worker),
+  responsiveDataFilters:/data-filters/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8"))&&/filter-summary/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8")),
+  mobileTableCards:/function labelResponsiveTables/.test(admin)&&/data-label/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8")),
+  mobilePosCart:/id="posCartToggle"/.test(html)&&/id="posCartPanel"/.test(html)&&/function togglePosCart/.test(admin)&&/pos-cart-open/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8")),
+  searchMetadata:/rel="canonical"/.test(storefront)&&/og:title/.test(storefront)&&/twitter:card/.test(storefront)&&/application\/ld\+json/.test(storefront)&&/"@type":"OnlineStore"/.test(storefront),
+  peopleFirstSeo:/ร้านค้าปลีกสมุนไพรและสินค้าออนไลน์/.test(storefront)&&/class="seo-content"/.test(storefront)&&/function shareStoreLink/.test(app),
+  systemVersion:/version:"5\.12\.1"/.test(worker)&&/v5\.12\.1/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

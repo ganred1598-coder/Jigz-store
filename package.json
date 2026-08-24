@@ -1,6 +1,6 @@
 {
   "name": "jigz-store",
-  "version": "5.11.1",
+  "version": "5.12.1",
   "private": true,
   "scripts": {
     "dev": "wrangler dev",

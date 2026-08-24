@@ -65,7 +65,7 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.11.1");
+assert.equal(health.body.version, "5.12.1");
 const googleVerification=await request("/googlea735a29242109529.html");
 assert.equal(googleVerification.status,200);
 assert.equal(await googleVerification.text(),"google-site-verification: googlea735a29242109529.html");
@@ -187,6 +187,14 @@ assert.equal(posCodOrder.body.order.status, "NEW", "POS COD must not be marked p
 assert.equal(Number(posCodOrder.body.order.shipping_fee), codShipping);
 assert.equal(Number(posCodOrder.body.order.total), codTotal);
 assert.equal(Number(posCodOrder.body.order.cod_amount), codTotal + 10);
+const thaiOrderDay=new Date(new Date(String(posCodOrder.body.order.created_at).replace(" ","T")+"Z").getTime()+7*3600000).toISOString().slice(0,10);
+const filteredOrders=await json(`/api/admin/orders?from=${thaiOrderDay}&to=${thaiOrderDay}&payment=COD&source=POS&q=${encodeURIComponent(posCodOrder.body.order.id)}`);
+assert.equal(filteredOrders.response.status,200,JSON.stringify(filteredOrders.body));
+assert.equal(filteredOrders.body.orders.length,1,"Order date/payment/source/search filters must intersect");
+assert.equal(filteredOrders.body.orders[0].id,posCodOrder.body.order.id);
+const invalidOrderRange=await json("/api/admin/orders?from=2026-12-31&to=2026-01-01");
+assert.equal(invalidOrderRange.response.status,400);
+assert.equal(invalidOrderRange.body.error,"invalid_date_range");
 const commission = await db.prepare("SELECT commission_rate,profit_base,commission_amount,status FROM sales_commissions WHERE order_id=?").bind(posOrder.body.order.id).first();
 const expectedProfit = Math.max(0,posSalePrice*2-2.5*packSize*2);
 assert.equal(Number(commission.commission_rate),10);
@@ -270,4 +278,4 @@ const protectedEnv = { DB: db, ASSETS: assets, ADMIN_ACCESS_REQUIRED: "true", TE
 assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401);
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
-console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));
+console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "Cloudflare Access denial"] }, null, 2));
