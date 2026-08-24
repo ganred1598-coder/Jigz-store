@@ -73,6 +73,11 @@ const checks={
   customerStylePos:/pos-customer-grid/.test(html)&&/pos-product-card/.test(admin),
   posDirectQuantity:/data-pos-product-qty/.test(admin)&&/data-pos-qty-input/.test(admin)&&/function setPosQuantity/.test(admin)&&/function posMaxQty/.test(admin),
   posPerBillPrice:/data-pos-price-input/.test(admin)&&/function setPosPrice/.test(admin)&&/salePrice/.test(admin)&&/hasPosOverride=source==="POS"/.test(worker)&&/posPriceOverrides/.test(worker),
+  posCodShipping:/id="posShipping"/.test(html)&&/id="posCodAmount"/.test(html)&&/function updatePosTotals/.test(admin)&&/shippingFee:totals\.shipping/.test(admin)&&/codAmount/.test(worker)&&/invalid_cod_amount/.test(worker),
+  adminGetRetry:/attempts=method==="GET"\?2:1/.test(admin)&&/setTimeout\(resolve,350\)/.test(admin),
+  fastHealth:/function quickHealth/.test(worker)&&/health_timeout/.test(worker)&&/"run_worker_first": true/.test(wrangler),
+  adminGateTimeout:/AbortSignal\.timeout/.test(admin)&&/เวลานานกว่าปกติ/.test(admin),
+  packingRollback:/data-order-rollback/.test(admin)&&/function rollbackPacking/.test(admin)&&/ROLLBACK_PACKING_STATUS/.test(worker)&&/rollback_reason_required/.test(worker),
   linkedSalesAutoCommission:/function applyPosSalesAgent/.test(admin)&&/salesAgent/.test(admin)&&/agent_type='SALES'/.test(worker)&&/autoSalesAgent/.test(worker)&&/commissionCreated/.test(worker),
   salesSelfWorkspace:/id="my-sales" class="page"/.test(html)&&/function loadMySales/.test(admin)&&/\/api\/admin\/sales\/me/.test(worker)&&/function salesWorkspace/.test(worker)&&/WHERE user_id=\? AND agent_type='SALES'/.test(worker),
   salesPermissionBoundary:/effectiveRole/.test(worker)&&/sales_permission_denied/.test(worker)&&/classList\.add\("sales-mode"\)/.test(admin),
@@ -98,8 +103,10 @@ const checks={
   complianceGate:/compliance_required/.test(worker)&&/checkoutCompliance/.test(app)&&/compliance_text/.test(worker),
   reservationProofHold:/reservation_expires_at=CASE WHEN \?='VERIFIED'/.test(worker),
   internalAdminAccess:/CREATE TABLE IF NOT EXISTS admin_access_requests/.test(worker)&&/DEVICE_APPROVAL/.test(worker)&&/data-access-review/.test(admin)&&/gateRequest/.test(html),
+  googleVerification:/googlea735a29242109529\.html/.test(worker)&&/google-site-verification: googlea735a29242109529\.html/.test(worker)&&/"run_worker_first": true/.test(wrangler),
+  searchDiscovery:/pathname==="\/sitemap\.xml"/.test(worker)&&/application\/xml/.test(worker)&&/pathname==="\/robots\.txt"/.test(worker)&&/Disallow: \/admin/.test(worker)&&/"run_worker_first": true/.test(wrangler),
   noAccessHealthWarning:!/ACTION_REQUIRED/.test(worker)&&!/Cloudflare Access/.test(admin),
-  systemVersion:/version:"5\.10\.0"/.test(worker)&&/v5\.10\.0/.test(html)
+  systemVersion:/version:"5\.11\.1"/.test(worker)&&/v5\.11\.1/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

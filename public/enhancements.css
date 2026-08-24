@@ -592,3 +592,13 @@ button,a,input,select,textarea { touch-action: manipulation; }
 .system-guide b { color: var(--text); }
 #healthChecks article b { font-size: 18px; overflow-wrap: anywhere; }
 #healthAlerts small, #healthApprovals small { display: block; margin-top: 5px; color: var(--muted); white-space: normal; }
+.pos-field-label { display: grid; gap: .42rem; color: #aeb9cf; font-size: .78rem; font-weight: 700; }
+.pos-field-label .field { width: 100%; color: #fff; }
+.pos-bill-summary { display: grid; gap: .55rem; padding: 1rem; border: 1px solid #263a5f; border-radius: 14px; background: linear-gradient(145deg,rgba(8,20,43,.92),rgba(31,8,48,.78)); }
+.pos-bill-summary > span, .pos-bill-summary > strong { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.pos-bill-summary > strong { padding-top: .7rem; border-top: 1px solid #32466b; color: #fff; font-size: 1.05rem; }
+.pos-bill-summary #posCodSummary { padding: .7rem; border: 1px solid #ff42c6; border-radius: 10px; background: rgba(255,38,183,.08); color: #ffd9f4; }
+.receipt-totals { margin-top: 1rem; border-top: 1px solid #ccd3df; padding-top: .65rem; }
+.receipt-totals p, .receipt-totals h2 { display: flex; justify-content: space-between; gap: 1rem; margin: .35rem 0; }
+.receipt-totals .cod-receipt-total { padding: .6rem; border: 2px solid #111; border-radius: 8px; }
+@media (max-width:640px) { .pos-cart .two { grid-template-columns: 1fr; } .pos-bill-summary { padding: .8rem; } }

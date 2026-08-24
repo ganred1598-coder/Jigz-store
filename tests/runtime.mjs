@@ -65,7 +65,19 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.10.0");
+assert.equal(health.body.version, "5.11.1");
+const googleVerification=await request("/googlea735a29242109529.html");
+assert.equal(googleVerification.status,200);
+assert.equal(await googleVerification.text(),"google-site-verification: googlea735a29242109529.html");
+const sitemap=await request("/sitemap.xml");
+assert.equal(sitemap.status,200);
+assert.match(sitemap.headers.get("content-type")||"",/application\/xml/);
+assert.match(await sitemap.text(),/<loc>https:\/\/jigz\.test\/<\/loc>/);
+const robots=await request("/robots.txt");
+assert.equal(robots.status,200);
+const robotsText=await robots.text();
+assert.match(robotsText,/Disallow: \/admin/);
+assert.match(robotsText,/Sitemap: https:\/\/jigz\.test\/sitemap\.xml/);
 
 const session = await json("/api/session");
 assert.equal(session.response.status, 200);
@@ -154,6 +166,27 @@ assert.equal(posOrder.body.order.agent_code, salesCode, "Worker must assign the 
 assert.equal(Number(posOrder.body.order.items[0].line_total), posSalePrice * 2);
 assert.equal(Number(posOrder.body.order.items[0].unit_price) * packSize, posSalePrice);
 assert.equal(Number(posOrder.body.order.items[0].actual_cost), 2.5 * packSize * 2, JSON.stringify(posOrder.body.order.items[0]));
+const codShipping = 45;
+const codSalePrice = 20;
+const codTotal = codSalePrice + codShipping;
+const posCodOrder = await json("/api/admin/orders", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    customerName: "POS COD Tester",
+    phone: "0833333333",
+    address: "ส่งปลายทาง",
+    paymentMethod: "COD",
+    shippingFee: codShipping,
+    codAmount: codTotal + 10,
+    items: [{ productId: product.id, packSize, qty: 1, salePrice: codSalePrice }]
+  })
+});
+assert.equal(posCodOrder.response.status, 201, JSON.stringify(posCodOrder.body));
+assert.equal(posCodOrder.body.order.status, "NEW", "POS COD must not be marked paid before collection");
+assert.equal(Number(posCodOrder.body.order.shipping_fee), codShipping);
+assert.equal(Number(posCodOrder.body.order.total), codTotal);
+assert.equal(Number(posCodOrder.body.order.cod_amount), codTotal + 10);
 const commission = await db.prepare("SELECT commission_rate,profit_base,commission_amount,status FROM sales_commissions WHERE order_id=?").bind(posOrder.body.order.id).first();
 const expectedProfit = Math.max(0,posSalePrice*2-2.5*packSize*2);
 assert.equal(Number(commission.commission_rate),10);
@@ -204,6 +237,13 @@ assert.equal(approvedOrder.body.order.agent_code,restrictedSalesCode);
 assert.equal(Number(approvedOrder.body.order.items[0].line_total),.01);
 const moveOrder=async(id,status,extra={})=>json(`/api/admin/orders/${encodeURIComponent(id)}/transition`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status,...extra})});
 await moveOrder(posOrder.body.order.id,"PACKING");
+await moveOrder(posOrder.body.order.id,"PACKED");
+const rolledBackPacking=await moveOrder(posOrder.body.order.id,"PACKING",{reason:"ตรวจพบว่าต้องแพ็กใหม่"});
+assert.equal(rolledBackPacking.response.status,200,JSON.stringify(rolledBackPacking.body));
+assert.equal(rolledBackPacking.body.order.status,"PACKING");
+const rollbackAudit=await db.prepare("SELECT action,details_json FROM audit_logs WHERE entity_id=? ORDER BY id DESC LIMIT 1").bind(posOrder.body.order.id).first();
+assert.equal(rollbackAudit.action,"ROLLBACK_PACKING_STATUS");
+assert.equal(JSON.parse(rollbackAudit.details_json).reason,"ตรวจพบว่าต้องแพ็กใหม่");
 await moveOrder(posOrder.body.order.id,"PACKED");
 await moveOrder(posOrder.body.order.id,"SHIPPED",{trackingCompany:"TEST",trackingNumber:"TRACK001"});
 await moveOrder(posOrder.body.order.id,"COMPLETED");
