@@ -1,7 +1,7 @@
 const $=selector=>document.querySelector(selector);
 const locale=window.JIGZI18N?.locale()||"th-TH";
 const money=new Intl.NumberFormat(locale,{style:"currency",currency:"THB",maximumFractionDigits:2});
-const statusLabel={NEW:"รับออเดอร์แล้ว",ACCEPTED:"ร้านรับงานแล้ว",PENDING_PAYMENT:"รอตรวจสอบการชำระ",PAID:"ยืนยันเงินแล้ว",PACKING:"กำลังแพ็ก",PACKED:"แพ็กเสร็จแล้ว",SHIPPED:"จัดส่งแล้ว",COMPLETED:"สำเร็จ",CANCELLED:"ยกเลิก"};
+const statusLabel={NEW:"ออเดอร์ใหม่ / รอรับงาน",ACCEPTED:"รับงานแล้ว",PENDING_PAYMENT:"รอตรวจสอบการชำระเงิน",PAID:"ชำระเงินแล้ว",PACKING:"กำลังแพ็กสินค้า",PACKED:"ตรวจแพ็กเรียบร้อย",SHIPPED:"จัดส่งแล้ว",COMPLETED:"เสร็จสิ้นออเดอร์",CANCELLED:"ยกเลิกออเดอร์"};
 const savedCatalogView=localStorage.getItem("jigz_catalog_view");
 const state={products:[],promotions:[],settings:{},user:null,profile:{},wallet:null,orders:[],cart:JSON.parse(localStorage.getItem("jigz_cart")||"[]"),catalogView:["grid","list","compact"].includes(savedCatalogView)?savedCatalogView:"grid"};
 const esc=value=>String(value??"").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));

@@ -115,7 +115,8 @@ const checks={
   searchMetadata:/rel="canonical"/.test(storefront)&&/og:title/.test(storefront)&&/twitter:card/.test(storefront)&&/application\/ld\+json/.test(storefront)&&/"@type":"OnlineStore"/.test(storefront),
   peopleFirstSeo:/ร้านค้าปลีกสมุนไพรและสินค้าออนไลน์/.test(storefront)&&/class="seo-content"/.test(storefront)&&/function shareStoreLink/.test(app),
   distinctPaidCompleted:/status-colors\.css/.test(html)&&/status-PAID/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8"))&&/status-COMPLETED/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8")),
-  systemVersion:/version:"5\.12\.2"/.test(worker)&&/v5\.12\.2/.test(html)
+  allOrderStatusColors:["NEW","ACCEPTED","PENDING_PAYMENT","PAID","PACKING","PACKED","SHIPPED","COMPLETED","CANCELLED"].every(value=>fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8").includes(`status-${value}`)),
+  systemVersion:/version:"5\.12\.3"/.test(worker)&&/v5\.12\.3/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

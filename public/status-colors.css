@@ -1,61 +1,62 @@
-/* Status colors shared by storefront and Command Center. */
-.status-PAID,
-.status.PAID {
+/* Shared order-status system for storefront, POS and Command Center. */
+[class^="status-"], .status {
+  --status-color: #f7f8ff;
+  --status-bg: rgb(247 248 255 / 10%);
+  --status-border: rgb(247 248 255 / 45%);
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 9px;
-  border: 1px solid #159ddd;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 10px;
+  border: 1px solid var(--status-border);
   border-radius: 999px;
-  background: #087cb32b;
-  color: #45ceff !important;
-  box-shadow: inset 0 0 12px #159ddd18;
+  background: var(--status-bg);
+  color: var(--status-color) !important;
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--status-color) 12%, transparent);
+  font-weight: 800;
+  line-height: 1.25;
+  white-space: nowrap;
 }
-
-.status-PAID::before,
-.status.PAID::before {
-  content: "฿";
+[class^="status-"]::before, .status::before {
+  content: "•";
   display: grid;
+  flex: 0 0 17px;
   place-items: center;
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
-  background: #159ddd;
-  color: #03101b;
+  background: var(--status-color);
+  color: #030612;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 950;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--status-color) 48%, transparent);
 }
-
-.status-COMPLETED,
-.status.COMPLETED {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 9px;
-  border: 1px solid #20c979;
-  border-radius: 999px;
-  background: #20c97926;
-  color: #48ef9c !important;
-  box-shadow: inset 0 0 12px #20c97918;
+.status-NEW, .status.NEW { --status-color:#ff8a24; --status-bg:rgb(255 138 36 / 14%); --status-border:rgb(255 138 36 / 68%); }
+.status-NEW::before, .status.NEW::before { content:"!"; }
+.status-ACCEPTED, .status.ACCEPTED { --status-color:#f7f8ff; --status-bg:rgb(247 248 255 / 10%); --status-border:rgb(247 248 255 / 52%); }
+.status-ACCEPTED::before, .status.ACCEPTED::before { content:"✓"; }
+.status-PENDING_PAYMENT, .status.PENDING_PAYMENT { --status-color:#73d9ff; --status-bg:rgb(115 217 255 / 13%); --status-border:rgb(115 217 255 / 62%); }
+.status-PENDING_PAYMENT::before, .status.PENDING_PAYMENT::before { content:"⌛"; font-size:8px; }
+.status-PAID, .status.PAID { --status-color:#248cff; --status-bg:rgb(36 140 255 / 16%); --status-border:rgb(36 140 255 / 72%); }
+.status-PAID::before, .status.PAID::before { content:"฿"; }
+.status-PACKING, .status.PACKING { --status-color:#ff4fd8; --status-bg:rgb(255 79 216 / 15%); --status-border:rgb(255 79 216 / 68%); }
+.status-PACKING::before, .status.PACKING::before { content:"↻"; }
+.status-PACKED, .status.PACKED { --status-color:#9b5cff; --status-bg:rgb(91 34 165 / 32%); --status-border:rgb(155 92 255 / 67%); }
+.status-PACKED::before, .status.PACKED::before { content:"▣"; }
+.status-SHIPPED, .status.SHIPPED { --status-color:#ffd43b; --status-bg:rgb(255 212 59 / 14%); --status-border:rgb(255 212 59 / 68%); }
+.status-SHIPPED::before, .status.SHIPPED::before { content:"➜"; }
+.status-COMPLETED, .status.COMPLETED { --status-color:#35e68a; --status-bg:rgb(53 230 138 / 14%); --status-border:rgb(53 230 138 / 68%); }
+.status-COMPLETED::before, .status.COMPLETED::before { content:"✓"; }
+.status-CANCELLED, .status.CANCELLED { --status-color:#ff4f64; --status-bg:rgb(255 79 100 / 15%); --status-border:rgb(255 79 100 / 68%); }
+.status-CANCELLED::before, .status.CANCELLED::before { content:"×"; font-size:13px; }
+@media (max-width:520px) {
+  [class^="status-"], .status { padding:5px 8px; font-size:11px; white-space:normal; }
 }
-
-.status-COMPLETED::before,
-.status.COMPLETED::before {
-  content: "✓";
-  display: grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #20c979;
-  color: #03140c;
-  font-size: 11px;
-  font-weight: 900;
-}
-
-@media (prefers-contrast: more) {
-  .status-PAID,
-  .status.PAID,
-  .status-COMPLETED,
-  .status.COMPLETED { border-width: 2px; }
+@media (prefers-contrast:more) { [class^="status-"], .status { border-width:2px; } }
+@media (prefers-reduced-motion:no-preference) {
+  .status-NEW::before, .status.NEW::before,
+  .status-PENDING_PAYMENT::before, .status.PENDING_PAYMENT::before,
+  .status-PACKING::before, .status.PACKING::before { animation:status-pulse 1.8s ease-in-out infinite; }
+  @keyframes status-pulse { 50% { transform:scale(1.12); filter:brightness(1.25); } }
 }

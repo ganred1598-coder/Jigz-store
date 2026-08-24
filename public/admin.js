@@ -5,7 +5,7 @@ const state={user:null,salesAgent:null,mySales:null,settings:null,products:[],or
 addEventListener("DOMContentLoaded",()=>document.querySelector('#orderStatus option[value="NEW"]')?.insertAdjacentHTML("afterend",'<option value="ACCEPTED">รับงานแล้ว</option>'));
 addEventListener("DOMContentLoaded",()=>api("/api/settings/public").then(({settings})=>{state.settings=settings;document.body.dataset.theme=settings.theme||"space";if($("#posShipping")&&!$("#posShipping").dataset.edited)$("#posShipping").value=settings.shipping_fee||"0";updatePosTotals()}).catch(()=>{}));
 addEventListener("DOMContentLoaded",()=>$("#setTheme").addEventListener("change",event=>{document.body.dataset.theme=event.target.value}));
-const labels={NEW:"ออเดอร์ใหม่ / COD",ACCEPTED:"รับงานแล้ว",PENDING_PAYMENT:"รอชำระเงิน",PAID:"ชำระแล้ว",PACKING:"กำลังแพ็ก",PACKED:"แพ็กแล้ว",SHIPPED:"จัดส่งแล้ว",COMPLETED:"สำเร็จ",CANCELLED:"ยกเลิก"};
+const labels={NEW:"ออเดอร์ใหม่ / รอรับงาน",ACCEPTED:"รับงานแล้ว",PENDING_PAYMENT:"รอตรวจสอบการชำระเงิน",PAID:"ชำระเงินแล้ว",PACKING:"กำลังแพ็กสินค้า",PACKED:"ตรวจแพ็กเรียบร้อย",SHIPPED:"จัดส่งแล้ว",COMPLETED:"เสร็จสิ้นออเดอร์",CANCELLED:"ยกเลิกออเดอร์"};
 
 function esc(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]))}
 function date(value){if(!value)return"—";return new Date(String(value).replace(" ","T")+(/Z|[+-]\d\d/.test(value)?"":"Z")).toLocaleString(locale)}

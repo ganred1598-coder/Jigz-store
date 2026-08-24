@@ -65,7 +65,7 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.12.2");
+assert.equal(health.body.version, "5.12.3");
 const googleVerification=await request("/googlea735a29242109529.html");
 assert.equal(googleVerification.status,200);
 assert.equal(await googleVerification.text(),"google-site-verification: googlea735a29242109529.html");
