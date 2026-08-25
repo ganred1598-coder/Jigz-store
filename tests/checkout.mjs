@@ -116,7 +116,8 @@ const checks={
   peopleFirstSeo:/ร้านค้าปลีกสมุนไพรและสินค้าออนไลน์/.test(storefront)&&/class="seo-content"/.test(storefront)&&/function shareStoreLink/.test(app),
   distinctPaidCompleted:/status-colors\.css/.test(html)&&/status-PAID/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8"))&&/status-COMPLETED/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8")),
   allOrderStatusColors:["NEW","ACCEPTED","PENDING_PAYMENT","PAID","PACKING","PACKED","SHIPPED","COMPLETED","CANCELLED"].every(value=>fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8").includes(`status-${value}`)),
-  systemVersion:/version:"5\.12\.3"/.test(worker)&&/v5\.12\.3/.test(html)
+  storeCredit:/credit_accounts/.test(worker)&&/credit_transactions/.test(worker)&&/creditCodeHash/.test(worker)&&/id="creditAccountForm"/.test(html)&&/checkoutCreditCode/.test(app),
+  systemVersion:/version:"5\.13\.0"/.test(worker)&&/v5\.13\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
