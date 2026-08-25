@@ -117,7 +117,8 @@ const checks={
   distinctPaidCompleted:/status-colors\.css/.test(html)&&/status-PAID/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8"))&&/status-COMPLETED/.test(fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8")),
   allOrderStatusColors:["NEW","ACCEPTED","PENDING_PAYMENT","PAID","PACKING","PACKED","SHIPPED","COMPLETED","CANCELLED"].every(value=>fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8").includes(`status-${value}`)),
   storeCredit:/credit_accounts/.test(worker)&&/credit_transactions/.test(worker)&&/creditCodeHash/.test(worker)&&/id="creditAccountForm"/.test(html)&&/checkoutCreditCode/.test(app),
-  systemVersion:/version:"5\.13\.0"/.test(worker)&&/v5\.13\.0/.test(html)
+  posCredit:/id="posCreditAccount"/.test(html)&&/id="posCreditAmount"/.test(html)&&/api\/admin\/credit-options/.test(worker)&&/credit-settled/.test(worker)&&/CREDIT_OVERDUE/.test(worker)&&/function loadPosCreditOptions/.test(admin),
+  systemVersion:/version:"5\.14\.0"/.test(worker)&&/v5\.14\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
