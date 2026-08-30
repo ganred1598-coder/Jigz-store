@@ -8,6 +8,7 @@ const storefront=fs.readFileSync(new URL("../public/index.html",import.meta.url)
 const guide=fs.readFileSync(new URL("../public/guide.html",import.meta.url),"utf8");
 const i18n=fs.readFileSync(new URL("../public/i18n.js",import.meta.url),"utf8");
 const wrangler=fs.readFileSync(new URL("../wrangler.jsonc",import.meta.url),"utf8");
+const receipt=fs.readFileSync(new URL("../public/receipt.js",import.meta.url),"utf8");
 
 const checks={
   checkoutHandler:/async function checkout\(event\)/.test(app),
@@ -15,7 +16,7 @@ const checks={
   stockValidation:/insufficient_stock/.test(worker),
   safeSubmitButton:/event\.submitter\|\|form\.querySelector/.test(app),
   clickableTracking:/function trackingLink\(order/.test(app)&&/target="_blank"/.test(app),
-  printableReceipt:/data-print-receipt/.test(app)&&/window\.print\(\)/.test(app),
+  printableReceipt:/data-print-receipt-paper/.test(app)&&/JIGZReceipt/.test(app)&&/window\.print\(\)/.test(receipt),
   orderTimeline:/function timelineHtml\(order\)/.test(app),
   trackingShare:/navigator\.share/.test(app)&&/data-copy-tracking/.test(app),
   codCloseGuard:/cod_payment_required/.test(worker)&&/cod-received/.test(worker),
@@ -118,7 +119,15 @@ const checks={
   allOrderStatusColors:["NEW","ACCEPTED","PENDING_PAYMENT","PAID","PACKING","PACKED","SHIPPED","COMPLETED","CANCELLED"].every(value=>fs.readFileSync(new URL("../public/status-colors.css",import.meta.url),"utf8").includes(`status-${value}`)),
   storeCredit:/credit_accounts/.test(worker)&&/credit_transactions/.test(worker)&&/creditCodeHash/.test(worker)&&/id="creditAccountForm"/.test(html)&&/checkoutCreditCode/.test(app),
   posCredit:/id="posCreditAccount"/.test(html)&&/id="posCreditAmount"/.test(html)&&/api\/admin\/credit-options/.test(worker)&&/credit-settled/.test(worker)&&/CREDIT_OVERDUE/.test(worker)&&/function loadPosCreditOptions/.test(admin),
-  systemVersion:/version:"5\.14\.0"/.test(worker)&&/v5\.14\.0/.test(html)
+  actualShippingCost:/id="actualShippingCost"/.test(admin)&&/id="fulfillmentExpense"/.test(admin)&&/actual_shipping_cost/.test(worker)&&/fulfillment_expense/.test(worker)&&/shipping_cost_recorded_by/.test(worker)&&/invalid_actual_shipping_cost/.test(worker)&&/totals\.shippingCost/.test(admin),
+  sampleCostTracking:/data-pos-sample/.test(admin)&&/is_sample/.test(worker)&&/line\.isSample\?"SAMPLE":"SALE"/.test(worker)&&/ตัวเทส\/ของแถม/.test(admin),
+  productVariants:/product_variants/.test(worker)&&/variantConfig/.test(worker)&&/id="productVariant"/.test(app)&&/product-variant-editor/.test(admin)&&/id="receiveVariant"/.test(html),
+  riderPayment:/enable_rider/.test(worker)&&/payment_channel/.test(worker)&&/value="RIDER"/.test(html)&&/value="RIDER"/.test(app),
+  linkedAgentWithoutCode:/autoSalesAgent/.test(worker)&&/linkedSalesAgent/.test(worker)&&/state\.agent/.test(app),
+  slipBindCount:/VALUES\(\?,'ORDER',\?,'EASYSLIP',\?,\?,\?,\?,\?,\?,\?,\?\)/.test(worker)&&/VALUES\(\?, 'DEPOSIT',\?,'EASYSLIP',\?,\?,\?,\?,\?,\?,\?,\?\)/.test(worker),
+  productionReceipt:/window\.JIGZReceipt/.test(receipt)&&/@page\{size:/.test(receipt)&&/paper==="58"/.test(receipt)&&/paper==="80"/.test(receipt)&&/data-print-receipt-paper="58"/.test(admin)&&/data-print-receipt-paper="A4"/.test(app),
+  receiptPrivacy:!/actual_cost|actual_shipping_cost|fulfillment_expense/.test(receipt),
+  systemVersion:/version:"5\.17\.0"/.test(worker)&&/v5\.17\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);

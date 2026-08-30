@@ -601,4 +601,7 @@ button,a,input,select,textarea { touch-action: manipulation; }
 .receipt-totals { margin-top: 1rem; border-top: 1px solid #ccd3df; padding-top: .65rem; }
 .receipt-totals p, .receipt-totals h2 { display: flex; justify-content: space-between; gap: 1rem; margin: .35rem 0; }
 .receipt-totals .cod-receipt-total { padding: .6rem; border: 2px solid #111; border-radius: 8px; }
+.receipt-print-actions { flex-wrap: wrap; margin-top: 14px; }
+.receipt-print-actions .button { min-width: 140px; }
+@media (max-width: 640px) { .receipt-print-actions { display: grid; grid-template-columns: 1fr; } .receipt-print-actions .button { width: 100%; } }
 @media (max-width:640px) { .pos-cart .two { grid-template-columns: 1fr; } .pos-bill-summary { padding: .8rem; } }

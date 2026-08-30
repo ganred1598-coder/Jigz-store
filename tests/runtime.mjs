@@ -65,7 +65,7 @@ const health = await json("/api/health");
 assert.equal(health.response.status, 200);
 assert.equal(health.body.ok, true);
 assert.equal(health.body.database, "connected");
-assert.equal(health.body.version, "5.14.0");
+assert.equal(health.body.version, "5.17.0");
 const googleVerification=await request("/googlea735a29242109529.html");
 assert.equal(googleVerification.status,200);
 assert.equal(await googleVerification.text(),"google-site-verification: googlea735a29242109529.html");
@@ -110,6 +110,18 @@ const expired = await json(`/api/orders/${encodeURIComponent(create.body.order.i
 assert.equal(expired.body.order.status, "CANCELLED", "Expired reservation must cancel automatically");
 const afterExpiry = await json("/api/products");
 assert.equal(Number(afterExpiry.body.products.find((item) => item.id === product.id).stock), stockBefore, "Expired reservation must return stock");
+
+const proofPayload = { ...payload, idempotencyKey: `slip:${crypto.randomUUID()}` };
+const proofOrder = await json("/api/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(proofPayload) });
+assert.equal(proofOrder.response.status, 201, JSON.stringify(proofOrder.body));
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async () => Response.json({ success: true, data: { transRef: `RUNTIME-${crypto.randomUUID()}`, amountInSlip: Number(proofOrder.body.order.total), isAmountMatched: true, matchedAccount: { id: "SHOP" }, isDuplicate: false } });
+const proofResult = await json(`/api/orders/${encodeURIComponent(proofOrder.body.order.id)}/payment-proof`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ proof: "data:image/png;base64,AA==" }) }, { ...env, EASYSLIP_API_KEY: "runtime-test-key" });
+globalThis.fetch = originalFetch;
+assert.equal(proofResult.response.status, 200, JSON.stringify(proofResult.body));
+assert.equal(proofResult.body.verificationStatus, "VERIFIED");
+assert.equal(proofResult.body.order.status, "PAID");
+assert.equal(Number((await db.prepare("SELECT COUNT(*) total FROM slip_verifications WHERE request_type='ORDER' AND request_id=?").bind(proofOrder.body.order.id).first()).total), 1, "Slip verification must be stored without a D1 bind mismatch");
 
 const adminSession = await json("/api/admin/session");
 assert.equal(adminSession.response.status, 200);
@@ -170,6 +182,23 @@ const createSalesAgent = await json("/api/admin/agents", {
 assert.equal(createSalesAgent.response.status, 200, JSON.stringify(createSalesAgent.body));
 const linkedSession = await json("/api/admin/session");
 assert.equal(linkedSession.body.salesAgent.code, salesCode);
+const variantProductId = `P-VARIANT-${Date.now()}`;
+const createVariantProduct = await json("/api/admin/products", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ id: variantProductId, name: "Runtime Flavor", category: "TEST", unit: "ชิ้น", price: 10, stock: 0, unitCost: 2, prices: { "1": 10 }, images: [], variantConfig: { optionName: "รสชาติ", variants: [{ label: "องุ่น", stock: 3, priceDelta: 3 }, { label: "ส้ม", stock: 2, priceDelta: 0 }] } })
+});
+assert.equal(createVariantProduct.response.status, 201, JSON.stringify(createVariantProduct.body));
+const variantCatalog = await json("/api/admin/products");
+const variantProduct = variantCatalog.body.products.find(item => item.id === variantProductId);
+assert.equal(variantProduct.optionName, "รสชาติ");
+assert.equal(variantProduct.variants.length, 2);
+const grapeVariant = variantProduct.variants.find(item => item.label === "องุ่น");
+const variantOrder = await json("/api/admin/orders", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ customerName: "Variant Customer", phone: "0877777777", address: "รับหน้าร้าน", paymentMethod: "CASH", items: [{ productId: variantProductId, variantId: grapeVariant.id, packSize: 1, qty: 1 }] }) });
+assert.equal(variantOrder.response.status, 201, JSON.stringify(variantOrder.body));
+assert.equal(variantOrder.body.order.items[0].variant_name, "องุ่น");
+assert.equal(Number(variantOrder.body.order.items[0].line_total), 13);
+assert.equal(Number((await db.prepare("SELECT stock FROM product_variants WHERE id=?").bind(grapeVariant.id).first()).stock), 2, "Variant stock must be deducted separately");
 await db.prepare("DELETE FROM inventory_lots WHERE product_id=?").bind(product.id).run();
 await db.prepare("INSERT INTO inventory_lots(product_id,received_qty,remaining_qty,unit_cost,note) VALUES(?,?,?,?,?)").bind(product.id,100,100,2.5,"runtime cost").run();
 const posSalePrice = 12.34;
@@ -212,6 +241,23 @@ assert.equal(posCodOrder.body.order.status, "NEW", "POS COD must not be marked p
 assert.equal(Number(posCodOrder.body.order.shipping_fee), codShipping);
 assert.equal(Number(posCodOrder.body.order.total), codTotal);
 assert.equal(Number(posCodOrder.body.order.cod_amount), codTotal + 10);
+const posRiderOrder = await json("/api/admin/orders", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({
+    customerName: "Rider Customer",
+    phone: "0866666666",
+    address: "ส่งโดย Rider",
+    paymentMethod: "RIDER",
+    shippingFee: 35,
+    codAmount: Number(product.prices[String(packSize)]) + 35,
+    items: [{ productId: product.id, packSize, qty: 1 }]
+  })
+});
+assert.equal(posRiderOrder.response.status, 201, JSON.stringify(posRiderOrder.body));
+assert.equal(posRiderOrder.body.order.payment_method, "RIDER");
+assert.equal(posRiderOrder.body.order.payment_channel, "RIDER");
+assert.equal(posRiderOrder.body.order.agent_code, salesCode, "Linked sales identity must apply without entering an agent code");
 const posCreditOptions=await json("/api/admin/credit-options");
 const posCreditOption=posCreditOptions.body.accounts.find(item=>item.user_id===accessDevice.body.user.id);
 assert.ok(posCreditOption,"POS must list credit users from system data");
@@ -292,6 +338,7 @@ assert.ok(approvalResult.body.orderId);
 const approvedOrder=await json(`/api/admin/orders/${encodeURIComponent(approvalResult.body.orderId)}`);
 assert.equal(approvedOrder.body.order.agent_code,restrictedSalesCode);
 assert.equal(Number(approvedOrder.body.order.items[0].line_total),.01);
+const shippingActor=(await json("/api/admin/session")).body.user.id;
 const moveOrder=async(id,status,extra={})=>json(`/api/admin/orders/${encodeURIComponent(id)}/transition`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status,...extra})});
 await moveOrder(posOrder.body.order.id,"PACKING");
 await moveOrder(posOrder.body.order.id,"PACKED");
@@ -302,17 +349,38 @@ const rollbackAudit=await db.prepare("SELECT action,details_json FROM audit_logs
 assert.equal(rollbackAudit.action,"ROLLBACK_PACKING_STATUS");
 assert.equal(JSON.parse(rollbackAudit.details_json).reason,"ตรวจพบว่าต้องแพ็กใหม่");
 await moveOrder(posOrder.body.order.id,"PACKED");
-await moveOrder(posOrder.body.order.id,"SHIPPED",{trackingCompany:"TEST",trackingNumber:"TRACK001"});
+const actualShippingCost=1.25;
+const fulfillmentExpense=.75;
+const shippedOrder=await moveOrder(posOrder.body.order.id,"SHIPPED",{trackingCompany:"TEST",trackingNumber:"TRACK001",actualShippingCost,fulfillmentExpense,fulfillmentExpenseNote:"กล่องและค่าธรรมเนียม"});
+assert.equal(shippedOrder.response.status,200,JSON.stringify(shippedOrder.body));
+assert.equal(Number(shippedOrder.body.order.actual_shipping_cost),actualShippingCost);
+assert.equal(Number(shippedOrder.body.order.fulfillment_expense),fulfillmentExpense);
+assert.equal(shippedOrder.body.order.fulfillment_expense_note,"กล่องและค่าธรรมเนียม");
+assert.equal(shippedOrder.body.order.shipping_cost_recorded_by,shippingActor);
+assert.ok(shippedOrder.body.order.shipping_cost_recorded_at);
+const shippingReport=await json("/api/admin/reports");
+assert.ok(Number(shippingReport.body.totals.shippingCost)>=actualShippingCost,"Reports must include actual shipping cost");
+assert.ok(Number(shippingReport.body.totals.fulfillmentCost)>=fulfillmentExpense,"Reports must include packing and fulfillment expenses");
 await moveOrder(posOrder.body.order.id,"COMPLETED");
 const firstRelease=await json("/api/admin/commissions/release",{method:"POST",headers:{"content-type":"application/json"},body:"{}"});
 assert.ok(firstRelease.body.paid>=1);
-const paidCommission=await db.prepare("SELECT id,commission_amount,status FROM sales_commissions WHERE order_id=?").bind(posOrder.body.order.id).first();
+const paidCommission=await db.prepare("SELECT id,commission_amount,deductions,status FROM sales_commissions WHERE order_id=?").bind(posOrder.body.order.id).first();
 assert.equal(paidCommission.status,"PAID");
+assert.equal(Number(paidCommission.deductions),actualShippingCost+fulfillmentExpense,"Commission must deduct shipping and fulfillment costs");
 const deletePaidOrder=await json(`/api/admin/orders/${encodeURIComponent(posOrder.body.order.id)}`,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({reason:"runtime return"})});
 assert.equal(deletePaidOrder.response.status,200,JSON.stringify(deletePaidOrder.body));
 const pendingReversal=await db.prepare("SELECT amount,status FROM wallet_transactions WHERE reference_type='COMMISSION_REVERSAL' AND reference_id=?").bind(String(paidCommission.id)).first();
 assert.equal(pendingReversal.status,"PENDING");
 assert.equal(Number(pendingReversal.amount),Number(paidCommission.commission_amount));
+const sampleStockBefore=Number((await json("/api/admin/products")).body.products.find(item=>item.id===product.id).stock);
+const sampleOrder=await json("/api/admin/orders",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({customerName:"Sample Customer",phone:"0800000000",address:"ส่งตัวเทส",paymentMethod:"CASH",items:[{productId:product.id,packSize,qty:1,salePrice:0,isSample:true}]})});
+assert.equal(sampleOrder.response.status,201,JSON.stringify(sampleOrder.body));
+assert.equal(sampleOrder.body.order.items[0].is_sample,true);
+assert.equal(Number(sampleOrder.body.order.items[0].line_total),0,"Sample must be free");
+assert.ok(Number(sampleOrder.body.order.items[0].actual_cost)>0,"Sample must retain FIFO cost");
+assert.equal(Number((await json("/api/admin/products")).body.products.find(item=>item.id===product.id).stock),sampleStockBefore-packSize,"Sample must deduct stock");
+const cancelSample=await json(`/api/admin/orders/${encodeURIComponent(sampleOrder.body.order.id)}/transition`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status:"CANCELLED"})});
+assert.equal(cancelSample.response.status,200,JSON.stringify(cancelSample.body));
 const adminHealth = await json("/api/admin/system-health");
 assert.equal(adminHealth.response.status, 200);
 assert.equal(adminHealth.body.ok, true);
@@ -320,7 +388,9 @@ const backup = await request("/api/admin/backup");
 assert.equal(backup.status, 200);
 assert.match(backup.headers.get("content-disposition") || "", /jigz-backup-/);
 const backupBody = await backup.json();
-assert.equal(backupBody.schemaVersion, "5.14.0");
+assert.equal(backupBody.schemaVersion, "5.17.0");
+assert.ok(Array.isArray(backupBody.productVariants));
+assert.ok(backupBody.productVariants.some(item => item.product_id === variantProductId));
 assert.ok(Array.isArray(backupBody.creditAccounts));
 assert.ok(Array.isArray(backupBody.creditTransactions));
 assert.equal(Object.hasOwn(backupBody.creditAccounts[0] || {}, "code_hash"), false);
@@ -330,4 +400,4 @@ const protectedEnv = { DB: db, ASSETS: assets, ADMIN_ACCESS_REQUIRED: "true", TE
 assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401);
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
-console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "OWNER-created store credit", "credit user isolation", "credit balance deduction", "credit refund on cancellation", "Cloudflare Access denial"] }, null, 2));
+console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "payment slip persistence", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "product variants", "Rider payment", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "OWNER-created store credit", "credit user isolation", "credit balance deduction", "credit refund on cancellation", "Cloudflare Access denial"] }, null, 2));
