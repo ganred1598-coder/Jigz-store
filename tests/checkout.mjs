@@ -51,6 +51,8 @@ const checks={
   closingSchema:/CREATE TABLE IF NOT EXISTS financial_closings/.test(worker)&&/UNIQUE\(period_type,period_key\)/.test(worker),
   closingApi:/\/api\/admin\/closings/.test(worker)&&/function calculateClosing/.test(worker)&&/function createClosing/.test(worker),
   closingUi:/id="closings" class="page"/.test(html)&&/function loadClosings/.test(admin)&&/function createFinancialClosing/.test(admin)&&/function showClosingDetail/.test(admin),
+  closingTransactionList:/function closingTransactions/.test(worker)&&/item_summary/.test(worker)&&/id="closingTransactionRows"/.test(html)&&/function renderClosingTransactions/.test(admin),
+  closingTransactionSnapshot:/transactions:preview\.transactions/.test(worker)&&/Snapshot ที่ปิดแล้ว/.test(admin)&&/data-order-detail/.test(admin),
   thaiClosingBoundary:/7\*3600000/.test(worker)&&/period_type/.test(worker),
   safeUserDelete:/userDeleteMatch/.test(worker)&&/ARCHIVE_USER/.test(worker)&&/user_balance_not_zero/.test(worker)&&/user_wallet_pending/.test(worker),
   userDeleteUi:/data-user-delete/.test(admin)&&/function deleteUser/.test(admin),
