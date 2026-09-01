@@ -55,6 +55,8 @@ const checks={
   closingTransactionSnapshot:/transactions:preview\.transactions/.test(worker)&&/Snapshot ที่ปิดแล้ว/.test(admin)&&/data-order-detail/.test(admin),
   ownerOrderInfoEdit:/function updateOrderInfo/.test(worker)&&/UPDATE_ORDER_INFO/.test(worker)&&/order_edit_reason_required/.test(worker)&&/data-order-info-edit/.test(admin)&&/function editOrderInfo/.test(admin),
   customerPaymentDeliverySplit:/function showCheckoutPaymentDelivery/.test(app)&&/id="checkoutDelivery"/.test(app)&&/cod-deposit-proof/.test(worker)&&/cod_deposit_amount/.test(worker)&&/VERIFY_COD_DEPOSIT/.test(worker)&&/data-upload-cod-deposit/.test(app),
+  ownerSlipReviewAndRiderShipping:/slip-review/.test(worker)&&/REVIEW_ORDER_SLIP/.test(worker)&&/data-slip-review/.test(admin)&&/shippingDeliveryMethod/.test(admin)&&/deliveryDueAmount/.test(admin),
+  ownerFullOrderEdit:/function updateOrderFull/.test(worker)&&/UPDATE_ORDER_FULL/.test(worker)&&/data-full-item-qty/.test(admin)&&/orderInfoPayment/.test(admin)&&/orderInfoStatus/.test(admin),
   thaiClosingBoundary:/7\*3600000/.test(worker)&&/period_type/.test(worker),
   safeUserDelete:/userDeleteMatch/.test(worker)&&/ARCHIVE_USER/.test(worker)&&/user_balance_not_zero/.test(worker)&&/user_wallet_pending/.test(worker),
   userDeleteUi:/data-user-delete/.test(admin)&&/function deleteUser/.test(admin),
