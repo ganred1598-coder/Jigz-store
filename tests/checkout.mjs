@@ -57,6 +57,7 @@ const checks={
   customerPaymentDeliverySplit:/function showCheckoutPaymentDelivery/.test(app)&&/id="checkoutDelivery"/.test(app)&&/cod-deposit-proof/.test(worker)&&/cod_deposit_amount/.test(worker)&&/VERIFY_COD_DEPOSIT/.test(worker)&&/data-upload-cod-deposit/.test(app),
   ownerSlipReviewAndRiderShipping:/slip-review/.test(worker)&&/REVIEW_ORDER_SLIP/.test(worker)&&/data-slip-review/.test(admin)&&/shippingDeliveryMethod/.test(admin)&&/deliveryDueAmount/.test(admin),
   ownerFullOrderEdit:/function updateOrderFull/.test(worker)&&/UPDATE_ORDER_FULL/.test(worker)&&/data-full-item-qty/.test(admin)&&/orderInfoPayment/.test(admin)&&/orderInfoStatus/.test(admin),
+  settingsFallback:/\.settings\|\|\{\}/.test(app)&&/shopName:state\.settings\.shop_name\|\|"JIGᶻ AGENT"/.test(app),
   thaiClosingBoundary:/7\*3600000/.test(worker)&&/period_type/.test(worker),
   safeUserDelete:/userDeleteMatch/.test(worker)&&/ARCHIVE_USER/.test(worker)&&/user_balance_not_zero/.test(worker)&&/user_wallet_pending/.test(worker),
   userDeleteUi:/data-user-delete/.test(admin)&&/function deleteUser/.test(admin),
