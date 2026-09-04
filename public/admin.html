@@ -8,7 +8,7 @@
   <link rel="icon" href="/assets/jigz-planet.png">
   <link rel="stylesheet" href="/admin.css?v=5.18.2">
   <link rel="stylesheet" href="/themes.css?v=5.12.1">
-  <link rel="stylesheet" href="/enhancements.css?v=5.18.1">
+  <link rel="stylesheet" href="/enhancements.css?v=5.18.3">
   <link rel="stylesheet" href="/status-colors.css?v=5.12.3">
   <title>JIGᶻ AGENT — Command Center</title>
 </head>
@@ -22,26 +22,26 @@
     <aside class="sidebar">
       <div class="logo"><img src="/assets/jigz-agent-logo.png" alt="JIGᶻ AGENT"></div>
       <nav id="nav">
-        <button class="active" data-view="dashboard">〽 <span>COMMAND CENTER</span></button>
-        <button data-view="pos">🛒 <span>POS ขายหน้าร้าน</span></button>
-        <button id="mySalesNav" class="hidden" data-view="my-sales">✧ <span>ยอดขายของฉัน</span></button>
-        <button data-view="orders">▤ <span>ออเดอร์</span><i id="orderPill">0</i></button>
-        <button data-view="payments">฿ <span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
-        <button data-view="shipping">🚚 <span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
-        <button data-view="products">◈ <span>สินค้า &amp; สต็อก</span></button>
-        <button data-view="customers">♧ <span>ลูกค้า / CRM</span></button>
-        <button class="owner-only hidden" data-view="staff">♛ <span>ผู้ดูแลระบบ</span></button>
-        <button data-view="agents">♙ <span>ตัวแทน &amp; ค่าคอม</span></button>
-        <button data-view="promotions">✦ <span>โปรโมชั่น</span></button>
-        <button data-view="rewards">★ <span>ของรางวัลพอยส์</span></button>
-        <button data-view="wallet">◉ <span>เครดิต ฝาก / ถอน</span><i id="walletPill">0</i></button>
-        <button data-view="closings">✓ <span>ปิดยอด</span></button>
-        <button data-view="finance">◎ <span>การเงิน</span></button>
-        <button data-view="reports">▦ <span>รายงาน &amp; Audit</span></button>
-        <button data-view="health">◌ <span>ศูนย์สุขภาพระบบ</span><i id="healthPill">0</i></button>
-        <button data-view="settings">⚙ <span>ตั้งค่าระบบเว็บ</span></button>
-        <button data-view="chat">☵ <span>แชททีมแอดมิน</span></button>
-        <a href="/">↪ <span>กลับหน้าร้าน</span></a>
+        <button class="active" data-view="dashboard"><span class="nav-glyph">⌁</span><span>COMMAND CENTER</span></button>
+        <button data-view="pos"><span class="nav-glyph">🛒</span><span>POS ขายหน้าร้าน</span></button>
+        <button id="mySalesNav" class="hidden" data-view="my-sales"><span class="nav-glyph">✦</span><span>ยอดขายของฉัน</span></button>
+        <button data-view="orders"><span class="nav-glyph">▤</span><span>ออเดอร์</span><i id="orderPill">0</i></button>
+        <button data-view="payments"><span class="nav-glyph">฿</span><span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
+        <button data-view="shipping"><span class="nav-glyph">➤</span><span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
+        <button data-view="products"><span class="nav-glyph">◇</span><span>สินค้า &amp; สต็อก</span></button>
+        <button data-view="customers"><span class="nav-glyph">♙</span><span>ลูกค้า / CRM</span></button>
+        <button class="owner-only hidden" data-view="staff"><span class="nav-glyph">♛</span><span>ผู้ดูแลระบบ</span></button>
+        <button data-view="agents"><span class="nav-glyph">♧</span><span>ตัวแทน &amp; ค่าคอม</span></button>
+        <button data-view="promotions"><span class="nav-glyph">✧</span><span>โปรโมชั่น</span></button>
+        <button data-view="rewards"><span class="nav-glyph">★</span><span>ของรางวัลพอยส์</span></button>
+        <button data-view="wallet"><span class="nav-glyph">◉</span><span>เครดิต ฝาก / ถอน</span><i id="walletPill">0</i></button>
+        <button data-view="closings"><span class="nav-glyph">✓</span><span>ปิดยอด</span></button>
+        <button data-view="finance"><span class="nav-glyph">◎</span><span>การเงิน</span></button>
+        <button data-view="reports"><span class="nav-glyph">▦</span><span>รายงาน &amp; Audit</span></button>
+        <button data-view="health"><span class="nav-glyph">♡</span><span>ศูนย์สุขภาพระบบ</span><i id="healthPill">0</i></button>
+        <button data-view="settings"><span class="nav-glyph">⚙</span><span>ตั้งค่าระบบเว็บ</span></button>
+        <button data-view="chat"><span class="nav-glyph">☵</span><span>แชททีมแอดมิน</span></button>
+        <a href="/"><span class="nav-glyph">↪</span><span>กลับหน้าร้าน</span></a>
       </nav>
       <div class="side-status"><b>JIGᶻ OS</b><small>v5.18.0 · BILL PRINT</small><strong>● ONLINE</strong></div>
     </aside>
@@ -198,6 +198,6 @@
   <div id="toast" class="toast"></div>
   <script src="/i18n.js?v=5.18.0" defer></script>
   <script src="/receipt.js?v=5.18.0" defer></script>
-  <script src="/admin.js?v=5.18.2" defer></script>
+  <script src="/admin.js?v=5.18.3" defer></script>
 </body>
 </html>

@@ -131,11 +131,17 @@
 .promo-admin-card { overflow: hidden; }
 .catalog-highlight { animation: catalogPulse .9s ease; }
 @keyframes catalogPulse { 50% { filter: drop-shadow(0 0 18px #b32bff); } }
-.bottom-nav button, .bottom-nav a { position: relative; display: grid; justify-items: center; gap: 3px; padding: 5px 2px; transition: color .2s, transform .2s; }
-.bottom-nav svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 0 transparent); transition: transform .2s, filter .2s; }
+.bottom-nav button, .bottom-nav a { position: relative; display: grid; justify-items: center; gap: 4px; padding: 4px 2px; transition: color .2s, transform .2s; }
+.bottom-nav svg { width: 34px; height: 34px; padding: 7px; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; border: 1px solid #7440a9; border-radius: 12px; background: radial-gradient(circle at 35% 25%,#65259c,#18072c 72%); box-shadow: inset 0 0 10px #c33cff1f,0 4px 12px #0008; filter: drop-shadow(0 0 0 transparent); transition: transform .2s,filter .2s,border-color .2s,background .2s; }
 .bottom-nav button:hover, .bottom-nav a:hover, .bottom-nav .active { color: #f1d7ff; transform: translateY(-2px); }
-.bottom-nav button:hover svg, .bottom-nav a:hover svg, .bottom-nav .active svg { stroke: #f14bff; transform: scale(1.08); filter: drop-shadow(0 0 7px #a62cff); }
+.bottom-nav button:hover svg, .bottom-nav a:hover svg, .bottom-nav .active svg { stroke: #fff; border-color:#ff54dc; background:radial-gradient(circle at 35% 25%,#d93fc7,#5d159e 58%,#101a50); transform: scale(1.08); filter: drop-shadow(0 0 8px #c22cff); }
 .bottom-nav .active::before { content: ""; position: absolute; top: -8px; width: 38px; height: 3px; border-radius: 99px; background: linear-gradient(90deg, #9a2cff, #ff3bc8, #20a4ff); box-shadow: 0 0 10px #c02cff; }
+
+/* JIGz neon icon system: clear targets and consistent visual hierarchy */
+#nav .nav-glyph { flex: 0 0 34px; width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid #49316f; border-radius: 11px; background: radial-gradient(circle at 35% 25%,#47206f,#0b1730 75%); color: #f1d9ff; font-size: 17px; font-weight: 900; line-height: 1; box-shadow: inset 0 0 10px #be3cff20,0 4px 12px #0007; transition: transform .2s,border-color .2s,box-shadow .2s,background .2s; }
+#nav button:hover .nav-glyph,#nav a:hover .nav-glyph,#nav button.active .nav-glyph { border-color:#ff56dc; background:radial-gradient(circle at 35% 25%,#f35bd4,#6816a5 58%,#102761); color:#fff; box-shadow:0 0 13px #c52eff99,inset 0 0 8px #fff3; transform:scale(1.07) rotate(-2deg); }
+#nav button[data-view="payments"] .nav-glyph,#nav button[data-view="closings"] .nav-glyph { color:#84ffd0; }
+#nav button[data-view="shipping"] .nav-glyph,#nav button[data-view="health"] .nav-glyph { color:#7cdcff; }
 .cart-star { position: fixed; z-index: 202; width: 22px; height: 22px; pointer-events: none; background: var(--star-color); clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 94%,50% 72%,21% 94%,32% 57%,2% 35%,39% 35%); filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 10px var(--star-color)); will-change: transform,opacity; }
 .cart-star.trail { width: 8px; height: 8px; opacity: .8; }
 .jigz-warp-burst,.jigz-cart-impact { position: fixed; z-index: 201; width: 52px; height: 52px; border: 3px solid var(--jigz-color); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); box-shadow: 0 0 12px var(--jigz-color),inset 0 0 14px var(--jigz-accent); animation: jigzWarpBurst .7s ease-out forwards; }

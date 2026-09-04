@@ -89,7 +89,7 @@ const checks={
   adminGetRetry:/attempts=method==="GET"\?3:1/.test(admin)&&/transientStatuses=new Set/.test(admin)&&/450\*\(attempt\+1\)/.test(admin),
   adminProductAutoRecovery:/productRetryCount<2/.test(admin)&&/loadProducts\(\{recovering:true\}\)/.test(admin)&&/ข้อมูลเดิมยังแสดงอยู่/.test(admin),
   compactMobileProducts:/product-mobile-card/.test(admin)&&/#products #productRows tr\.product-mobile-card/.test(fs.readFileSync(new URL("../public/admin.css",import.meta.url),"utf8")),
-  customerApiRecovery:/attempts=method==="GET"\?2:1/.test(app)&&/AbortSignal\.timeout\(method==="GET"\?5000:15000\)/.test(app)&&/function connectStore/.test(app)&&/data-retry-store/.test(app),
+  customerApiRecovery:/attempts=method==="GET"\?2:1/.test(app)&&/\[20000,30000\]\[attempt\]/.test(app)&&/sessionResults/.test(app)&&/function connectStore/.test(app)&&/data-retry-store/.test(app),
   fastHealth:/function quickHealth/.test(worker)&&/health_timeout/.test(worker)&&/"run_worker_first": true/.test(wrangler),
   adminGateTimeout:/AbortSignal\.timeout/.test(admin)&&/เวลานานกว่าปกติ/.test(admin),
   packingRollback:/data-order-rollback/.test(admin)&&/function rollbackPacking/.test(admin)&&/ROLLBACK_PACKING_STATUS/.test(worker)&&/rollback_reason_required/.test(worker),
