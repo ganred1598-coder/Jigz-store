@@ -21,7 +21,7 @@ const checks={
   trackingShare:/navigator\.share/.test(app)&&/data-copy-tracking/.test(app),
   codCloseGuard:/cod_payment_required/.test(worker)&&/cod-received/.test(worker),
   adminAppointment:/\/api\/admin\/staff/.test(worker),
-  ownerProductDelete:/request\.method==="DELETE"/.test(worker)&&/owner_required/.test(worker),
+  ownerProductDelete:/request\.method==="DELETE"/.test(worker)&&/owner_required/.test(worker)&&/UPDATE products SET status='DELETED'/.test(worker)&&/UPDATE product_variants SET status='DELETED'/.test(worker)&&/preservedHistory:true/.test(worker),
   categoryDropdown:/function categoryOptions/.test(admin)&&/newCategory/.test(admin),
   directProductUpload:/function productImageData/.test(admin)&&/function productImageUploader/.test(admin)&&/type="file"/.test(admin),
   largeImageCompression:/50\*1024\*1024/.test(admin)&&/createImageBitmap/.test(admin)&&/encodedImageData/.test(admin)&&/accept="image\/\*"/.test(admin),
