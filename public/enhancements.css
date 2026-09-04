@@ -121,6 +121,12 @@
 .image-tile { display: grid; gap: 6px; align-content: start; padding: 7px; border: 1px solid var(--line); border-radius: 11px; background: #090311; color: var(--muted); font-size: 11px; }
 .image-tile img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
 .image-tile input { accent-color: #b32bff; }
+.image-remove-button { width: 100%; min-height: 38px; padding: 8px 10px; border: 1px solid #85334d; border-radius: 9px; background: #3a1020; color: #ffb4c2; font-weight: 800; cursor: pointer; }
+.image-remove-button:hover { filter: brightness(1.18); }
+.image-tile.image-pending-remove { border-color: #ff4165; background: #280914; }
+.image-tile.image-pending-remove img { opacity: .3; filter: grayscale(1); }
+.image-tile.image-pending-remove .image-remove-button { border-color: #316dab; background: #0c2849; color: #b9dcff; }
+@media(max-width:520px){.image-preview{grid-template-columns:repeat(2,minmax(0,1fr))}.upload-button{width:100%;text-align:center}.image-remove-button{min-height:44px}}
 .promo-image, .promo-admin-card > img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 13px; margin-bottom: 10px; }
 .promo-admin-card { overflow: hidden; }
 .catalog-highlight { animation: catalogPulse .9s ease; }

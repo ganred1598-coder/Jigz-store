@@ -14,3 +14,52 @@
 .credit-code-reveal{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border:1px solid #8a2be2;border-radius:12px;background:#23083d}.credit-code-reveal b{font-size:20px;letter-spacing:2px;overflow-wrap:anywhere}.work-card .summary-grid{grid-template-columns:repeat(3,1fr);margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}.work-card .summary-grid div{padding:10px}.work-card .summary-grid b{font-size:14px}@media(max-width:520px){.credit-code-reveal{align-items:stretch;flex-direction:column}.work-card .summary-grid{grid-template-columns:1fr}.work-card .summary-grid div{border-right:0;border-bottom:1px solid var(--line)}}
 .pos-credit-fields{display:grid;gap:10px;padding:14px;border:1px solid #8338c7;border-radius:14px;background:linear-gradient(135deg,rgba(145,32,220,.13),rgba(16,91,229,.08))}.pos-credit-fields.hidden{display:none}.pos-credit-fields .notice{margin:0}.credit-manager-summary{margin-top:16px}.credit-overdue-head{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;margin:8px 0 10px;border:1px solid #ff9d24;border-radius:12px;background:rgba(255,122,24,.13);color:#ffd6a3}.credit-overdue-card{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:13px;margin-bottom:10px;border:1px solid rgba(255,122,24,.55);border-radius:14px;background:rgba(73,28,5,.3)}.credit-overdue-card div{display:grid;gap:3px}.credit-overdue-card small,.credit-overdue-card span{color:var(--muted)}.credit-overdue-card strong{color:#ffba60;font-size:1.1rem}.credit-overdue-notice{border-color:#ff8b2c!important;background:rgba(255,100,20,.12)!important}.credit-receipt-total{color:#ca6cff}@media(max-width:640px){.credit-overdue-card{grid-template-columns:1fr auto}.credit-overdue-card .button{grid-column:1/-1;width:100%}}
 .closing-transaction-table td.wrap{min-width:280px;white-space:normal}.closing-transaction-table td.wrap small{display:block;margin-top:4px;color:var(--muted);line-height:1.45}.closing-detail .closing-transaction-table{margin:12px 0 20px}.closing-detail>h3{margin-top:22px}@media(max-width:760px){.closing-transaction-table thead{display:none}.closing-transaction-table,.closing-transaction-table tbody,.closing-transaction-table tr,.closing-transaction-table td{display:block;width:100%}.closing-transaction-table tr{padding:10px 12px;border-bottom:1px solid var(--line)}.closing-transaction-table td{display:grid;grid-template-columns:112px minmax(0,1fr);gap:8px;padding:6px 0;border:0;white-space:normal}.closing-transaction-table td:before{content:attr(data-label);color:var(--muted);font-size:11px}.closing-transaction-table td.wrap{min-width:0}}
+
+/* Orders: compact table on desktop, task-first cards on phones. */
+.order-mobile-date{display:none}.order-meta-chip{display:inline-flex;align-items:center;min-height:26px;padding:4px 8px;border:1px solid #31466b;border-radius:999px;background:#0a1830;color:#dbe8ff;font-size:11px;font-weight:700}
+@media(max-width:760px){
+  #orders{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+  #orders .page-head{display:grid;gap:9px}
+  #orders .page-head>div:first-child p{display:none}
+  #orders .page-head .row-actions{display:grid;grid-template-columns:1fr auto auto;width:100%}
+  #orders .page-head .row-actions .button{min-height:42px;padding:9px 10px;font-size:11px}
+  #orders>.panel{overflow:visible;border:0;background:transparent;box-shadow:none}
+  #orders .data-filters{border:1px solid var(--line);border-radius:14px 14px 0 0;background:#060d1c}
+  #orders .filter-summary{border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;background:#060d1c}
+  #orders .table-wrap tbody{gap:12px;padding:12px 0}
+  #orders #orderRows tr{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0;padding:14px;border-left:4px solid #557199;border-radius:16px;background:linear-gradient(145deg,#0b1830,#050b17);box-shadow:0 10px 28px #0007}
+  #orders #orderRows tr.order-status-NEW{border-left-color:#64b5ff}
+  #orders #orderRows tr.order-status-ACCEPTED{border-left-color:#d8e3f5}
+  #orders #orderRows tr.order-status-PENDING_PAYMENT{border-left-color:#ff9b31}
+  #orders #orderRows tr.order-status-PAID{border-left-color:#3bef98}
+  #orders #orderRows tr.order-status-PACKING,#orders #orderRows tr.order-status-PACKED{border-left-color:#e25cff}
+  #orders #orderRows tr.order-status-SHIPPED{border-left-color:#2dd4ff}
+  #orders #orderRows tr.order-status-COMPLETED{border-left-color:#22e688}
+  #orders #orderRows tr.order-status-CANCELLED{border-left-color:#ff657d}
+  #orders #orderRows td{display:block;width:auto;padding:0;border:0;text-align:left}
+  #orders #orderRows td::before{display:none}
+  #orders .order-cell-id{grid-column:1;grid-row:1;padding-right:10px!important}
+  #orders .order-cell-id>b{display:block;font-size:15px;line-height:1.35;overflow-wrap:anywhere}
+  #orders .order-mobile-date{display:block;margin-top:4px;font-size:11px;font-weight:500}
+  #orders .order-cell-status{grid-column:2;grid-row:1;align-self:start;text-align:right;font-size:12px}
+  #orders .order-cell-customer{grid-column:1;grid-row:2;margin-top:14px;padding-right:10px!important}
+  #orders .order-cell-customer>b{display:block;font-size:16px;line-height:1.35}
+  #orders .order-cell-customer small{margin-top:4px;font-size:13px}
+  #orders .order-cell-total{grid-column:2;grid-row:2;align-self:center;margin-top:14px;text-align:right;color:#fff}
+  #orders .order-cell-total::before{content:"ยอดรวม";display:block;color:var(--muted);font-size:10px;font-weight:700}
+  #orders .order-cell-total>b{display:block;margin-top:3px;font-size:18px;color:#fff}
+  #orders .order-cell-source{grid-column:1;grid-row:3;margin-top:13px}
+  #orders .order-cell-payment{grid-column:2;grid-row:3;margin-top:13px;text-align:right}
+  #orders .order-cell-date{display:none}
+  #orders .order-cell-actions{grid-column:1/-1;grid-row:4;margin-top:13px;padding-top:12px!important;border-top:1px solid #1c2d4b!important}
+  #orders .order-cell-actions .row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #orders .order-cell-actions .row-actions button{min-width:0;min-height:44px;padding:9px 8px;font-size:12px;font-weight:800}
+  #orders .order-cell-actions [data-order-action]{border-color:#245cc4;background:linear-gradient(135deg,#7625d8,#0868f6)}
+  #orders .order-cell-actions [data-order-action="CANCELLED"],#orders .order-cell-actions .order-delete-button{border-color:#812a40;background:#441323}
+}
+@media(max-width:390px){
+  #orders .page-head .row-actions{grid-template-columns:1fr 1fr}
+  #orders .page-head .row-actions .button:first-child{grid-column:1/-1}
+  #orders #orderRows tr{padding:12px}
+  #orders .order-cell-status{max-width:130px;font-size:11px}
+}

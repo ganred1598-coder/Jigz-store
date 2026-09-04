@@ -24,6 +24,8 @@ const checks={
   ownerProductDelete:/request\.method==="DELETE"/.test(worker)&&/owner_required/.test(worker),
   categoryDropdown:/function categoryOptions/.test(admin)&&/newCategory/.test(admin),
   directProductUpload:/function productImageData/.test(admin)&&/function productImageUploader/.test(admin)&&/type="file"/.test(admin),
+  largeImageCompression:/50\*1024\*1024/.test(admin)&&/createImageBitmap/.test(admin)&&/encodedImageData/.test(admin)&&/accept="image\/\*"/.test(admin),
+  selectedImageDelete:/data-new-image-remove/.test(admin)&&/data-existing-image-toggle/.test(admin)&&/image-remove-button/.test(admin),
   fifoOpeningCost:/unitCost/.test(admin)&&/inventory_lots/.test(worker),
   editableAgents:/function editAgent/.test(admin)&&/UPDATE_AGENT/.test(worker),
   editableCommissions:/function editCommission/.test(admin)&&/UPDATE_COMMISSION/.test(worker),
