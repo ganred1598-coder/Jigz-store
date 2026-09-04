@@ -85,6 +85,7 @@ const checks={
   posPerBillPrice:/data-pos-price-input/.test(admin)&&/function setPosPrice/.test(admin)&&/salePrice/.test(admin)&&/hasPosOverride=source==="POS"/.test(worker)&&/posPriceOverrides/.test(worker),
   posCodShipping:/id="posShipping"/.test(html)&&/id="posCodAmount"/.test(html)&&/function updatePosTotals/.test(admin)&&/shippingFee:totals\.shipping/.test(admin)&&/codAmount/.test(worker)&&/invalid_cod_amount/.test(worker),
   adminGetRetry:/attempts=method==="GET"\?2:1/.test(admin)&&/setTimeout\(resolve,350\)/.test(admin),
+  customerApiRecovery:/attempts=method==="GET"\?2:1/.test(app)&&/AbortSignal\.timeout\(method==="GET"\?5000:15000\)/.test(app)&&/function connectStore/.test(app)&&/data-retry-store/.test(app),
   fastHealth:/function quickHealth/.test(worker)&&/health_timeout/.test(worker)&&/"run_worker_first": true/.test(wrangler),
   adminGateTimeout:/AbortSignal\.timeout/.test(admin)&&/เวลานานกว่าปกติ/.test(admin),
   packingRollback:/data-order-rollback/.test(admin)&&/function rollbackPacking/.test(admin)&&/ROLLBACK_PACKING_STATUS/.test(worker)&&/rollback_reason_required/.test(worker),
@@ -136,7 +137,7 @@ const checks={
   slipBindCount:/VALUES\(\?,'ORDER',\?,'EASYSLIP',\?,\?,\?,\?,\?,\?,\?,\?\)/.test(worker)&&/VALUES\(\?, 'DEPOSIT',\?,'EASYSLIP',\?,\?,\?,\?,\?,\?,\?,\?\)/.test(worker),
   productionReceipt:/window\.JIGZReceipt/.test(receipt)&&/@page\{size:/.test(receipt)&&/paper==="58"/.test(receipt)&&/paper==="80"/.test(receipt)&&/data-print-receipt-paper="58"/.test(admin)&&/data-print-receipt-paper="A4"/.test(app),
   receiptPrivacy:!/actual_cost|actual_shipping_cost|fulfillment_expense/.test(receipt),
-  systemVersion:/version:"5\.17\.0"/.test(worker)&&/v5\.17\.0/.test(html)
+  systemVersion:/version:"5\.18\.0"/.test(worker)&&/v5\.18\.0/.test(html)
 };
 
 if(Object.values(checks).some(value=>!value))throw new Error(`feature_check_failed:${JSON.stringify(checks)}`);
