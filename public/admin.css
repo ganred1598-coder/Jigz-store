@@ -63,3 +63,44 @@
   #orders #orderRows tr{padding:12px}
   #orders .order-cell-status{max-width:130px;font-size:11px}
 }
+
+/* Compact product inventory cards on phones. */
+@media(max-width:760px){
+  #products .table-wrap{padding:0}
+  #products #productRows{gap:12px;padding:10px}
+  #products #productRows tr.product-mobile-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;padding:14px;overflow:visible}
+  #products #productRows .product-cell-name,
+  #products #productRows .product-cell-category,
+  #products #productRows .product-cell-unit,
+  #products #productRows .product-cell-price,
+  #products #productRows .product-cell-cost,
+  #products #productRows .product-cell-stock,
+  #products #productRows .product-cell-status,
+  #products #productRows .product-cell-actions{display:block;width:auto;min-width:0;padding:0;border:0;text-align:left;white-space:normal}
+  #products #productRows .product-cell-name::before,
+  #products #productRows .product-cell-status::before,
+  #products #productRows .product-cell-actions::before{display:none}
+  #products #productRows .product-cell-name b{display:block;font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+  #products #productRows .product-cell-name small{margin-top:3px;font-size:11px}
+  #products #productRows .product-cell-status{text-align:right;align-self:start}
+  #products #productRows .product-cell-status .badge{font-size:10px}
+  #products #productRows .product-inactive{border-color:#526078;background:#263248;color:#c2cada}
+  #products #productRows .product-cell-category,
+  #products #productRows .product-cell-unit{display:flex;align-items:center;gap:7px;color:#cbd5e8;font-size:12px}
+  #products #productRows .product-cell-category::before,
+  #products #productRows .product-cell-unit::before{display:inline;flex:0 0 auto;margin:0;font-size:10px}
+  #products #productRows .product-cell-unit{justify-content:flex-end;text-align:right}
+  #products #productRows .product-cell-price,
+  #products #productRows .product-cell-stock{padding:10px;border:1px solid #243657;border-radius:10px;background:#071225}
+  #products #productRows .product-cell-price::before,
+  #products #productRows .product-cell-stock::before{display:block;margin-bottom:4px;font-size:10px}
+  #products #productRows .product-cell-price b,
+  #products #productRows .product-cell-stock b{font-size:17px;color:#fff}
+  #products #productRows .product-cell-stock{text-align:right}
+  #products #productRows .product-cell-cost{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:2px;color:#dce4f3;font-size:12px}
+  #products #productRows .product-cell-cost::before{display:inline;margin:0;font-size:10px}
+  #products #productRows .product-cell-actions{grid-column:1/-1;padding-top:2px}
+  #products #productRows .product-cell-actions .row-actions{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) 46px;gap:8px}
+  #products #productRows .product-cell-actions button{width:100%;min-width:0;min-height:44px;margin:0}
+  #products #productRows td[colspan]{grid-column:1/-1;padding:20px;text-align:center}
+}
