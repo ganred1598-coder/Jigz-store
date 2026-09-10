@@ -384,6 +384,11 @@ assert.equal(cancelSample.response.status,200,JSON.stringify(cancelSample.body))
 const adminHealth = await json("/api/admin/system-health");
 assert.equal(adminHealth.response.status, 200);
 assert.equal(adminHealth.body.ok, true);
+const runScheduled=async(cron)=>{const waits=[];await worker.scheduled({cron},env,{waitUntil:(promise)=>waits.push(Promise.resolve(promise))});await Promise.all(waits)};
+await runScheduled("0 16 * * *");
+await runScheduled("0 16 * * *");
+const closingReminders=await db.prepare("SELECT COUNT(*) total FROM system_alerts WHERE alert_type='DAILY_CLOSING_DUE'").first();
+assert.equal(Number(closingReminders.total),1,"Daily closing reminder must be automatic and idempotent");
 const backup = await request("/api/admin/backup");
 assert.equal(backup.status, 200);
 assert.match(backup.headers.get("content-disposition") || "", /jigz-backup-/);
@@ -400,4 +405,4 @@ const protectedEnv = { DB: db, ASSETS: assets, ADMIN_ACCESS_REQUIRED: "true", TE
 assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401);
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
-console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "payment slip persistence", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "product variants", "Rider payment", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "backup export", "OWNER-created store credit", "credit user isolation", "credit balance deduction", "credit refund on cancellation", "Cloudflare Access denial"] }, null, 2));
+console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "payment slip persistence", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "product variants", "Rider payment", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "automatic daily closing reminder", "backup export", "OWNER-created store credit", "credit user isolation", "credit balance deduction", "credit refund on cancellation", "Cloudflare Access denial"] }, null, 2));
