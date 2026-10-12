@@ -1,0 +1,32 @@
+#pageRefreshButton {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(90px + env(safe-area-inset-bottom));
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #b878ff;
+  border-radius: 24px;
+  background: #281044;
+  color: #fff;
+  font: 600 14px/1.4 Arial, sans-serif;
+  box-shadow: 0 4px 16px #0006;
+  cursor: pointer;
+}
+#pageRefreshButton svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#pageRefreshButton:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+#pageRefreshButton:disabled { opacity: .65; cursor: wait; }
+@media print { #pageRefreshButton { display: none !important; } }
