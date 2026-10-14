@@ -382,6 +382,37 @@ assert.equal(Number((await json("/api/admin/products")).body.products.find(item=
 const cancelSample=await json(`/api/admin/orders/${encodeURIComponent(sampleOrder.body.order.id)}/transition`,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({status:"CANCELLED"})});
 assert.equal(cancelSample.response.status,200,JSON.stringify(cancelSample.body));
 const adminHealth = await json("/api/admin/system-health");
+const visitorOwnerCookie=cookie;
+cookie="";
+assert.equal((await json("/api/admin/visitors")).response.status,401);
+await json("/api/session");
+assert.equal((await json("/api/admin/visitors")).response.status,401);
+cookie=restrictedSalesCookie;
+assert.equal((await json("/api/admin/visitors")).response.status,403);
+cookie=visitorOwnerCookie;
+for(let i=0;i<305;i++){
+ await db.prepare("INSERT INTO users(id,display_name,role,last_seen_at) VALUES(?,?,'CUSTOMER',datetime('now',?))").bind("presence-test-"+i,"Presence Test "+i,i===0?"-1 minutes":"-10 minutes").run();
+}
+await db.prepare("INSERT INTO users(id,display_name,role,status) VALUES('presence-deleted','Presence Test deleted','CUSTOMER','DELETED')").run();
+const visitors=await json("/api/admin/visitors?q=Presence%20Test");
+assert.equal(visitors.response.status,200,JSON.stringify(visitors.body));
+assert.equal(visitors.body.total,305);
+assert.equal(visitors.body.users.length,50);
+assert.equal(visitors.body.pages,7);
+const lastVisitors=await json("/api/admin/visitors?q=Presence%20Test&page=7");
+assert.equal(lastVisitors.body.users.length,5);
+const onlineVisitors=await json("/api/admin/visitors?q=Presence%20Test&status=online");
+assert.equal(onlineVisitors.body.total,1);
+assert.equal(onlineVisitors.body.users[0].id,"presence-test-0");
+const offlineVisitors=await json("/api/admin/visitors?q=Presence%20Test&status=offline");
+assert.equal(offlineVisitors.body.total,304);
+assert.equal((await json("/api/admin/visitors?page=-1")).response.status,400);
+assert.equal((await json("/api/admin/visitors?status=bad")).response.status,400);
+assert.equal((await json("/api/admin/visitors?q=%27%20OR%201%3D1--")).body.total,0);
+assert.equal((await json("/api/admin/visitors?q=Presence%20Test&page=999")).body.page,7);
+await db.prepare("UPDATE users SET last_seen_at=datetime('now','-6 minutes') WHERE id='presence-test-0'").run();
+assert.equal((await json("/api/admin/visitors?q=Presence%20Test&status=online")).body.total,0);
+console.log("PASS: visitor authorization, search, pagination beyond 300, offline expiry, deleted exclusion, invalid filters");
 assert.equal(adminHealth.response.status, 200);
 assert.equal(adminHealth.body.ok, true);
 const runScheduled=async(cron)=>{const waits=[];await worker.scheduled({cron},env,{waitUntil:(promise)=>waits.push(Promise.resolve(promise))});await Promise.all(waits)};

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/status-colors.css?v=5.12.3">
   <title>JIGᶻ AGENT — Command Center</title>
   <link rel="stylesheet" href="/page-refresh.css?v=1">
+  <link rel="stylesheet" href="/visitors.css?v=1">
 </head>
 <body>
   <section id="gate" class="gate">
@@ -30,6 +31,7 @@
         <button data-view="payments"><span class="nav-glyph">฿</span><span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
         <button data-view="shipping"><span class="nav-glyph">➤</span><span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
         <button data-view="products"><span class="nav-glyph">◇</span><span>สินค้า &amp; สต็อก</span></button>
+        <button data-view="visitors"><span class="nav-glyph">◉</span><span>ผู้เข้าใช้งาน / ออนไลน์</span></button>
         <button data-view="customers"><span class="nav-glyph">♙</span><span>ลูกค้า / CRM</span></button>
         <button class="owner-only hidden" data-view="staff"><span class="nav-glyph">♛</span><span>ผู้ดูแลระบบ</span></button>
         <button data-view="agents"><span class="nav-glyph">♧</span><span>ตัวแทน &amp; ค่าคอม</span></button>
@@ -58,6 +60,17 @@
       </header>
 
       <main class="content">
+        <section id="visitors" class="page">
+          <div class="page-head"><div><h1>ผู้เข้าใช้งาน / ออนไลน์</h1><p>ออนไลน์ = มีการติดต่อระบบใน 5 นาทีล่าสุด อัปเดตทุก 30 วินาทีเมื่อเปิดหน้านี้</p></div><button id="visitorRefresh" class="button" type="button">↻ อัปเดต</button></div>
+          <div class="visitor-metrics"><article class="panel"><small>ผู้เข้าใช้งานทั้งหมด</small><b id="visitorTotal">—</b></article><article class="panel"><small>ออนไลน์ปัจจุบัน</small><b id="visitorOnline" class="green">—</b></article></div>
+          <p class="muted">นับตามบัญชี/รหัสอุปกรณ์ที่ระบบบันทึก ไม่ใช่จำนวนคนที่ยืนยันตัวตน ไม่รวมบัญชีที่ถูกลบหรือปิดใช้งาน</p>
+          <article class="panel">
+            <form id="visitorFilters" class="filters"><input id="visitorSearch" class="field" placeholder="ค้นหาชื่อหรือรหัสผู้ใช้" aria-label="ค้นหาผู้เข้าใช้งาน" maxlength="100"><select id="visitorStatus" class="field" aria-label="สถานะออนไลน์"><option value="all">ทั้งหมด</option><option value="online">ออนไลน์ปัจจุบัน</option><option value="offline">ออฟไลน์</option></select><button class="button" type="submit">ค้นหา</button></form>
+            <p id="visitorMessage" class="visitor-message" role="status" aria-live="polite">เลือกเมนูเพื่อโหลดข้อมูล</p>
+            <div class="table-wrap"><table><thead><tr><th>ชื่อ / รหัส</th><th>บทบาท</th><th>สถานะ</th><th>เข้าครั้งแรก</th><th>ล่าสุด (เวลาไทย)</th></tr></thead><tbody id="visitorRows"></tbody></table></div>
+            <div class="visitor-pagination"><button id="visitorPrevious" class="button ghost" type="button" disabled>ก่อนหน้า</button><span id="visitorPage">—</span><button id="visitorNext" class="button ghost" type="button" disabled>ถัดไป</button></div>
+          </article>
+        </section>
         <section id="dashboard" class="page active">
           <div class="page-head"><div><h1>〽 COMMAND CENTER</h1><p>ภาพรวมระบบแบบเรียลไทม์</p></div><button class="button" data-action="refresh-dashboard">⟳ รีเฟรช</button></div>
           <div class="metrics">
@@ -199,7 +212,8 @@
   <div id="toast" class="toast"></div>
   <script src="/i18n.js?v=5.18.0" defer></script>
   <script src="/receipt.js?v=5.18.0" defer></script>
-  <script src="/admin.js?v=5.18.4" defer></script>
+  <script src="/admin.js?v=5.18.5" defer></script>
   <script src="/page-refresh.js?v=1" defer></script>
+  <script src="/visitors.js?v=1" defer></script>
 </body>
 </html>
