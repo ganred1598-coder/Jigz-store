@@ -1,0 +1,94 @@
+/* Shared readability and accessibility. Keep print layouts independent. */
+@media screen {
+ body.ui-comfort{--muted:#b3bdd0;--line:#30405b;font-size:16px;line-height:1.55;background-color:#080d19}
+ .ui-comfort h1,.ui-comfort h2,.ui-comfort h3{line-height:1.3;text-wrap:balance}
+ .ui-comfort p,.ui-comfort label,.ui-comfort small{overflow-wrap:anywhere}
+ .ui-comfort :is(button,a,input,select,textarea):focus-visible{outline:3px solid #c2a9ff;outline-offset:3px}
+ .ui-comfort :is(input,select,textarea){font-size:16px;min-width:0;max-width:100%}
+ .ui-comfort :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=hidden]),select){min-height:46px}
+ .ui-comfort :is(button,.button,.primary,.secondary){min-height:44px;touch-action:manipulation;line-height:1.4}
+ .ui-comfort :is(.panel,.sheet,.modal-card,.work-card){border-color:var(--line);box-shadow:0 8px 24px #0002}
+ .ui-comfort :is(.form,.two,.dashboard-grid,.page-head,.panel-head,.row-actions)>*{min-width:0}
+ .ui-comfort :is(.page-head,.panel-head,.row-actions){flex-wrap:wrap}
+ .ui-comfort :is(.field,textarea){line-height:1.5}
+ .ui-comfort .toast{max-width:min(460px,calc(100vw - 32px));overflow-wrap:anywhere;line-height:1.6;z-index:150}
+ .ui-comfort .modal{padding:24px;overscroll-behavior:contain}
+ .ui-comfort :is(.sheet,.modal-card){max-height:calc(100dvh - 48px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+ .ui-comfort :is(#modalClose,.modal-close){width:44px;height:44px;flex:0 0 44px}
+ .ui-comfort .sheet-head{gap:16px;margin-bottom:18px}
+ .ui-comfort .sheet-head h2{font-size:clamp(20px,3vw,28px)}
+ .ui-admin .topbar{height:auto;min-height:72px;gap:12px;padding-block:12px}
+ .ui-admin .content{padding:24px;max-width:1500px}
+ .ui-admin .page-head{margin-bottom:22px;align-items:flex-start}
+ .ui-admin .page-head h1{font-size:clamp(24px,3vw,32px)}
+ .ui-admin .page-head p{max-width:65ch;line-height:1.65}
+ .ui-admin .sidebar{background:#0a1020}
+ .ui-admin #nav{gap:6px}
+ .ui-admin #nav :is(button,a){min-height:46px;padding:10px 12px;font-size:14px}
+ .ui-admin #nav button.active{background:#31214f;border-color:#9774cd;box-shadow:none}
+ .ui-admin .logo{background:#10182a;box-shadow:none}
+ .ui-admin .logo img{filter:none}
+ .ui-admin .panel{background:#10192a}
+ .ui-admin .panel-head{padding:18px}
+ .ui-admin .metrics article{background:#111d31;border-color:#35435e;min-height:124px}
+ .ui-admin .metrics b{font-variant-numeric:tabular-nums;margin:10px 0}
+ .ui-admin .button:not(.danger):not(.ghost):not(.orange){background:#7651bc}
+ .ui-admin .button.ghost{background:#152137}
+ .ui-admin #materials .panel{padding:18px}
+ .ui-admin .form label{line-height:1.6}
+ .ui-admin .table-wrap{overflow-x:auto;overscroll-behavior-x:contain}
+ .ui-admin th,.ui-admin td{line-height:1.6}
+ .ui-admin .topbar .admin{flex-shrink:0}
+ .ui-store>header{height:auto;min-height:74px;gap:12px;padding-block:10px}
+ .ui-store .header-actions{flex-wrap:wrap;justify-content:flex-end;min-width:0}
+ .ui-store .header-actions .head-button{max-width:180px;white-space:normal;height:auto;padding:9px 12px}
+ .ui-store .bottom-nav :is(button,a){min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+ .ui-store .bottom-nav small{font-size:12px}
+ .ui-store .toolbar{flex-wrap:wrap}
+ .ui-store .toolbar>*{min-width:0;max-width:100%}
+ .ui-store .hero-actions{flex-wrap:wrap}
+ .ui-connection{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom));z-index:160;width:min(480px,calc(100vw - 24px));padding:12px 16px;border:1px solid #e5b667;border-radius:12px;background:#352813;color:#fff1d5;box-shadow:0 6px 20px #0005;font-size:14px}
+ @media(max-width:900px){
+  .ui-admin .topbar{flex-wrap:wrap;gap:8px;padding:10px 12px}
+  .ui-admin .topbar #globalSearch{order:8;width:100%;flex:1 0 100%}
+  .ui-admin .topbar>.button{width:auto;max-width:none;white-space:normal;overflow:visible;text-overflow:clip;flex:0 1 auto}
+  .ui-admin .topbar .admin{margin-left:auto}
+  .ui-admin .content{padding:18px}
+ }
+ @media(max-width:600px){
+  .ui-admin .content{padding:16px 12px calc(24px + env(safe-area-inset-bottom))}
+  .ui-admin .topbar{position:relative;backdrop-filter:none}
+  .ui-admin .topbar #menuButton{display:block;flex:0 0 44px;width:44px}
+  .ui-admin .topbar .admin>div{display:none}
+  .ui-admin .topbar .admin-language{margin:0;flex:0 0 auto}
+  .ui-admin .topbar #pushEnable,.ui-admin .topbar #pushTest{font-size:13px;padding:8px 10px}
+  .ui-admin .topbar .avatar{width:36px;height:36px}
+  .ui-admin .page-head{gap:12px}
+  .ui-admin .page-head>.row-actions{width:100%}
+  .ui-admin .page-head .row-actions>*{flex:1 1 140px}
+  .ui-admin .two,.ui-admin .dashboard-grid{grid-template-columns:minmax(0,1fr)}
+  .ui-admin .metrics,.ui-admin .metrics.four,.ui-admin .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ui-admin .metrics article{padding:14px;min-height:112px}
+  .ui-admin .metrics b{font-size:24px;overflow-wrap:anywhere}
+  .ui-admin .form{gap:16px}
+  .ui-admin .sidebar{max-width:calc(100vw - 48px);height:100dvh;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+  .ui-comfort .modal{padding:10px 8px calc(10px + env(safe-area-inset-bottom));align-items:center}
+  .ui-comfort :is(.sheet,.modal-card){width:100%;max-width:100%;max-height:calc(100dvh - 20px - env(safe-area-inset-bottom));border-radius:18px;padding:18px 14px}
+  .ui-comfort .sheet-head{align-items:flex-start}
+  .ui-comfort .modal-card #modalTitle{padding-right:44px;font-size:22px}
+  .ui-comfort .toast{bottom:calc(90px + env(safe-area-inset-bottom));font-size:15px}
+  .ui-store>header{padding:10px 12px;flex-wrap:wrap;align-items:center}
+  .ui-store>header .brand-logo{width:112px;height:44px}
+  .ui-store .header-actions{gap:6px;flex:1}
+  .ui-store #accountLabel{display:none}
+  .ui-store .header-actions .head-button{padding:8px 10px}
+  .ui-store main{padding:16px 12px}
+  .ui-store .toolbar>input{flex:1 0 100%}
+  .ui-store .toolbar>select{flex:1 1 calc(50% - 9px);width:auto}
+  .ui-store .hero h1{line-height:1.15}
+  .ui-store .hero p{font-size:16px}
+ }
+ @media(prefers-reduced-motion:reduce){
+  .ui-comfort,.ui-comfort *{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+ }
+}
