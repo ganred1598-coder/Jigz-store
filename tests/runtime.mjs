@@ -437,3 +437,6 @@ assert.equal((await request("/api/admin/session", {}, protectedEnv)).status, 401
 assert.equal((await request("/admin", {}, protectedEnv)).status, 401);
 
 console.log(JSON.stringify({ ok: true, version: health.body.version, tested: ["D1 initialization", "device session", "order creation", "idempotent retry", "stock deduction", "reservation expiry", "stock restoration", "payment slip persistence", "owner bootstrap", "internal admin access request", "OWNER device approval", "linked sales session", "automatic sales attribution", "product variants", "Rider payment", "sales self workspace", "SALES permission boundary", "POS price approval request", "OWNER price approval", "approval stock safety", "POS per-bill pricing", "order date/payment/source filters", "invalid date-range guard", "FIFO commission calculation", "paid commission reversal", "catalog price isolation", "price override audit", "health center", "automatic daily closing reminder", "backup export", "OWNER-created store credit", "credit user isolation", "credit balance deduction", "credit refund on cancellation", "Cloudflare Access denial"] }, null, 2));
+
+const {testMaterials}=await import("./materials-cases.mjs");
+await testMaterials({assert,db,json,request,setCookie:value=>{cookie=value},ownerCookie,salesCookie:restrictedSalesCookie});

@@ -13,6 +13,7 @@
   <title>JIGᶻ AGENT — Command Center</title>
   <link rel="stylesheet" href="/page-refresh.css?v=1">
   <link rel="stylesheet" href="/visitors.css?v=1">
+  <link rel="stylesheet" href="/materials.css?v=1">
 </head>
 <body>
   <section id="gate" class="gate">
@@ -31,6 +32,7 @@
         <button data-view="payments"><span class="nav-glyph">฿</span><span>รอชำระเงิน</span><i id="paymentPill">0</i></button>
         <button data-view="shipping"><span class="nav-glyph">➤</span><span>จัดส่ง / COD</span><i id="shippingPill">0</i></button>
         <button data-view="products"><span class="nav-glyph">◇</span><span>สินค้า &amp; สต็อก</span></button>
+        <button class="owner-only hidden" data-view="materials"><span class="nav-glyph">▣</span><span>วัสดุ / ค่าใช้จ่าย</span></button>
         <button data-view="visitors"><span class="nav-glyph">◉</span><span>ผู้เข้าใช้งาน / ออนไลน์</span></button>
         <button data-view="customers"><span class="nav-glyph">♙</span><span>ลูกค้า / CRM</span></button>
         <button class="owner-only hidden" data-view="staff"><span class="nav-glyph">♛</span><span>ผู้ดูแลระบบ</span></button>
@@ -164,7 +166,7 @@
         <section id="closings" class="page">
           <div class="page-head"><div><h1>ปิดยอดรายวัน / รายเดือน</h1><p>บันทึก Snapshot รายรับ ต้นทุน กำไร ค่าคอม เงินสด และยอดเครดิต ณ เวลาปิดยอด</p></div><button class="button ghost" data-action="load-closings">⟳ คำนวณใหม่</button></div>
           <article class="panel closing-control"><form id="closingForm" class="closing-form"><label>รอบปิดยอด<select id="closingType" class="field"><option value="DAY">รายวัน</option><option value="MONTH">รายเดือน</option></select></label><label id="closingDayLabel">วันที่<input id="closingDay" class="field" type="date" required></label><label id="closingMonthLabel" class="hidden">เดือน<input id="closingMonth" class="field" type="month"></label><label>เงินสดนับจริง (ถ้ามี)<input id="closingActualCash" class="field" type="number" min="0" step="0.01" placeholder="ระบบจะคำนวณส่วนต่าง"></label><label class="closing-note">หมายเหตุ<input id="closingNote" class="field" maxlength="500" placeholder="เช่น ส่งมอบกะ / ตรวจโดย..."></label><button id="closingCreate" class="button" type="submit">ยืนยันปิดยอด</button></form><div id="closingExistingNotice" class="closing-status hidden"></div></article>
-          <div class="metrics four closing-metrics"><article><span>รายรับที่รับเงินจริง</span><b id="cRevenue">฿0</b><small id="closingPeriodLabel">—</small></article><article class="orange"><span>ต้นทุนจริงรวม</span><b id="cCost">฿0</b><small id="cCostBreakdown">รวมทุนสินค้าและต้นทุนขนส่งจริง</small></article><article class="blue"><span>กำไรขั้นต้น</span><b id="cProfit">฿0</b><small>ก่อนหักค่าคอม</small></article><article class="pink"><span>กำไรหลังค่าคอม</span><b id="cNet">฿0</b><small id="cCommission">ค่าคอม ฿0</small></article></div>
+          <div class="metrics four closing-metrics"><article><span>รายรับที่รับเงินจริง</span><b id="cRevenue">฿0</b><small id="closingPeriodLabel">—</small></article><article class="orange"><span>ต้นทุนจริงรวม</span><b id="cCost">฿0</b><small id="cCostBreakdown">รวมทุนสินค้าและต้นทุนขนส่งจริง</small></article><article class="blue"><span>กำไรขั้นต้น</span><b id="cProfit">฿0</b><small>ก่อนหักค่าคอม</small></article><article class="pink"><span>กำไรสุทธิร้าน</span><b id="cNet">฿0</b><small id="cCommission">ค่าคอม ฿0</small></article></div>
           <article class="panel top-gap"><div class="closing-breakdown"><div><span>โอนเงิน</span><b id="cTransfer">฿0</b></div><div><span>เงินสดตามระบบ</span><b id="cCash">฿0</b></div><div><span>COD รับแล้ว</span><b id="cCod">฿0</b></div><div><span>Rider รับแล้ว</span><b id="cRider">฿0</b></div><div><span>เติมเครดิต</span><b id="cWalletDeposit">฿0</b></div><div><span>ถอนเครดิต</span><b id="cWalletWithdrawal">฿0</b></div><div><span>ออเดอร์ค้างในรอบ</span><b id="cPending">0</b></div></div></article>
           <article class="panel top-gap"><div class="panel-head"><div><h2>รายการรับเงินจริงในรอบที่เลือก</h2><small id="closingTransactionSummary" class="muted">เลือกวันที่หรือเดือนเพื่อดูรายการ</small></div></div><div class="table-wrap"><table class="closing-transaction-table"><thead><tr><th>เวลารับเงิน</th><th>เลขออเดอร์</th><th>ลูกค้า / รายการ</th><th>ช่องทาง</th><th>สถานะ</th><th>ยอดรวม</th></tr></thead><tbody id="closingTransactionRows"></tbody></table></div></article>
           <article class="panel top-gap"><div class="panel-head"><div><h2>ประวัติปิดยอด</h2><small class="muted">ยอดที่ปิดแล้วไม่ถูกเขียนทับ เพื่อคงหลักฐานทางบัญชี</small></div></div><div id="closingRows" class="closing-admin-list"></div></article>
@@ -204,6 +206,7 @@
           <div class="page-head"><div><h1>แชททีมแอดมิน</h1><p>อัปเดตข้อความใหม่อัตโนมัติทุก 4 วินาที</p></div></div>
           <article class="panel chat-panel"><div id="chatMessages" class="chat-messages"></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" maxlength="1000" required placeholder="พิมพ์ข้อความถึงทีมแอดมิน..."><button class="button" type="submit">ส่ง</button></form></article>
         </section>
+      <section id="materials" class="page"></section>
       </main>
     </section>
   </div>
@@ -212,8 +215,9 @@
   <div id="toast" class="toast"></div>
   <script src="/i18n.js?v=5.18.0" defer></script>
   <script src="/receipt.js?v=5.18.0" defer></script>
-  <script src="/admin.js?v=5.18.5" defer></script>
+  <script src="/admin.js?v=5.19.0" defer></script>
   <script src="/page-refresh.js?v=1" defer></script>
   <script src="/visitors.js?v=1" defer></script>
+<script src="/materials.js?v=1" defer></script>
 </body>
 </html>
