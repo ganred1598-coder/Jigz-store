@@ -49,6 +49,10 @@
  .ui-store .hero-actions{flex-wrap:wrap}
  .ui-connection{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom));z-index:160;width:min(480px,calc(100vw - 24px));padding:12px 16px;border:1px solid #e5b667;border-radius:12px;background:#352813;color:#fff1d5;box-shadow:0 6px 20px #0005;font-size:14px}
  @media(max-width:900px){
+  /* A fixed sticky offset no longer matches a wrapping topbar. Keep titles in flow. */
+  .ui-admin .page-head{position:static;top:auto;z-index:auto;padding:0;background:transparent;backdrop-filter:none}
+  .ui-admin .data-filters>label{min-width:0;max-width:100%}
+  .ui-admin .data-filters input[type="date"]{display:block;width:100%;min-width:0;max-width:100%;min-inline-size:0;box-sizing:border-box}
   .ui-admin .topbar{flex-wrap:wrap;gap:8px;padding:10px 12px}
   .ui-admin .topbar #globalSearch{order:8;width:100%;flex:1 0 100%}
   .ui-admin .topbar>.button{width:auto;max-width:none;white-space:normal;overflow:visible;text-overflow:clip;flex:0 1 auto}
